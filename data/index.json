@@ -1,0 +1,12 @@
+{
+  "county": "Los Angeles County",
+  "description": "Medi-Cal managed care plans available to members in Los Angeles County, plus statewide resources and access barriers. JSON is the source of truth; run scripts/build-data.mjs to regenerate the site bundle.",
+  "planOrder": [
+    "la-care",
+    "health-net",
+    "molina",
+    "kaiser",
+    "blue-shield-promise",
+    "anthem"
+  ]
+}

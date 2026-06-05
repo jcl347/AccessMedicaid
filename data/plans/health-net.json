@@ -1,0 +1,167 @@
+{
+  "planId": "health-net",
+  "planName": "Health Net Community Solutions (Medi-Cal)",
+  "relationship": "Primary plan a member can choose in Los Angeles County.",
+  "memberServicesPhone": "1-800-675-6110",
+  "memberServicesHours": "24 hours a day, 7 days a week",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-800-675-6110",
+  "website": "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal.html",
+  "memberPortalUrl": "https://member.medi-cal.healthnet.com",
+  "findADoctorUrl": "https://findaprovider.healthnetcalifornia.com/",
+  "memberHandbookUrl": "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-member-handbook-2025.pdf",
+  "notes": "Member Services 1-800-675-6110 (TTY 711) is the all-in-one line: Member Services, the 24/7 Nurse Advice Line, transportation requests, and interpreter requests. Important separations for Medi-Cal members: (1) Pharmacy is run by the state's Medi-Cal Rx program (1-800-977-2273, 24/7), not Health Net. (2) Dental for most members goes through Medi-Cal Dental / Smile California (1-800-322-6384), a separate state program. (3) Renewal is handled by your county (LA County DPSS, 1-866-613-3777) or BenefitsCal.com, not Health Net. Transportation is provided through Modivcare (1-855-253-6863) for both NEMT and non-medical NMT. The legacy provider search was retired in September 2025; the current find-a-doctor tool is findaprovider.healthnetcalifornia.com.",
+  "resources": [
+    {
+      "category": "Find a doctor",
+      "title": "Find a Doctor or Provider",
+      "description": "Use the online Find a Provider tool to look for doctors, specialists, clinics, hospitals, and pharmacies that take your Health Net Medi-Cal plan. You can also call Member Services and they will help you find a doctor near you.",
+      "phone": "1-800-675-6110",
+      "url": "https://findaprovider.healthnetcalifornia.com/",
+      "languages": "Help in 16+ languages by phone; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free Rides to Medical Visits (NEMT)",
+      "description": "If you have a hard time getting to a doctor, dentist, or pharmacy, you can get a free ride. Medical rides (like wheelchair vans or gurney transport) are arranged through Modivcare. For NEMT you may need a Physician Certification form first, and you should call ahead - 48 hours for higher-level rides. You can also call Member Services and choose the transportation option.",
+      "phone": "1-855-253-6863",
+      "url": "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-get-a-ride-for-health-care-services-modivcare.pdf",
+      "languages": "TTY 711; ride guide available in 13 languages",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Free Rides for Health-Related Trips (NMT)",
+      "description": "Non-medical transportation (NMT) gives you a free ride by car, taxi, van, rideshare, or bus to pick up prescriptions, get medical supplies, or go to a covered health appointment. Call Modivcare or Member Services to book. Try to call at least 24 hours ahead.",
+      "phone": "1-855-253-6863",
+      "url": "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-routine-medical-transportation.pdf",
+      "languages": "TTY 711; phone help in 16+ languages",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "24/7 Nurse Advice Line",
+      "description": "Talk to a nurse any time, day or night, for free. A nurse can answer health questions and help you decide if you should see a doctor, go to urgent care, or go to the ER. Call the same Member Services number, 24 hours a day, 7 days a week.",
+      "phone": "1-800-675-6110",
+      "url": "https://providerlibrary.healthnetcalifornia.com/contacts/health-net-nurse-advice-line.html",
+      "languages": "TTY 711; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental Health & Substance Use Help",
+      "description": "If you need help with stress, depression, anxiety, alcohol, or drugs, call the behavioral health line. Your plan covers therapy, visits with psychiatrists or psychologists, and other treatment. If you are in crisis or thinking about hurting yourself, call or text 988 any time, or go to the nearest ER.",
+      "phone": "1-888-426-0030",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/behavioral-health.html",
+      "languages": "TTY 711; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Prescription Drugs (Medi-Cal Rx)",
+      "description": "Your prescription drugs are covered by the state's Medi-Cal Rx program, not by Health Net. Call Medi-Cal Rx any time, day or night, with questions about your medicines, to find a pharmacy, or for help. You will need your BIC or member ID number.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/member/",
+      "languages": "TTY 711; multilingual support",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental Care (Medi-Cal Dental)",
+      "description": "For most members, dental care is a separate state program called Medi-Cal Dental (also called Denti-Cal or Smile California), not part of your Health Net plan. Call them to find a dentist or ask about covered dental services. Note: Health Net does offer a separate dental plan in Los Angeles and Sacramento Counties at hndental.com.",
+      "phone": "1-800-322-6384",
+      "url": "https://smilecalifornia.org/",
+      "languages": "TTY 1-800-735-2922; multilingual support",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye Care and Glasses",
+      "description": "Your plan covers eye exams and eyeglasses for both children and adults. Call Member Services to find an eye doctor in your plan or to ask what is covered.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal.html",
+      "languages": "TTY 711; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free Interpreter and Language Help",
+      "description": "You have the right to free help in your language. You can ask for a phone or in-person interpreter, and you can get plan papers in other languages, large print, or braille - all at no cost. Just call Member Services and ask for an interpreter.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/support/language-assistance.html",
+      "languages": "16+ languages including Spanish, Armenian, Chinese, Farsi, Korean, Russian, Tagalog, Vietnamese; TTY 711",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Member ID Card & Online Account",
+      "description": "Your member ID card has your member number and the phone numbers you need. Create an online account to see your benefits, pick or change your doctor, and ask for a new ID card if yours is lost. You will need your member number to sign up.",
+      "phone": "1-800-675-6110",
+      "url": "https://member.medi-cal.healthnet.com",
+      "languages": "TTY 711; phone help in 16+ languages",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew Your Medi-Cal (Keep Your Coverage)",
+      "description": "Every year you must renew your Medi-Cal to keep it. Your county runs renewals, not Health Net. In Los Angeles County, renew online at BenefitsCal.com or call LA County DPSS. Make sure your address and phone number are up to date so you do not miss your renewal letter.",
+      "phone": "1-866-613-3777",
+      "url": "https://benefitscal.com/",
+      "languages": "TTY 1-800-660-4026; multilingual support",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a Complaint or Appeal",
+      "description": "If you are unhappy with your care or a decision about your services, you can file a complaint (grievance) or an appeal. You can do it by phone, online, by mail, or by fax - all for free. You can also ask for a State Fair Hearing if you disagree with an appeal decision.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/appeals-and-grievances.html",
+      "languages": "TTY 711; free interpreter and translation help",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Extra Help: Care Management & Community Supports (CalAIM)",
+      "description": "If you have complex health needs, you may qualify for extra services at no cost. Enhanced Care Management (ECM) gives you one person to help coordinate all your care. Community Supports can help with things like housing, healthy food, and home help. Call Member Services to see if you qualify.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal/calaim-resources.html",
+      "languages": "TTY 711; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent Care & After-Hours Help",
+      "description": "For a real emergency, call 911 or go to the nearest ER. If it is not an emergency but you need care soon - like at night or on a weekend - call the 24/7 Nurse Advice Line first. They can guide you to urgent care or tell you what to do.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal.html",
+      "languages": "TTY 711; free interpreter available",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook & Forms",
+      "description": "The Member Handbook (also called Evidence of Coverage) explains all your benefits, your rights, and how to get care. You can read it online or call Member Services to have a copy mailed to you for free in your language.",
+      "phone": "1-800-675-6110",
+      "url": "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-member-handbook-2025.pdf",
+      "languages": "Available in multiple languages, large print, and braille; TTY 711",
+      "verified": false
+    }
+  ],
+  "sources": [
+    "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal.html",
+    "https://providerlibrary.healthnetcalifornia.com/contacts/health-net-nurse-advice-line.html",
+    "https://providerlibrary.healthnetcalifornia.com/contacts/modivcare.html",
+    "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-get-a-ride-for-health-care-services-modivcare.pdf",
+    "https://www.healthnet.com/content/healthnet/en_us/members/behavioral-health.html",
+    "https://medi-calrx.dhcs.ca.gov/member/",
+    "https://www.healthnet.com/content/healthnet/en_us/members/support/language-assistance.html",
+    "https://www.healthnet.com/content/healthnet/en_us/members/appeals-and-grievances.html",
+    "https://www.healthnet.com/content/healthnet/en_us/members/medi-cal/calaim-resources.html",
+    "https://findaprovider.healthnetcalifornia.com/",
+    "https://member.medi-cal.healthnet.com",
+    "https://smilecalifornia.org/contact-us/",
+    "https://benefitscal.com/",
+    "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-member-handbook-2025.pdf"
+  ]
+}

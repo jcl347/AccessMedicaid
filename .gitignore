@@ -1,0 +1,15 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Node (only if tooling is added later; data build needs no deps)
+node_modules/
+npm-debug.log*
+
+# Local scratch
+*.log
+.tmp/

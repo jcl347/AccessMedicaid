@@ -1,0 +1,184 @@
+{
+  "planId": "kaiser",
+  "planName": "Kaiser Permanente Medi-Cal (KP Cal, LLC)",
+  "relationship": "Direct plan for eligible/continuity Medi-Cal members in Los Angeles County (Kaiser Foundation Health Plan / KP Cal, LLC).",
+  "memberServicesPhone": "1-855-839-7613",
+  "memberServicesHours": "24 hours a day, 7 days a week (closed major holidays)",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-855-839-7613",
+  "website": "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid",
+  "memberPortalUrl": "https://healthy.kaiserpermanente.org/register",
+  "findADoctorUrl": "https://healthy.kaiserpermanente.org/southern-california/doctors-locations",
+  "memberHandbookUrl": "https://healthy.kaiserpermanente.org/content/dam/kporg/final/documents/health-plan-documents/eoc/ca/medicaid/evidence-of-coverage-medi-cal.pdf",
+  "notes": "Member Services for Kaiser Permanente Medi-Cal in Southern California (including LA County) is 1-855-839-7613 (TTY 711), 24/7 except major holidays - this is the correct Medi-Cal line (use the number on the back of your KP Medi-Cal ID card). The commonly cited 1-800-464-4000 is Kaiser's GENERAL member line; Medi-Cal members should call 1-855-839-7613. For a 24/7 nurse, Medi-Cal members are routed through Member Services. DENTAL and most outpatient PHARMACY are CARVED OUT of the Kaiser Medi-Cal plan: dental is the state's Medi-Cal Dental / Smile California (1-800-322-6384) and outpatient drugs are the state's Medi-Cal Rx (1-800-977-2273). VISION (routine eye exams and eyewear) is generally through Kaiser Vision Essentials/optometry. For renewals, Kaiser's Medicaid Assistance Center (1-800-557-4515, M-F 8am-5pm) can help, but the county and BenefitsCal.com handle the official redetermination.",
+  "resources": [
+    {
+      "category": "Member ID card & online account",
+      "title": "Member Services (your main help line)",
+      "description": "Call this number for almost anything: questions about your Medi-Cal benefits, finding or changing your doctor, getting a new ID card, booking a ride, or talking to a nurse. It is open day and night, every day (closed on major holidays). Use the number on the back of your Kaiser Medi-Cal card.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/support",
+      "languages": "Free interpreter help in any language, including sign language, 24/7. TTY: dial 711.",
+      "verified": true
+    },
+    {
+      "category": "Find a doctor",
+      "title": "Find a doctor or location",
+      "description": "Search online for primary care doctors, specialists, hospitals, urgent care, and pharmacies near you. You can also pick or switch your personal doctor anytime. If you need help, call Member Services and they will find an available doctor close to you.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/doctors-locations",
+      "languages": "Free interpreter help available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Set up your online account at kp.org",
+      "description": "Create a free account on kp.org to see test results, email your doctor, refill prescriptions, and view your ID card from your phone or computer. You will need your medical record number, which is printed on your member ID card.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/register",
+      "languages": "Site available in multiple languages; interpreter help via Member Services, TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "Talk to a nurse, day or night",
+      "description": "Not sure if you need to see a doctor? A registered nurse can give you medical advice any time, day or night, and help you choose the right kind of care. The easiest way as a Medi-Cal member is to call Member Services and ask for the advice nurse.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/get-care",
+      "languages": "Free interpreter help 24/7; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent and after-hours care",
+      "description": "For a sudden illness or minor injury that is not life-threatening, you can call the advice nurse through Member Services any time, use a 24/7 video or phone visit, or go to a Kaiser urgent care. For a true emergency, call 911 or go to the nearest emergency room.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/get-care",
+      "languages": "Free interpreter help 24/7; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free rides to medical visits (NEMT)",
+      "description": "If a health condition keeps you from getting to a covered medical appointment by car, bus, or taxi, Kaiser can arrange a free ride such as a wheelchair van or gurney van. A doctor's form may be needed. Call to set up a medical ride.",
+      "phone": "1-833-226-6760",
+      "url": "https://homecare-scal.kaiserpermanente.org/transportation-services/",
+      "languages": "Interpreter help via Member Services, TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Free rides to non-medical health needs (NMT)",
+      "description": "You can also get a free curb-to-curb ride to non-medical things that support your health, like picking up prescriptions or going to a Medi-Cal redetermination appointment. Call to book this kind of ride.",
+      "phone": "1-844-299-6230",
+      "url": "https://homecare-scal.kaiserpermanente.org/transportation-services/",
+      "languages": "Interpreter help via Member Services, TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health and addiction care",
+      "description": "You can get help for stress, depression, anxiety, or drug and alcohol problems. Call to set up a phone, video, or in-person visit with a mental health professional or addiction counselor. No referral is needed for most mental health care.",
+      "phone": "1-833-579-4848",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/health-wellness/mental-health/services",
+      "languages": "Free interpreter help; TTY 711. Line open Mon-Fri 8am-5pm (1-833-KP-WITH-U).",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health crisis support (24/7)",
+      "description": "If you are in emotional crisis or thinking about hurting yourself, help is available right now. Call Kaiser's 24/7 crisis line, or call or text 988 any time to reach a trained counselor for free and confidential support. If life is in danger, call 911.",
+      "phone": "1-800-900-3277",
+      "url": "https://healthy.kaiserpermanente.org/health-wellness/mental-health",
+      "languages": "988 offers help in many languages; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Prescriptions through Medi-Cal Rx",
+      "description": "For Medi-Cal, your outpatient prescription drugs are covered by the state's Medi-Cal Rx program, not by Kaiser. You can fill covered drugs at any pharmacy in the Medi-Cal Rx network. Call Medi-Cal Rx with questions about your medicines, open 24/7.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/member/",
+      "languages": "Interpreter help available; TTY 711 (Mon-Fri 8am-5pm).",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental care through Medi-Cal Dental (Smile, California)",
+      "description": "Dental care is not handled by Kaiser. Your Medi-Cal dental benefits come from the state's Medi-Cal Dental program, also called Smile, California. Call them to find a dentist or ask about covered dental services.",
+      "phone": "1-800-322-6384",
+      "url": "https://smilecalifornia.org/",
+      "languages": "Interpreter help available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye exams and glasses",
+      "description": "Routine eye exams and covered eyewear are usually provided through Kaiser's Vision Essentials and optometry departments. Call Member Services or check your handbook to learn what vision care is covered and to book an eye exam.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/doctors-locations",
+      "languages": "Free interpreter help; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free language and interpreter services",
+      "description": "You have the right to get help in the language you are most comfortable with. Kaiser offers free interpreters, including sign language, 24 hours a day, 7 days a week, whenever you contact them. You never have to pay for this, and you do not need to bring your own interpreter.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/support",
+      "languages": "Spoken-language interpreters and sign language, free, 24/7. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew your Medi-Cal so you keep coverage",
+      "description": "Each year your county checks if you still qualify for Medi-Cal. Watch your mail, fill out any renewal form, and send it back by the deadline so you do not lose coverage. Kaiser's Medicaid Assistance Center can help you with your renewal.",
+      "phone": "1-800-557-4515",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid/renewing",
+      "languages": "Interpreter help available; TTY 711. Open Mon-Fri 8am-5pm.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a complaint or appeal a decision",
+      "description": "If you are unhappy with your care or service, or you disagree with a decision about your benefits, you can file a grievance or an appeal. Kaiser must help you. Call Member Services to start, or use the grievance form. You can also get free help from the state.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/content/dam/kporg/final/documents/health-plan-documents/eoc/ca/medicaid/evidence-of-coverage-medi-cal.pdf",
+      "languages": "Free interpreter help; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Enhanced Care Management and Community Supports (CalAIM)",
+      "description": "If you have complex health needs, a Lead Care Manager can help coordinate your doctors, specialists, and mental health care (Enhanced Care Management). Community Supports may help with things like housing help, healthy meals, or other non-medical needs. Call Member Services to see if you qualify.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid/calaim-programs",
+      "languages": "Free interpreter help; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook (Evidence of Coverage) and forms",
+      "description": "Your Member Handbook explains all your Medi-Cal benefits, your rights, and how to get care. You can read it online or ask Member Services to mail you a printed copy for free in your language.",
+      "phone": "1-855-839-7613",
+      "url": "https://healthy.kaiserpermanente.org/content/dam/kporg/final/documents/health-plan-documents/eoc/ca/medicaid/evidence-of-coverage-medi-cal.pdf",
+      "languages": "Available in multiple languages; free printed copy on request. TTY 711.",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid/new-members",
+    "https://healthy.kaiserpermanente.org/southern-california/doctors-locations",
+    "https://healthy.kaiserpermanente.org/southern-california/get-care",
+    "https://healthy.kaiserpermanente.org/register",
+    "https://homecare-scal.kaiserpermanente.org/transportation-services/",
+    "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid/calaim-programs",
+    "https://healthy.kaiserpermanente.org/southern-california/shop-plans/medicaid/renewing",
+    "https://healthy.kaiserpermanente.org/southern-california/health-wellness/mental-health/services",
+    "https://healthy.kaiserpermanente.org/health-wellness/mental-health",
+    "https://healthy.kaiserpermanente.org/content/dam/kporg/final/documents/health-plan-documents/eoc/ca/medicaid/evidence-of-coverage-medi-cal.pdf",
+    "https://medi-calrx.dhcs.ca.gov/member/",
+    "https://smilecalifornia.org/contact-us/",
+    "https://www.dhcs.ca.gov/services/medi-cal-resources/transportation-services/"
+  ]
+}

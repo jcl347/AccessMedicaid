@@ -1,0 +1,147 @@
+{
+  "resources": [
+    {
+      "category": "Dental",
+      "title": "Medi-Cal Dental (Smile California) Member Help",
+      "description": "Free dental coverage help. Call to find a Medi-Cal dentist, ask about treatment, or file a complaint. Open Monday-Friday, 8 a.m.-5 p.m.",
+      "phone": "1-800-322-6384",
+      "url": "https://smilecalifornia.org",
+      "languages": "Free interpreter for in-language assistance; TTY 1-800-735-2922",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Medi-Cal Rx Customer Service Center",
+      "description": "Help with covered prescription drugs, finding a pharmacy, and prescription problems. Available 24 hours a day, 7 days a week.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov",
+      "languages": "Interpreter services available; TTY 711",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Health Care Options (Enroll, Change, or Keep a Plan)",
+      "description": "Call to join a Medi-Cal health plan, switch plans, or get help choosing. Open Monday-Friday, 8 a.m.-6 p.m.",
+      "phone": "1-800-430-4263",
+      "url": "https://www.healthcareoptions.dhcs.ca.gov",
+      "languages": "Help in 19+ languages including Spanish, Chinese, Vietnamese, Tagalog, Korean, Armenian; TTY 1-800-430-7077",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "DHCS Medi-Cal Managed Care Office of the Ombudsman",
+      "description": "Free help solving problems with your Medi-Cal managed care plan, like denied care or access issues. Open Monday-Friday, 8 a.m.-5 p.m. Have your Medi-Cal ID ready.",
+      "phone": "1-888-452-8609",
+      "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/MMCDOfficeoftheOmbudsman.aspx",
+      "languages": "Interpreter services available; email MMCDOmbudsmanOffice@dhcs.ca.gov",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "Health Consumer Alliance (Free Legal Help)",
+      "description": "Free, confidential help with health coverage problems, denied services, billing issues, and filing appeals or grievances. Free for everyone, regardless of income.",
+      "phone": "1-888-804-3536",
+      "url": "https://healthconsumer.org",
+      "languages": "Free legal services in all languages; TTY 1-877-735-2929",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Medi-Cal Member Help Line (DHCS)",
+      "description": "General Medi-Cal help line for questions about your benefits and your rights. Open Monday-Friday, 8 a.m.-5 p.m.",
+      "phone": "1-800-541-5555",
+      "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/WhereToGetHelp.aspx",
+      "languages": "Bilingual staff and free interpreter services; TTY 711 (CA State Relay)",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "BenefitsCal (Apply, Renew, Report Changes)",
+      "description": "Official online portal to apply for Medi-Cal, complete your yearly renewal, upload documents, and report changes like a new address or income. Report changes within 10 days.",
+      "phone": "",
+      "url": "https://benefitscal.com",
+      "languages": "Available in multiple languages online",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "LA County DPSS Customer Service Center",
+      "description": "Los Angeles County office for Medi-Cal. Call to renew, report changes, ask about your case, or apply for benefits.",
+      "phone": "1-866-613-3777",
+      "url": "https://dpss.lacounty.gov/en/customer-service/csc.html",
+      "languages": "Multilingual support including Spanish, Armenian, Cambodian, Vietnamese, Mandarin, Cantonese, Farsi, Tagalog, Russian, Korean",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "211 LA (Food, Housing, Utilities & Social Needs)",
+      "description": "Free, 24/7 help connecting Los Angeles County residents to food, housing, utility assistance, and other community resources. Just dial 211.",
+      "phone": "211",
+      "url": "https://211la.org",
+      "languages": "Multilingual support available 24/7",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "LA County Dept. of Mental Health ACCESS Line",
+      "description": "24/7 help line for mental health and substance use services in Los Angeles County, including crisis support, referrals, and crisis teams.",
+      "phone": "1-800-854-7771",
+      "url": "https://dmh.lacounty.gov/get-help-now/",
+      "languages": "Interpreter services available; call 711 relay for hearing/speech disabilities",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "LA County Substance Abuse Service Helpline (SASH)",
+      "description": "Free 24/7 helpline for help with substance use, misuse, and addiction. A counselor does a brief screening and refers you to a treatment provider.",
+      "phone": "1-844-804-7500",
+      "url": "http://publichealth.lacounty.gov/sapc/cares/",
+      "languages": "Translation services available",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "988 Suicide & Crisis Lifeline",
+      "description": "Free, confidential 24/7 support for anyone in suicidal, mental health, or substance use crisis, or emotional distress. Call, text, or chat anytime.",
+      "phone": "988",
+      "url": "https://988lifeline.org",
+      "languages": "English and Spanish (dial 988 then press 2, or text AYUDA to 988); interpreters in 240+ languages; Deaf/Hard of Hearing services",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Medi-Cal Transportation (NEMT)",
+      "description": "Non-Emergency Medical Transportation by ambulance, wheelchair van, or litter van for members who cannot travel by car or bus to covered care. Needs a provider's prescription. Managed care members call their plan; fee-for-service members ask their provider.",
+      "phone": "",
+      "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx",
+      "languages": "",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Medi-Cal Non-Medical Transportation (NMT)",
+      "description": "Rides (car, bus pass, taxi, or van) to and from covered Medi-Cal services like doctor and dental visits or picking up prescriptions. Available with full-scope Medi-Cal; no prescription needed. Managed care members call their plan to arrange it.",
+      "phone": "",
+      "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx",
+      "languages": "",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://smilecalifornia.org/contact-us/",
+    "https://dental.dhcs.ca.gov/Contact_Us/Medi-Cal_Dental_Member_Contact_Information/MediCalDentalMemberContactInformation",
+    "https://www.dhcs.ca.gov/individuals/medi-cal-rx-customer-service-center/",
+    "https://medi-calrx.dhcs.ca.gov/member/",
+    "https://www.healthcareoptions.dhcs.ca.gov/en/contact-us",
+    "https://www.dhcs.ca.gov/services/medi-cal/Pages/MMCDOfficeoftheOmbudsman.aspx",
+    "https://healthconsumer.org/",
+    "https://www.dhcs.ca.gov/services/medi-cal/Pages/WhereToGetHelp.aspx",
+    "https://benefitscal.com/?lang=en",
+    "https://dpss.lacounty.gov/en/customer-service/csc.html",
+    "https://211la.org/",
+    "https://dmh.lacounty.gov/get-help-now/",
+    "http://publichealth.lacounty.gov/sapc/cares/",
+    "https://988lifeline.org/",
+    "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx"
+  ]
+}
