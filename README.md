@@ -16,23 +16,27 @@ screen readers, and people who are stressed and short on time.
 
 ```
 AccessMedicaid/
-├─ site/                     ← the website (open site/index.html in any browser)
-│  ├─ index.html
-│  ├─ css/styles.css
-│  └─ js/
-│     ├─ app.js              ← renders plans, needs, resources, barriers
-│     └─ data.js             ← generated data bundle the page reads (window.AM_DATA)
+├─ index.html                ← the website (open in any browser, or deploy the repo root)
+├─ css/styles.css
+├─ js/
+│  ├─ app.js                 ← renders plans, needs, resources, barriers
+│  └─ data.js                ← generated data bundle the page reads (window.AM_DATA)
 ├─ data/                     ← the "database" (source of truth, JSON)
 │  ├─ plans/<plan>.json      ← one file per Medi-Cal plan
 │  ├─ barriers.json          ← access barriers + how to get past them
 │  ├─ state-resources.json   ← California statewide resources (any plan)
-│  └─ index.json             ← manifest of plans + metadata
+│  ├─ meta.json              ← categories + metadata
+│  └─ index.json             ← manifest (plan order)
+├─ scripts/build-data.mjs    ← compiles data/ → js/data.js
+├─ vercel.json               ← static-hosting config (Vercel)
 └─ README.md
 ```
 
 The data lives as JSON in `data/` (the database). The site reads a single generated
-bundle, `site/js/data.js`, which is built from those JSON files so the site works by
-**simply double-clicking `site/index.html`** — no server, no build tools required.
+bundle, `js/data.js`, which is built from those JSON files so the site works by
+**simply double-clicking `index.html`** — no server, no build tools required.
+Because `index.html` is at the repository root, the repo also deploys as-is to static
+hosts (Vercel, GitHub Pages, Netlify) with zero configuration.
 
 ## How it was built
 
@@ -54,11 +58,11 @@ on an official site this run are marked **"Please confirm."**
 
 ## Run it
 
-Just open `site/index.html` in a browser. To serve it (optional):
+Just open `index.html` in a browser. To serve it (optional):
 
 ```powershell
 # from the repo root
-python -m http.server 8080 --directory site
+python -m http.server 8080
 # then visit http://localhost:8080
 ```
 
@@ -76,6 +80,6 @@ python -m http.server 8080 --directory site
 
 ## Updating the data
 
-Edit the JSON in `data/`, then regenerate `site/js/data.js` (it's the same content assigned
-to `window.AM_DATA`). Keep phone numbers and URLs confirmed against official sites, and set
-`verified: true` only for facts you re-checked.
+Edit the JSON in `data/`, then run `node scripts/build-data.mjs` to regenerate `js/data.js`
+(the same content assigned to `window.AM_DATA`). Keep phone numbers and URLs confirmed
+against official sites, and set `verified: true` only for facts you re-checked.

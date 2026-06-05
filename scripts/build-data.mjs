@@ -1,6 +1,6 @@
-/* Build the website data bundle (site/js/data.js) from the JSON "database" in /data.
+/* Build the website data bundle (js/data.js) from the JSON "database" in /data.
    The /data JSON files are the single source of truth. Run:  node scripts/build-data.mjs
-   The site reads window.AM_DATA so it works by simply opening site/index.html (no server). */
+   The site reads window.AM_DATA so it works by simply opening index.html (no server). */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,7 +32,7 @@ const bundle = {
 
 const banner = "/* AUTO-GENERATED from /data by scripts/build-data.mjs - do not edit by hand. */\n";
 writeFileSync(
-  join(root, "site", "js", "data.js"),
+  join(root, "js", "data.js"),
   banner + "window.AM_DATA = " + JSON.stringify(bundle, null, 2) + ";\n",
   "utf8"
 );
@@ -40,6 +40,6 @@ writeFileSync(
 const resourceCount =
   plans.reduce((n, p) => n + (p.resources ? p.resources.length : 0), 0) + stateDoc.resources.length;
 console.log(
-  `Wrote site/js/data.js — ${plans.length} plans, ${barriersDoc.barriers.length} barriers, ` +
+  `Wrote js/data.js — ${plans.length} plans, ${barriersDoc.barriers.length} barriers, ` +
     `${stateDoc.resources.length} statewide resources, ${resourceCount} total resource cards.`
 );
