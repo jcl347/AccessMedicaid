@@ -771,11 +771,15 @@
  setMapLabel("Finding " + careLabel().toLowerCase() + " within " + scope + "...");
  var list = $("#nearList"); if (list) list.innerHTML = '<div class="empty-note">Searching the map for the closest places...</div>';
  var token = (geo.t = geo.t + 1);
- fetch("/api/nearby?lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius, { headers: { Accept: "application/json" } })
+ var nurl = "/api/nearby?lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius;
+ function fail() { if (token !== geo.t) return; setMapLabel("The map search is busy right now. Tap your need again to retry, or use the Google Maps link below."); if (list) list.innerHTML = '<div class="empty-note">Couldn\'t reach the map service. Please retry in a moment, or use "Open this search in Google Maps" below.</div>'; }
+ function retryOrFail(n) { if (token !== geo.t) return; if (n < 2) { setTimeout(function () { attempt(n + 1); }, 900); } else { fail(); } }
+ function attempt(n) {
+ fetch(nurl, { headers: { Accept: "application/json" } })
  .then(function (r) { return r.json(); })
  .then(function (d) {
  if (token !== geo.t) return;
- if (!d || !d.ok) { setMapLabel("We couldn't load places right now. Use the Google Maps link below."); if (list) list.innerHTML = ""; return; }
+ if (!d || !d.ok) { retryOrFail(n); return; }
  var places = (d.places || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; });
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
@@ -787,7 +791,9 @@
  setMapLabel(places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". All are on the map; nearest listed first:") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time."));
  renderNearList(places.slice(0, 20));
  })
- .catch(function () { if (token === geo.t) { setMapLabel("We couldn't load places right now. Use the Google Maps link below."); if (list) list.innerHTML = ""; } });
+ .catch(function () { retryOrFail(n); });
+ }
+ attempt(0);
  }
 
  function renderNearList(places) {
