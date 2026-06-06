@@ -1,178 +1,178 @@
 {
-  "planId": "la-care",
-  "planName": "L.A. Care Health Plan (Medi-Cal)",
-  "relationship": "Primary plan a Medi-Cal member can choose in Los Angeles County. L.A. Care is the local public health plan (the largest publicly operated health plan in the U.S.).",
-  "memberServicesPhone": "1-888-839-9909",
-  "memberServicesHours": "24 hours a day, 7 days a week, including holidays",
-  "ttyPhone": "711",
-  "nurseAdviceLine": "1-800-249-3619",
-  "website": "https://www.lacare.org/health-plans/medi-cal",
-  "memberPortalUrl": "https://members.lacare.org/",
-  "findADoctorUrl": "https://providers.lacare.org/s/find-doctor-or-hospital",
-  "memberHandbookUrl": "https://www.lacare.org/members/handbook",
-  "notes": "L.A. Care Member Services (1-888-839-9909, TTY 711) is available 24/7 and is the single front door for most needs: booking rides, requesting an interpreter, replacing your ID card, asking about benefits, and starting a grievance. Medi-Cal Dental (Denti-Cal) and Medi-Cal Rx (pharmacy) are state-run programs SEPARATE from L.A. Care, so members call those programs directly. Behavioral/mental health and substance use care is delivered through L.A. Care's partner Carelon Behavioral Health (1-877-344-2858); members with serious (specialty) mental health needs may instead get care through the L.A. County Department of Mental Health. Non-emergency rides are provided through L.A. Care's partner Call the Car. The member online portal is L.A. Care Connect.",
-  "resources": [
-    {
-      "category": "Member ID card & online account",
-      "title": "Member Services (start here for almost anything)",
-      "description": "Call L.A. Care any time, day or night. They can help you find care, book a ride, get an interpreter, replace your ID card, or answer benefit questions. The call is free.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/member-services",
-      "languages": "Free interpreters in any language, 24/7. TTY: 711.",
-      "verified": true
-    },
-    {
-      "category": "Find a doctor",
-      "title": "Find a doctor, hospital, or pharmacy",
-      "description": "Use L.A. Care's online tool to look up doctors, specialists, hospitals, and pharmacies that take your plan. You can also call Member Services and they will help you find one near you.",
-      "phone": "1-888-839-9909",
-      "url": "https://providers.lacare.org/s/find-doctor-or-hospital",
-      "languages": "Call Member Services for help in your language (TTY 711).",
-      "verified": false
-    },
-    {
-      "category": "Nurse advice line (24/7)",
-      "title": "24-Hour Nurse Advice Line",
-      "description": "Not sure if you should see a doctor? Call a nurse any time, day or night, for free advice about your health. A nurse can tell you what to do and how soon to get care.",
-      "phone": "1-800-249-3619",
-      "url": "https://www.lacare.org/members/getting-care/nurse-advice-line",
-      "languages": "Available 24/7. TTY: 711.",
-      "verified": true
-    },
-    {
-      "category": "Get a ride (transportation)",
-      "title": "Free rides to medical care (NEMT)",
-      "description": "If you have a medical reason that you cannot use a car, bus, or train, L.A. Care can set up a ride like a wheelchair van or ambulance to your medical visit. Your doctor fills out a short form. Call Member Services and choose the transportation option.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/transportation",
-      "languages": "Call Member Services for help in your language (TTY 711).",
-      "verified": true
-    },
-    {
-      "category": "Transportation to non-medical (NMT)",
-      "title": "Free rides for non-medical trips (NMT)",
-      "description": "L.A. Care can give you a free ride to a doctor visit, the pharmacy to pick up medicine, or other covered care, even if you do not have a medical need for a special vehicle. No doctor form is needed. Call at least 3 hours before your appointment (Mon-Fri) and have your ID card ready. Rides are provided through Call the Car.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/handbook/transportation-benefits-situations-are-not-emergencies-non-medical",
-      "languages": "Call Member Services for help in your language (TTY 711).",
-      "verified": true
-    },
-    {
-      "category": "Mental health & substance use",
-      "title": "Mental health & substance use help (Carelon)",
-      "description": "If you feel sad, stressed, anxious, or need help with drug or alcohol use, you can get care like therapy and counseling. L.A. Care works with Carelon Behavioral Health to connect you. If you have more serious mental health needs, you can also get care through the L.A. County Department of Mental Health (call 1-800-854-7771, available 24/7).",
-      "phone": "1-877-344-2858",
-      "url": "https://www.lacare.org/members/getting-care/behavioral-health/medi-cal",
-      "languages": "TTY: 1-800-735-2929.",
-      "verified": true
-    },
-    {
-      "category": "Pharmacy & prescriptions",
-      "title": "Medicine and prescriptions (Medi-Cal Rx)",
-      "description": "Your prescription medicines are covered by Medi-Cal Rx, a state program that is separate from L.A. Care. For questions about your medicine or which pharmacy to use, call Medi-Cal Rx any time, day or night.",
-      "phone": "1-800-977-2273",
-      "url": "https://www.medi-calrx.dhcs.ca.gov/home/",
-      "languages": "Available 24/7. TTY: call 1-800-977-2273 and press 7, or 711.",
-      "verified": true
-    },
-    {
-      "category": "Dental",
-      "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
-      "description": "Your dental care is covered by Medi-Cal Dental (also called Denti-Cal), a state program that is separate from L.A. Care. Call them to find a dentist or ask about cleanings, fillings, and other dental care.",
-      "phone": "1-800-322-6384",
-      "url": "https://www.lacare.org/members/getting-care/dental-services",
-      "languages": "Open Mon-Fri, 8 a.m. to 5 p.m. TTY/TDD: 1-800-735-2922.",
-      "verified": true
-    },
-    {
-      "category": "Vision",
-      "title": "Eye exams and glasses (VSP)",
-      "description": "L.A. Care covers eye exams and glasses through Vision Service Plan (VSP). Medi-Cal members can get a routine eye exam and a pair of glasses, usually once every 24 months. Call VSP with questions about your vision care.",
-      "phone": "1-800-877-7195",
-      "url": "https://www.lacare.org/members/getting-care/vision",
-      "languages": "TTY: 1-800-428-4833.",
-      "verified": true
-    },
-    {
-      "category": "Language & interpreter help",
-      "title": "Free interpreters and translated materials",
-      "description": "You have the right to free help in your language. L.A. Care can give you an interpreter (including sign language) for your doctor visits and phone calls, 24/7, at no cost. You can also get the Member Handbook and other papers in your language or in large print, audio, or Braille.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/interpretation-translation",
-      "languages": "Free oral interpretation in any language and sign language, 24/7. Written materials available in 11 languages. TTY: 711.",
-      "verified": true
-    },
-    {
-      "category": "Member ID card & online account",
-      "title": "Your member ID card & L.A. Care Connect",
-      "description": "Your ID card shows you are an L.A. Care member. If your card is lost, stolen, or damaged, you can get a new one for free. Use the L.A. Care Connect online account to view or print your card, or call Member Services to ask for a new one.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/id-card/medi-cal",
-      "languages": "Call Member Services for help in your language (TTY 711).",
-      "verified": true
-    },
-    {
-      "category": "Renew Medi-Cal / keep coverage",
-      "title": "Renew your Medi-Cal and keep your coverage",
-      "description": "Each year you must renew your Medi-Cal so you do not lose it. Watch your mail for a renewal form from L.A. County and answer it by the due date. Keep your address, phone, and email up to date. The easiest way to renew is online at BenefitsCal.com. For free in-person help, call to make an appointment at a Community Resource Center.",
-      "phone": "1-877-287-6290",
-      "url": "https://www.lacare.org/health-plans/medi-cal/renewals",
-      "languages": "Renew online at BenefitsCal.com, by mail, or by phone (county line 1-866-613-3777). TTY 711.",
-      "verified": true
-    },
-    {
-      "category": "Complaints & appeals (grievances)",
-      "title": "File a complaint or appeal a decision",
-      "description": "If you are unhappy with your care or L.A. Care said no to a service you think you need, you can file a grievance or appeal. It is free and will not affect your care. Call Member Services any time, fill out a form at your doctor's office, or mail it in. You usually have up to 180 days after a denial to appeal.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/file-grievance",
-      "languages": "Available 24/7. TTY: 711. You can also get free help from the state DHCS Ombudsman at 1-888-452-8609 (Mon-Fri, 8 a.m.-5 p.m.).",
-      "verified": true
-    },
-    {
-      "category": "Extra benefits & community supports (CalAIM)",
-      "title": "Extra help: care management & community supports (CalAIM)",
-      "description": "If you have complex health needs, L.A. Care offers extra free help. Enhanced Care Management (ECM) gives you one person to help coordinate all your care. Community Supports can help with things like housing help, meals after a hospital stay, and more. These are free and do not replace your regular benefits. Call to learn more or talk to your doctor.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/enhanced-care-management",
-      "languages": "Call Member Services for help in your language (TTY 711).",
-      "verified": true
-    },
-    {
-      "category": "Urgent & after-hours care",
-      "title": "Urgent care and after-hours help",
-      "description": "If you need care fast but it is not an emergency, you can go to an urgent care center or call the 24-Hour Nurse Advice Line for advice on what to do. If you have a true emergency, like trouble breathing or chest pain, call 911 or go to the nearest emergency room right away.",
-      "phone": "1-800-249-3619",
-      "url": "https://www.lacare.org/members/getting-care/nurse-advice-line",
-      "languages": "Nurse line available 24/7. TTY: 711. Call 911 for emergencies.",
-      "verified": true
-    },
-    {
-      "category": "Member handbook & forms",
-      "title": "Member Handbook and forms",
-      "description": "The Member Handbook explains all your benefits, your rights, and how to get care. You can read it online, download it, or ask for a free printed copy in your language.",
-      "phone": "1-888-839-9909",
-      "url": "https://www.lacare.org/members/handbook",
-      "languages": "Available in 11 languages and other formats (large print, audio, Braille). TTY: 711.",
-      "verified": true
-    }
-  ],
-  "sources": [
-    "https://www.lacare.org/health-plans/medi-cal",
-    "https://www.lacare.org/members/getting-care/nurse-advice-line",
-    "https://www.lacare.org/members/handbook/important-phone-numbers",
-    "https://www.lacare.org/members/transportation",
-    "https://www.lacare.org/members/getting-care/behavioral-health/medi-cal",
-    "https://www.medi-calrx.dhcs.ca.gov/home/",
-    "https://www.lacare.org/members/getting-care/dental-services",
-    "https://www.lacare.org/members/getting-care/vision",
-    "https://www.lacare.org/members/interpretation-translation",
-    "https://www.lacare.org/members/id-card/medi-cal",
-    "https://www.lacare.org/health-plans/medi-cal/renewals",
-    "https://www.lacare.org/members/file-grievance",
-    "https://www.lacare.org/members/enhanced-care-management",
-    "https://www.lacare.org/members/handbook",
-    "https://providers.lacare.org/s/find-doctor-or-hospital",
-    "https://members.lacare.org/"
-  ]
+ "planId": "la-care",
+ "planName": "L.A. Care Health Plan (Medi-Cal)",
+ "relationship": "Primary plan a Medi-Cal member can choose in Los Angeles County. L.A. Care is the local public health plan (the largest publicly operated health plan in the U.S.).",
+ "memberServicesPhone": "1-888-839-9909",
+ "memberServicesHours": "24 hours a day, 7 days a week, including holidays",
+ "ttyPhone": "711",
+ "nurseAdviceLine": "1-800-249-3619",
+ "website": "https://www.lacare.org/health-plans/medi-cal",
+ "memberPortalUrl": "https://members.lacare.org/",
+ "findADoctorUrl": "https://providers.lacare.org/s/find-doctor-or-hospital",
+ "memberHandbookUrl": "https://www.lacare.org/members/handbook",
+ "notes": "L.A. Care Member Services (1-888-839-9909, TTY 711) is available 24/7 and is the single front door for most needs: booking rides, requesting an interpreter, replacing your ID card, asking about benefits, and starting a grievance. Medi-Cal Dental (Denti-Cal) and Medi-Cal Rx (pharmacy) are state-run programs SEPARATE from L.A. Care, so members call those programs directly. Behavioral/mental health and substance use care is delivered through L.A. Care's partner Carelon Behavioral Health (1-877-344-2858); members with serious (specialty) mental health needs may instead get care through the L.A. County Department of Mental Health. Non-emergency rides are provided through L.A. Care's partner Call the Car. The member online portal is L.A. Care Connect.",
+ "resources": [
+ {
+ "category": "Member ID card & online account",
+ "title": "Member Services (start here for almost anything)",
+ "description": "Call L.A. Care any time, day or night. They can help you find care, book a ride, get an interpreter, replace your ID card, or answer benefit questions. The call is free.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/member-services",
+ "languages": "Free interpreters in any language, 24/7. TTY: 711.",
+ "verified": true
+ },
+ {
+ "category": "Find a doctor",
+ "title": "Find a doctor, hospital, or pharmacy",
+ "description": "Use L.A. Care's online tool to look up doctors, specialists, hospitals, and pharmacies that take your plan. You can also call Member Services and they will help you find one near you.",
+ "phone": "1-888-839-9909",
+ "url": "https://providers.lacare.org/s/find-doctor-or-hospital",
+ "languages": "Call Member Services for help in your language (TTY 711).",
+ "verified": false
+ },
+ {
+ "category": "Nurse advice line (24/7)",
+ "title": "24-Hour Nurse Advice Line",
+ "description": "Not sure if you should see a doctor? Call a nurse any time, day or night, for free advice about your health. A nurse can tell you what to do and how soon to get care.",
+ "phone": "1-800-249-3619",
+ "url": "https://www.lacare.org/members/getting-care/nurse-advice-line",
+ "languages": "Available 24/7. TTY: 711.",
+ "verified": true
+ },
+ {
+ "category": "Get a ride (transportation)",
+ "title": "Free rides to medical care (NEMT)",
+ "description": "If you have a medical reason that you cannot use a car, bus, or train, L.A. Care can set up a ride like a wheelchair van or ambulance to your medical visit. Your doctor fills out a short form. Call Member Services and choose the transportation option.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/transportation",
+ "languages": "Call Member Services for help in your language (TTY 711).",
+ "verified": true
+ },
+ {
+ "category": "Transportation to non-medical (NMT)",
+ "title": "Free rides for non-medical trips (NMT)",
+ "description": "L.A. Care can give you a free ride to a doctor visit, the pharmacy to pick up medicine, or other covered care, even if you do not have a medical need for a special vehicle. No doctor form is needed. Call at least 3 hours before your appointment (Mon-Fri) and have your ID card ready. Rides are provided through Call the Car.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook/transportation-benefits-situations-are-not-emergencies-non-medical",
+ "languages": "Call Member Services for help in your language (TTY 711).",
+ "verified": true
+ },
+ {
+ "category": "Mental health & substance use",
+ "title": "Mental health & substance use help (Carelon)",
+ "description": "If you feel sad, stressed, anxious, or need help with drug or alcohol use, you can get care like therapy and counseling. L.A. Care works with Carelon Behavioral Health to connect you. If you have more serious mental health needs, you can also get care through the L.A. County Department of Mental Health (call 1-800-854-7771, available 24/7).",
+ "phone": "1-877-344-2858",
+ "url": "https://www.lacare.org/members/getting-care/behavioral-health/medi-cal",
+ "languages": "TTY: 1-800-735-2929.",
+ "verified": true
+ },
+ {
+ "category": "Pharmacy & prescriptions",
+ "title": "Medicine and prescriptions (Medi-Cal Rx)",
+ "description": "Your prescription medicines are covered by Medi-Cal Rx, a state program that is separate from L.A. Care. For questions about your medicine or which pharmacy to use, call Medi-Cal Rx any time, day or night.",
+ "phone": "1-800-977-2273",
+ "url": "https://www.medi-calrx.dhcs.ca.gov/home/",
+ "languages": "Available 24/7. TTY: call 1-800-977-2273 and press 7, or 711.",
+ "verified": true
+ },
+ {
+ "category": "Dental",
+ "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
+ "description": "Your dental care is covered by Medi-Cal Dental (also called Denti-Cal), a state program that is separate from L.A. Care. Call them to find a dentist or ask about cleanings, fillings, and other dental care.",
+ "phone": "1-800-322-6384",
+ "url": "https://www.lacare.org/members/getting-care/dental-services",
+ "languages": "Open Mon-Fri, 8 a.m. to 5 p.m. TTY/TDD: 1-800-735-2922.",
+ "verified": true
+ },
+ {
+ "category": "Vision",
+ "title": "Eye exams and glasses (VSP)",
+ "description": "L.A. Care covers eye exams and glasses through Vision Service Plan (VSP). Medi-Cal members can get a routine eye exam and a pair of glasses, usually once every 24 months. Call VSP with questions about your vision care.",
+ "phone": "1-800-877-7195",
+ "url": "https://www.lacare.org/members/getting-care/vision",
+ "languages": "TTY: 1-800-428-4833.",
+ "verified": true
+ },
+ {
+ "category": "Language & interpreter help",
+ "title": "Free interpreters and translated materials",
+ "description": "You have the right to free help in your language. L.A. Care can give you an interpreter (including sign language) for your doctor visits and phone calls, 24/7, at no cost. You can also get the Member Handbook and other papers in your language or in large print, audio, or Braille.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/interpretation-translation",
+ "languages": "Free oral interpretation in any language and sign language, 24/7. Written materials available in 11 languages. TTY: 711.",
+ "verified": true
+ },
+ {
+ "category": "Member ID card & online account",
+ "title": "Your member ID card & L.A. Care Connect",
+ "description": "Your ID card shows you are an L.A. Care member. If your card is lost, stolen, or damaged, you can get a new one for free. Use the L.A. Care Connect online account to view or print your card, or call Member Services to ask for a new one.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/id-card/medi-cal",
+ "languages": "Call Member Services for help in your language (TTY 711).",
+ "verified": true
+ },
+ {
+ "category": "Renew Medi-Cal / keep coverage",
+ "title": "Renew your Medi-Cal and keep your coverage",
+ "description": "Each year you must renew your Medi-Cal so you do not lose it. Watch your mail for a renewal form from L.A. County and answer it by the due date. Keep your address, phone, and email up to date. The easiest way to renew is online at BenefitsCal.com. For free in-person help, call to make an appointment at a Community Resource Center.",
+ "phone": "1-877-287-6290",
+ "url": "https://www.lacare.org/health-plans/medi-cal/renewals",
+ "languages": "Renew online at BenefitsCal.com, by mail, or by phone (county line 1-866-613-3777). TTY 711.",
+ "verified": true
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "File a complaint or appeal a decision",
+ "description": "If you are unhappy with your care or L.A. Care said no to a service you think you need, you can file a grievance or appeal. It is free and will not affect your care. Call Member Services any time, fill out a form at your doctor's office, or mail it in. You usually have up to 180 days after a denial to appeal.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/file-grievance",
+ "languages": "Available 24/7. TTY: 711. You can also get free help from the state DHCS Ombudsman at 1-888-452-8609 (Mon-Fri, 8 a.m.-5 p.m.).",
+ "verified": true
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "Extra help: care management & community supports (CalAIM)",
+ "description": "If you have complex health needs, L.A. Care offers extra free help. Enhanced Care Management (ECM) gives you one person to help coordinate all your care. Community Supports can help with things like housing help, meals after a hospital stay, and more. These are free and do not replace your regular benefits. Call to learn more or talk to your doctor.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/enhanced-care-management",
+ "languages": "Call Member Services for help in your language (TTY 711).",
+ "verified": true
+ },
+ {
+ "category": "Urgent & after-hours care",
+ "title": "Urgent care and after-hours help",
+ "description": "If you need care fast but it is not an emergency, you can go to an urgent care center or call the 24-Hour Nurse Advice Line for advice on what to do. If you have a true emergency, like trouble breathing or chest pain, call 911 or go to the nearest emergency room right away.",
+ "phone": "1-800-249-3619",
+ "url": "https://www.lacare.org/members/getting-care/nurse-advice-line",
+ "languages": "Nurse line available 24/7. TTY: 711. Call 911 for emergencies.",
+ "verified": true
+ },
+ {
+ "category": "Member handbook & forms",
+ "title": "Member Handbook and forms",
+ "description": "The Member Handbook explains all your benefits, your rights, and how to get care. You can read it online, download it, or ask for a free printed copy in your language.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook",
+ "languages": "Available in 11 languages and other formats (large print, audio, Braille). TTY: 711.",
+ "verified": true
+ }
+ ],
+ "sources": [
+ "https://www.lacare.org/health-plans/medi-cal",
+ "https://www.lacare.org/members/getting-care/nurse-advice-line",
+ "https://www.lacare.org/members/handbook/important-phone-numbers",
+ "https://www.lacare.org/members/transportation",
+ "https://www.lacare.org/members/getting-care/behavioral-health/medi-cal",
+ "https://www.medi-calrx.dhcs.ca.gov/home/",
+ "https://www.lacare.org/members/getting-care/dental-services",
+ "https://www.lacare.org/members/getting-care/vision",
+ "https://www.lacare.org/members/interpretation-translation",
+ "https://www.lacare.org/members/id-card/medi-cal",
+ "https://www.lacare.org/health-plans/medi-cal/renewals",
+ "https://www.lacare.org/members/file-grievance",
+ "https://www.lacare.org/members/enhanced-care-management",
+ "https://www.lacare.org/members/handbook",
+ "https://providers.lacare.org/s/find-doctor-or-hospital",
+ "https://members.lacare.org/"
+ ]
 }

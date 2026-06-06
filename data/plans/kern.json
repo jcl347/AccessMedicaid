@@ -1,177 +1,177 @@
 {
-  "planId": "kern",
-  "planName": "Kern Family Health Care (Kern Health Systems)",
-  "relationship": "Local Initiative Medi-Cal managed care plan for Kern County, operated by Kern Health Systems (KHS).",
-  "memberServicesPhone": "1-800-391-2000",
-  "memberServicesHours": "Monday-Friday, 8:00 a.m. to 5:00 p.m. (local Bakersfield line: 661-632-1590).",
-  "ttyPhone": "711",
-  "nurseAdviceLine": "1-800-391-2000",
-  "website": "https://www.kernfamilyhealthcare.com/medi-cal/",
-  "memberPortalUrl": "https://member.kernfamilyhealthcare.com/v3app/a/",
-  "findADoctorUrl": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
-  "memberHandbookUrl": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
-  "notes": "Kern Family Health Care is the public/Local Initiative Medi-Cal plan for Kern County, operated by Kern Health Systems (KHS). Member Services 1-800-391-2000 was verified on official KFHC pages; TTY is 711. The same number doubles as the 24/7 Advice Nurse Line and the urgent/after-hours line, with menu options (Transportation is option 3). Dental and pharmacy benefits are carved out: routine dental is handled by the state Medi-Cal Dental program, and outpatient prescriptions by Medi-Cal Rx, not KFHC. The live site returned HTTP 403 to direct fetching, so several details were confirmed via official KFHC search excerpts and are marked 'please confirm' where they could not be independently opened this run.",
-  "resources": [
-    {
-      "category": "Find a doctor",
-      "title": "Find a doctor, hospital, or clinic",
-      "description": "Need a doctor, clinic, or hospital that takes your plan? Use the online Find a Doctor tool to search by name, specialty, language, or location. You can also pick or change your main doctor (PCP) when you log in to the Member Portal. If you need help, call Member Services.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
-      "languages": "Free interpreters in 200+ languages through Member Services; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Nurse advice line (24/7)",
-      "title": "24-hour Advice Nurse Line",
-      "description": "Have a health question and can't reach your doctor? A nurse can help you any time, day or night, 24 hours a day, 7 days a week. They can tell you how to care for yourself at home and whether you should see a doctor. Have your KFHC ID number ready when you call.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Urgent & after-hours care",
-      "title": "Urgent and after-hours care",
-      "description": "For a real emergency, call 911 or go to the nearest ER. For urgent problems that are not life-threatening, call your doctor's office first. If they are closed, you can call the 24-hour Advice Nurse Line any time for help and advice.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Get a ride (transportation)",
-      "title": "Free rides to medical care (NEMT)",
-      "description": "If your health or a disability means you need a special ride (like a wheelchair van) to get to a covered medical visit, KFHC can arrange it at no cost to you. Your doctor fills out a short form (a Physician Certification Statement) to set it up. Call the Transportation Department to book. Try to call at least 5 business days before your visit.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Transportation to non-medical (NMT)",
-      "title": "Rides to non-medical Medi-Cal services (NMT)",
-      "description": "If you have no way to get to a Medi-Cal service or to pick up your medicine, KFHC can help with non-medical transportation. This can include a bus pass, a rideshare trip, or paying you back for mileage. When you call, just explain why you can't get there. Once approved, it is on file for 12 months. Call the Transportation Department (option 3).",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Mental health & substance use",
-      "title": "Mental health and substance use help",
-      "description": "KFHC covers care for mild-to-moderate mental health needs, like feeling very sad, worried, or stressed. You usually do not need pre-approval to see a plan provider. For a mental health crisis, call the Kern County crisis line at 988 or 1-800-991-5272 any time. For drug or alcohol help, call the 24-hour Substance Use Disorder Access Line at 1-866-266-4898.",
-      "phone": "1-800-991-5272",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
-      "languages": "Interpreter help available; crisis line TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Pharmacy & prescriptions",
-      "title": "Your prescription drug benefit (Medi-Cal Rx)",
-      "description": "Your prescription medicines are covered through Medi-Cal Rx, the state's pharmacy program (not directly by KFHC). Show your BIC or Medi-Cal ID card at the pharmacy. For questions about covered drugs or to find a pharmacy that takes Medi-Cal Rx, call them 24/7 or use the online pharmacy locator.",
-      "phone": "1-800-977-2273",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
-      "languages": "Customer Service 24/7; TTY 711 (Mon-Fri 8am-5pm)",
-      "verified": false
-    },
-    {
-      "category": "Dental",
-      "title": "Dental care (Medi-Cal Dental)",
-      "description": "Your dental care comes through Medi-Cal Dental, the state's dental program (not directly through KFHC). It covers things like checkups, cleanings, fillings, and more. Call Medi-Cal Dental to learn about covered services or to find a dentist who takes Medi-Cal. They are open Monday-Friday, 8am-5pm.",
-      "phone": "1-800-322-6384",
-      "url": "https://dental.dhcs.ca.gov/",
-      "languages": "TTY 1-800-735-2922",
-      "verified": false
-    },
-    {
-      "category": "Vision",
-      "title": "Vision care (eye exams and glasses)",
-      "description": "KFHC covers vision care through Vision Service Plan (VSP). You can get a routine eye exam to check your eye health and your prescription. Eyeglasses are covered for members under 21 and for nursing-home residents (state Medi-Cal rules). To find an eye doctor, search VSP and choose the 'Medicaid' network, or call Member Services for help.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Language & interpreter help",
-      "title": "Free interpreter and translation help",
-      "description": "You have the right to get help in your language at no cost. Over-the-phone interpreters speak more than 200 languages. You can also ask for a free interpreter at your doctor visits, and you can get plan letters and the handbook in other languages, large print, braille, or audio. Just call Member Services before your visit.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
-      "languages": "Over-the-phone interpreters in 200+ languages; TDD/TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Member ID card & online account",
-      "title": "Member ID card and online account (Member Portal / LiNK app)",
-      "description": "Your KFHC member ID card should arrive in the mail within about two weeks of starting coverage. Bring it to every visit and pharmacy pickup. Lost your card? Request a new one online or by calling Member Services. You can also sign up for the Member Portal (or the free LiNK app) to view your main doctor, change your info, and see your prescription approvals.",
-      "phone": "1-800-391-2000",
-      "url": "https://member.kernfamilyhealthcare.com/v3app/a/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Renew Medi-Cal / keep coverage",
-      "title": "Keep your Medi-Cal coverage (renew every year)",
-      "description": "You must renew your Medi-Cal every year so you don't lose your coverage. Watch your mail for a renewal packet from the Kern County Department of Human Services and send back anything they ask for on time. If you miss the deadline, you have 90 days after it to still finish your renewal. Make sure your address and phone number are up to date.",
-      "phone": "1-877-410-8812",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Complaints & appeals (grievances)",
-      "title": "File a complaint or appeal (grievance)",
-      "description": "If you are unhappy with your care, a provider, or a plan decision, you have the right to speak up, and it will not affect your care. You can file a grievance online, by phone, or by mailing a form. If the plan denies a service, you can appeal to ask them to review it. KFHC answers most grievances within 30 days. Mail forms to: Grievance Coordinator, KFHC, 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
-      "languages": "Forms in English and Spanish; interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Extra benefits & community supports (CalAIM)",
-      "title": "Extra help: Enhanced Care Management & Community Supports (CalAIM)",
-      "description": "If you have complex health needs, KFHC offers Enhanced Care Management (ECM) at no cost. A care team helps you coordinate your doctors, mental health, and other needs, all in one place. Community Supports can help with things like finding housing, getting healthy food, or having a safe place to recover after a hospital stay. Call Member Services to ask if you qualify.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Member handbook & forms",
-      "title": "Member Handbook and forms",
-      "description": "The Member Handbook (also called the Evidence of Coverage) explains all your benefits, your rights, and how to get care. You can read it online, or ask for a free printed copy in English or Spanish, or in large print, braille, or audio. Read it soon after you join so you know what is covered.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
-      "languages": "Available in English and Spanish; large print, braille, and audio on request; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Other",
-      "title": "Contact Kern Family Health Care",
-      "description": "For any question about your Medi-Cal plan, Member Services can help Monday-Friday, 8am-5pm. The local Bakersfield number is 661-632-1590, or call toll-free at 1-800-391-2000 from outside Bakersfield. The office is at 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
-      "phone": "1-800-391-2000",
-      "url": "https://www.kernfamilyhealthcare.com/contact-us/",
-      "languages": "Interpreter help in 200+ languages; TTY 711",
-      "verified": true
-    }
-  ],
-  "sources": [
-    "https://www.kernfamilyhealthcare.com/medi-cal/",
-    "https://www.kernfamilyhealthcare.com/contact-us/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
-    "https://member.kernfamilyhealthcare.com/v3app/a/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
-    "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
-    "https://dental.dhcs.ca.gov/",
-    "https://www.kcdhs.org/services/apply-for-benefits/medi-cal"
-  ]
+ "planId": "kern",
+ "planName": "Kern Family Health Care (Kern Health Systems)",
+ "relationship": "Local Initiative Medi-Cal managed care plan for Kern County, operated by Kern Health Systems (KHS).",
+ "memberServicesPhone": "1-800-391-2000",
+ "memberServicesHours": "Monday-Friday, 8:00 a.m. to 5:00 p.m. (local Bakersfield line: 661-632-1590).",
+ "ttyPhone": "711",
+ "nurseAdviceLine": "1-800-391-2000",
+ "website": "https://www.kernfamilyhealthcare.com/medi-cal/",
+ "memberPortalUrl": "https://member.kernfamilyhealthcare.com/v3app/a/",
+ "findADoctorUrl": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+ "memberHandbookUrl": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+ "notes": "Kern Family Health Care is the public/Local Initiative Medi-Cal plan for Kern County, operated by Kern Health Systems (KHS). Member Services 1-800-391-2000 was verified on official KFHC pages; TTY is 711. The same number doubles as the 24/7 Advice Nurse Line and the urgent/after-hours line, with menu options (Transportation is option 3). Dental and pharmacy benefits are carved out: routine dental is handled by the state Medi-Cal Dental program, and outpatient prescriptions by Medi-Cal Rx, not KFHC. The live site returned HTTP 403 to direct fetching, so several details were confirmed via official KFHC search excerpts and are marked 'please confirm' where they could not be independently opened this run.",
+ "resources": [
+ {
+ "category": "Find a doctor",
+ "title": "Find a doctor, hospital, or clinic",
+ "description": "Need a doctor, clinic, or hospital that takes your plan? Use the online Find a Doctor tool to search by name, specialty, language, or location. You can also pick or change your main doctor (PCP) when you log in to the Member Portal. If you need help, call Member Services.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+ "languages": "Free interpreters in 200+ languages through Member Services; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Nurse advice line (24/7)",
+ "title": "24-hour Advice Nurse Line",
+ "description": "Have a health question and can't reach your doctor? A nurse can help you any time, day or night, 24 hours a day, 7 days a week. They can tell you how to care for yourself at home and whether you should see a doctor. Have your KFHC ID number ready when you call.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Urgent & after-hours care",
+ "title": "Urgent and after-hours care",
+ "description": "For a real emergency, call 911 or go to the nearest ER. For urgent problems that are not life-threatening, call your doctor's office first. If they are closed, you can call the 24-hour Advice Nurse Line any time for help and advice.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Get a ride (transportation)",
+ "title": "Free rides to medical care (NEMT)",
+ "description": "If your health or a disability means you need a special ride (like a wheelchair van) to get to a covered medical visit, KFHC can arrange it at no cost to you. Your doctor fills out a short form (a Physician Certification Statement) to set it up. Call the Transportation Department to book. Try to call at least 5 business days before your visit.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Transportation to non-medical (NMT)",
+ "title": "Rides to non-medical Medi-Cal services (NMT)",
+ "description": "If you have no way to get to a Medi-Cal service or to pick up your medicine, KFHC can help with non-medical transportation. This can include a bus pass, a rideshare trip, or paying you back for mileage. When you call, just explain why you can't get there. Once approved, it is on file for 12 months. Call the Transportation Department (option 3).",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Mental health & substance use",
+ "title": "Mental health and substance use help",
+ "description": "KFHC covers care for mild-to-moderate mental health needs, like feeling very sad, worried, or stressed. You usually do not need pre-approval to see a plan provider. For a mental health crisis, call the Kern County crisis line at 988 or 1-800-991-5272 any time. For drug or alcohol help, call the 24-hour Substance Use Disorder Access Line at 1-866-266-4898.",
+ "phone": "1-800-991-5272",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
+ "languages": "Interpreter help available; crisis line TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Pharmacy & prescriptions",
+ "title": "Your prescription drug benefit (Medi-Cal Rx)",
+ "description": "Your prescription medicines are covered through Medi-Cal Rx, the state's pharmacy program (not directly by KFHC). Show your BIC or Medi-Cal ID card at the pharmacy. For questions about covered drugs or to find a pharmacy that takes Medi-Cal Rx, call them 24/7 or use the online pharmacy locator.",
+ "phone": "1-800-977-2273",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
+ "languages": "Customer Service 24/7; TTY 711 (Mon-Fri 8am-5pm)",
+ "verified": false
+ },
+ {
+ "category": "Dental",
+ "title": "Dental care (Medi-Cal Dental)",
+ "description": "Your dental care comes through Medi-Cal Dental, the state's dental program (not directly through KFHC). It covers things like checkups, cleanings, fillings, and more. Call Medi-Cal Dental to learn about covered services or to find a dentist who takes Medi-Cal. They are open Monday-Friday, 8am-5pm.",
+ "phone": "1-800-322-6384",
+ "url": "https://dental.dhcs.ca.gov/",
+ "languages": "TTY 1-800-735-2922",
+ "verified": false
+ },
+ {
+ "category": "Vision",
+ "title": "Vision care (eye exams and glasses)",
+ "description": "KFHC covers vision care through Vision Service Plan (VSP). You can get a routine eye exam to check your eye health and your prescription. Eyeglasses are covered for members under 21 and for nursing-home residents (state Medi-Cal rules). To find an eye doctor, search VSP and choose the 'Medicaid' network, or call Member Services for help.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Language & interpreter help",
+ "title": "Free interpreter and translation help",
+ "description": "You have the right to get help in your language at no cost. Over-the-phone interpreters speak more than 200 languages. You can also ask for a free interpreter at your doctor visits, and you can get plan letters and the handbook in other languages, large print, braille, or audio. Just call Member Services before your visit.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
+ "languages": "Over-the-phone interpreters in 200+ languages; TDD/TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Member ID card & online account",
+ "title": "Member ID card and online account (Member Portal / LiNK app)",
+ "description": "Your KFHC member ID card should arrive in the mail within about two weeks of starting coverage. Bring it to every visit and pharmacy pickup. Lost your card? Request a new one online or by calling Member Services. You can also sign up for the Member Portal (or the free LiNK app) to view your main doctor, change your info, and see your prescription approvals.",
+ "phone": "1-800-391-2000",
+ "url": "https://member.kernfamilyhealthcare.com/v3app/a/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Renew Medi-Cal / keep coverage",
+ "title": "Keep your Medi-Cal coverage (renew every year)",
+ "description": "You must renew your Medi-Cal every year so you don't lose your coverage. Watch your mail for a renewal packet from the Kern County Department of Human Services and send back anything they ask for on time. If you miss the deadline, you have 90 days after it to still finish your renewal. Make sure your address and phone number are up to date.",
+ "phone": "1-877-410-8812",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "File a complaint or appeal (grievance)",
+ "description": "If you are unhappy with your care, a provider, or a plan decision, you have the right to speak up, and it will not affect your care. You can file a grievance online, by phone, or by mailing a form. If the plan denies a service, you can appeal to ask them to review it. KFHC answers most grievances within 30 days. Mail forms to: Grievance Coordinator, KFHC, 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
+ "languages": "Forms in English and Spanish; interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "Extra help: Enhanced Care Management & Community Supports (CalAIM)",
+ "description": "If you have complex health needs, KFHC offers Enhanced Care Management (ECM) at no cost. A care team helps you coordinate your doctors, mental health, and other needs, all in one place. Community Supports can help with things like finding housing, getting healthy food, or having a safe place to recover after a hospital stay. Call Member Services to ask if you qualify.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Member handbook & forms",
+ "title": "Member Handbook and forms",
+ "description": "The Member Handbook (also called the Evidence of Coverage) explains all your benefits, your rights, and how to get care. You can read it online, or ask for a free printed copy in English or Spanish, or in large print, braille, or audio. Read it soon after you join so you know what is covered.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+ "languages": "Available in English and Spanish; large print, braille, and audio on request; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Other",
+ "title": "Contact Kern Family Health Care",
+ "description": "For any question about your Medi-Cal plan, Member Services can help Monday-Friday, 8am-5pm. The local Bakersfield number is 661-632-1590, or call toll-free at 1-800-391-2000 from outside Bakersfield. The office is at 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
+ "phone": "1-800-391-2000",
+ "url": "https://www.kernfamilyhealthcare.com/contact-us/",
+ "languages": "Interpreter help in 200+ languages; TTY 711",
+ "verified": true
+ }
+ ],
+ "sources": [
+ "https://www.kernfamilyhealthcare.com/medi-cal/",
+ "https://www.kernfamilyhealthcare.com/contact-us/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+ "https://member.kernfamilyhealthcare.com/v3app/a/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
+ "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+ "https://dental.dhcs.ca.gov/",
+ "https://www.kcdhs.org/services/apply-for-benefits/medi-cal"
+ ]
 }

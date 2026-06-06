@@ -1,178 +1,178 @@
 {
-  "planId": "molina",
-  "planName": "Molina Healthcare of California (Medi-Cal)",
-  "relationship": "Subcontractor plan; receiving transferred Health Net members in Los Angeles County.",
-  "memberServicesPhone": "1-888-665-4621",
-  "memberServicesHours": "Monday-Friday, 7:00 a.m. to 7:00 p.m.",
-  "ttyPhone": "711",
-  "nurseAdviceLine": "1-888-275-8750",
-  "website": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
-  "memberPortalUrl": "https://member.molinahealthcare.com/Member/Login",
-  "findADoctorUrl": "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
-  "memberHandbookUrl": "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
-  "notes": "Member Services 1-888-665-4621 (TTY 711), Mon-Fri 7 a.m.-7 p.m. The 24/7 Nurse Advice Line is 1-888-275-8750. Pharmacy is NOT handled by Molina - outpatient prescriptions moved to the state's Medi-Cal Rx (1-800-977-2273) on 1/1/2022. Dental is carved out to Medi-Cal Dental / Denti-Cal (1-800-322-6384). To renew/keep Medi-Cal in LA County, members work with the county (LA County DPSS / BenefitsCal), not Molina. Rides (both NEMT and NMT) are booked through American Logistics (1-844-292-2688). Health Net members transferred into Molina in LA County should confirm their new Molina ID card and PCP after the transition.",
-  "resources": [
-    {
-      "category": "Find a doctor",
-      "title": "Find a doctor, clinic, or specialist",
-      "description": "Use Molina's online Provider Directory to search for a primary care doctor, specialist, hospital, or clinic that takes your plan near you. If you need help choosing or changing your doctor, call Member Services and they will help you.",
-      "phone": "1-888-665-4621",
-      "url": "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
-      "languages": "Free interpreter help in any language; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Get a ride (transportation)",
-      "title": "Free rides to medical visits (NEMT)",
-      "description": "If you have no way to get to a covered medical appointment, Molina pays for a ride at no cost to you. Non-Emergency Medical Transportation (NEMT) is by ambulance, wheelchair van, or litter van when your health needs it. Call American Logistics to book; try to call at least 3 business days ahead and have your member ID card ready.",
-      "phone": "1-844-292-2688",
-      "url": "https://molina.americanlogistics.com/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Transportation to non-medical (NMT)",
-      "title": "Rides to pick up medicine and other Medi-Cal services (NMT)",
-      "description": "Non-Medical Transportation (NMT) gives you a free ride by car, taxi, bus, or van to and from your Medi-Cal services and to pick up prescriptions. Book through American Logistics, the same line used for medical rides. American Logistics takes requests 24 hours a day, 7 days a week.",
-      "phone": "1-844-292-2688",
-      "url": "https://molina.americanlogistics.com/",
-      "languages": "Interpreter help available; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Nurse advice line (24/7)",
-      "title": "Talk to a nurse anytime, day or night",
-      "description": "Not sure if you need to see a doctor or go to the ER? Call the free Nurse Advice Line any time, 24 hours a day, 7 days a week. A nurse will listen, give advice, and tell you where to go for care.",
-      "phone": "1-888-275-8750",
-      "url": "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/services/nurseadvice.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Mental health & substance use",
-      "title": "Help for your mental health and substance use",
-      "description": "Molina covers mental health care like therapy (one-on-one, family, or group) and medication management - you do not need a referral. For substance use treatment, your county program usually provides care; call Member Services and ask for a Case Manager to help you get started. For free, confidential 24/7 help, you can also call SAMHSA's national helpline at 1-800-662-4357. If you are in crisis, call or text 988.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/mtlhlth.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Pharmacy & prescriptions",
-      "title": "Your prescription drug benefit (Medi-Cal Rx)",
-      "description": "Your outpatient prescriptions are covered by Medi-Cal Rx, run by the state, not by Molina. Show your Medi-Cal BIC card at the pharmacy. To find a pharmacy or ask drug questions, call Medi-Cal Rx 24 hours a day or visit their website.",
-      "phone": "1-800-977-2273",
-      "url": "https://medi-calrx.dhcs.ca.gov/",
-      "languages": "Help in many languages; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Dental",
-      "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
-      "description": "Dental care is covered by the state's Medi-Cal Dental Program (also called Denti-Cal), not by Molina. Your Molina doctor can do a dental screening and refer you. For a dentist or dental questions, call Medi-Cal Dental.",
-      "phone": "1-800-322-6384",
-      "url": "https://smilecalifornia.org/",
-      "languages": "TTY 1-800-735-2922 or 711",
-      "verified": true
-    },
-    {
-      "category": "Vision",
-      "title": "Eye exams and glasses",
-      "description": "Molina covers routine eye exams and eyeglasses at no cost to you, usually once every 24 months (more often if medically needed, such as for diabetes). Molina works with VSP Vision Care for these services. Call Member Services to find an eye doctor.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/vision.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Language & interpreter help",
-      "title": "Free help in your language",
-      "description": "You have the right to a free interpreter for any health visit or phone call - you should never have to use a family member or friend. Help is available 24/7 over the phone, by video, or in person, in any language including sign language. Call Member Services, or call Hanna Interpreting Service directly to set up an interpreter.",
-      "phone": "1-833-739-6055",
-      "url": "https://www.molinahealthcare.com/marketplace/ca/en-us/Multi-Language-Interpreter-Services.aspx",
-      "languages": "All languages and sign language; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Member ID card & online account",
-      "title": "My Molina online account and your ID card",
-      "description": "Create a free My Molina account online to see your benefits, pick or change your doctor, and ask for a new ID card if yours is lost. Always carry both your Molina ID card and your state Medi-Cal BIC card and show them when you get care or medicine. Call Member Services to request a replacement card.",
-      "phone": "1-888-665-4621",
-      "url": "https://member.molinahealthcare.com/Member/Login",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": false
-    },
-    {
-      "category": "Renew Medi-Cal / keep coverage",
-      "title": "Keep your Medi-Cal - renew every year",
-      "description": "Medi-Cal must be renewed once a year so you do not lose coverage. In Los Angeles County, renew and keep your address and phone up to date with the county (DPSS) online at BenefitsCal.com or by phone. Open any mail from the county right away and answer it on time.",
-      "phone": "1-866-613-3777",
-      "url": "https://benefitscal.com/",
-      "languages": "County help in multiple languages; TTY 1-800-660-4026",
-      "verified": true
-    },
-    {
-      "category": "Complaints & appeals (grievances)",
-      "title": "File a complaint or appeal a decision",
-      "description": "If you are unhappy with your care or services, you can file a complaint (grievance) at any time. If Molina denies, delays, changes, or stops a service and you disagree, you can file an appeal - ask within 60 days of the notice. You can file by phone, online through My Molina, by mail (Attn: Member Appeals & Grievances, 200 Oceangate, Suite 100, Long Beach, CA 90802), or by fax at 562-499-0757.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/quality/cna/cna.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Extra benefits & community supports (CalAIM)",
-      "title": "Extra care and support (CalAIM)",
-      "description": "Through CalAIM, Molina offers extra help for members with complex needs. Enhanced Care Management (ECM) gives you your own care team and a Lead Care Manager who coordinates all your care. Community Supports can help with things like housing help, healthy food, and other social needs. Call Member Services or ask your doctor to see if you qualify.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/CalAIM/CalAIM.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Urgent & after-hours care",
-      "title": "Urgent care and help after hours",
-      "description": "For care you need quickly but that is not an emergency (like a bad cold, sprain, or minor cut), go to an urgent care center or call your doctor. After your doctor's office is closed, call the free 24/7 Nurse Advice Line for advice on what to do. For a life-threatening emergency, call 911 or go to the nearest ER.",
-      "phone": "1-888-275-8750",
-      "url": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
-      "languages": "Free interpreter help; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Member handbook & forms",
-      "title": "Member Handbook (Evidence of Coverage)",
-      "description": "Your Member Handbook (also called the Member Services Guide or Evidence of Coverage) explains all your benefits, what is covered, and your rights. You can read it online, download it, or call Member Services to have one mailed to you for free.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
-      "languages": "Available in other languages; TTY 711",
-      "verified": true
-    },
-    {
-      "category": "Other",
-      "title": "Member Services - your main help line",
-      "description": "When you are not sure who to call, start with Molina Member Services. They can help you find a doctor, understand your benefits, get an interpreter, replace your ID card, set up a ride, or file a complaint. Call Monday through Friday, 7 a.m. to 7 p.m.",
-      "phone": "1-888-665-4621",
-      "url": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medical/contact.aspx",
-      "languages": "Free interpreter help in any language; TTY 711",
-      "verified": true
-    }
-  ],
-  "sources": [
-    "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medical/contact.aspx",
-    "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
-    "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
-    "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/services/nurseadvice.aspx",
-    "https://molina.americanlogistics.com/",
-    "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/mtlhlth.aspx",
-    "https://medi-calrx.dhcs.ca.gov/",
-    "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/vision.aspx",
-    "https://www.molinahealthcare.com/marketplace/ca/en-us/Multi-Language-Interpreter-Services.aspx",
-    "https://member.molinahealthcare.com/Member/Login",
-    "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/quality/cna/cna.aspx",
-    "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/CalAIM/CalAIM.aspx",
-    "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
-    "https://dpss.lacounty.gov/en/keep-benefits.html",
-    "https://benefitscal.com/",
-    "https://smilecalifornia.org/"
-  ]
+ "planId": "molina",
+ "planName": "Molina Healthcare of California (Medi-Cal)",
+ "relationship": "Subcontractor plan; receiving transferred Health Net members in Los Angeles County.",
+ "memberServicesPhone": "1-888-665-4621",
+ "memberServicesHours": "Monday-Friday, 7:00 a.m. to 7:00 p.m.",
+ "ttyPhone": "711",
+ "nurseAdviceLine": "1-888-275-8750",
+ "website": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
+ "memberPortalUrl": "https://member.molinahealthcare.com/Member/Login",
+ "findADoctorUrl": "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
+ "memberHandbookUrl": "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
+ "notes": "Member Services 1-888-665-4621 (TTY 711), Mon-Fri 7 a.m.-7 p.m. The 24/7 Nurse Advice Line is 1-888-275-8750. Pharmacy is NOT handled by Molina - outpatient prescriptions moved to the state's Medi-Cal Rx (1-800-977-2273) on 1/1/2022. Dental is carved out to Medi-Cal Dental / Denti-Cal (1-800-322-6384). To renew/keep Medi-Cal in LA County, members work with the county (LA County DPSS / BenefitsCal), not Molina. Rides (both NEMT and NMT) are booked through American Logistics (1-844-292-2688). Health Net members transferred into Molina in LA County should confirm their new Molina ID card and PCP after the transition.",
+ "resources": [
+ {
+ "category": "Find a doctor",
+ "title": "Find a doctor, clinic, or specialist",
+ "description": "Use Molina's online Provider Directory to search for a primary care doctor, specialist, hospital, or clinic that takes your plan near you. If you need help choosing or changing your doctor, call Member Services and they will help you.",
+ "phone": "1-888-665-4621",
+ "url": "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
+ "languages": "Free interpreter help in any language; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Get a ride (transportation)",
+ "title": "Free rides to medical visits (NEMT)",
+ "description": "If you have no way to get to a covered medical appointment, Molina pays for a ride at no cost to you. Non-Emergency Medical Transportation (NEMT) is by ambulance, wheelchair van, or litter van when your health needs it. Call American Logistics to book; try to call at least 3 business days ahead and have your member ID card ready.",
+ "phone": "1-844-292-2688",
+ "url": "https://molina.americanlogistics.com/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Transportation to non-medical (NMT)",
+ "title": "Rides to pick up medicine and other Medi-Cal services (NMT)",
+ "description": "Non-Medical Transportation (NMT) gives you a free ride by car, taxi, bus, or van to and from your Medi-Cal services and to pick up prescriptions. Book through American Logistics, the same line used for medical rides. American Logistics takes requests 24 hours a day, 7 days a week.",
+ "phone": "1-844-292-2688",
+ "url": "https://molina.americanlogistics.com/",
+ "languages": "Interpreter help available; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Nurse advice line (24/7)",
+ "title": "Talk to a nurse anytime, day or night",
+ "description": "Not sure if you need to see a doctor or go to the ER? Call the free Nurse Advice Line any time, 24 hours a day, 7 days a week. A nurse will listen, give advice, and tell you where to go for care.",
+ "phone": "1-888-275-8750",
+ "url": "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/services/nurseadvice.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Mental health & substance use",
+ "title": "Help for your mental health and substance use",
+ "description": "Molina covers mental health care like therapy (one-on-one, family, or group) and medication management - you do not need a referral. For substance use treatment, your county program usually provides care; call Member Services and ask for a Case Manager to help you get started. For free, confidential 24/7 help, you can also call SAMHSA's national helpline at 1-800-662-4357. If you are in crisis, call or text 988.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/mtlhlth.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Pharmacy & prescriptions",
+ "title": "Your prescription drug benefit (Medi-Cal Rx)",
+ "description": "Your outpatient prescriptions are covered by Medi-Cal Rx, run by the state, not by Molina. Show your Medi-Cal BIC card at the pharmacy. To find a pharmacy or ask drug questions, call Medi-Cal Rx 24 hours a day or visit their website.",
+ "phone": "1-800-977-2273",
+ "url": "https://medi-calrx.dhcs.ca.gov/",
+ "languages": "Help in many languages; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Dental",
+ "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
+ "description": "Dental care is covered by the state's Medi-Cal Dental Program (also called Denti-Cal), not by Molina. Your Molina doctor can do a dental screening and refer you. For a dentist or dental questions, call Medi-Cal Dental.",
+ "phone": "1-800-322-6384",
+ "url": "https://smilecalifornia.org/",
+ "languages": "TTY 1-800-735-2922 or 711",
+ "verified": true
+ },
+ {
+ "category": "Vision",
+ "title": "Eye exams and glasses",
+ "description": "Molina covers routine eye exams and eyeglasses at no cost to you, usually once every 24 months (more often if medically needed, such as for diabetes). Molina works with VSP Vision Care for these services. Call Member Services to find an eye doctor.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/vision.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Language & interpreter help",
+ "title": "Free help in your language",
+ "description": "You have the right to a free interpreter for any health visit or phone call - you should never have to use a family member or friend. Help is available 24/7 over the phone, by video, or in person, in any language including sign language. Call Member Services, or call Hanna Interpreting Service directly to set up an interpreter.",
+ "phone": "1-833-739-6055",
+ "url": "https://www.molinahealthcare.com/marketplace/ca/en-us/Multi-Language-Interpreter-Services.aspx",
+ "languages": "All languages and sign language; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Member ID card & online account",
+ "title": "My Molina online account and your ID card",
+ "description": "Create a free My Molina account online to see your benefits, pick or change your doctor, and ask for a new ID card if yours is lost. Always carry both your Molina ID card and your state Medi-Cal BIC card and show them when you get care or medicine. Call Member Services to request a replacement card.",
+ "phone": "1-888-665-4621",
+ "url": "https://member.molinahealthcare.com/Member/Login",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": false
+ },
+ {
+ "category": "Renew Medi-Cal / keep coverage",
+ "title": "Keep your Medi-Cal - renew every year",
+ "description": "Medi-Cal must be renewed once a year so you do not lose coverage. In Los Angeles County, renew and keep your address and phone up to date with the county (DPSS) online at BenefitsCal.com or by phone. Open any mail from the county right away and answer it on time.",
+ "phone": "1-866-613-3777",
+ "url": "https://benefitscal.com/",
+ "languages": "County help in multiple languages; TTY 1-800-660-4026",
+ "verified": true
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "File a complaint or appeal a decision",
+ "description": "If you are unhappy with your care or services, you can file a complaint (grievance) at any time. If Molina denies, delays, changes, or stops a service and you disagree, you can file an appeal - ask within 60 days of the notice. You can file by phone, online through My Molina, by mail (Attn: Member Appeals & Grievances, 200 Oceangate, Suite 100, Long Beach, CA 90802), or by fax at 562-499-0757.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/quality/cna/cna.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "Extra care and support (CalAIM)",
+ "description": "Through CalAIM, Molina offers extra help for members with complex needs. Enhanced Care Management (ECM) gives you your own care team and a Lead Care Manager who coordinates all your care. Community Supports can help with things like housing help, healthy food, and other social needs. Call Member Services or ask your doctor to see if you qualify.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/CalAIM/CalAIM.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Urgent & after-hours care",
+ "title": "Urgent care and help after hours",
+ "description": "For care you need quickly but that is not an emergency (like a bad cold, sprain, or minor cut), go to an urgent care center or call your doctor. After your doctor's office is closed, call the free 24/7 Nurse Advice Line for advice on what to do. For a life-threatening emergency, call 911 or go to the nearest ER.",
+ "phone": "1-888-275-8750",
+ "url": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
+ "languages": "Free interpreter help; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Member handbook & forms",
+ "title": "Member Handbook (Evidence of Coverage)",
+ "description": "Your Member Handbook (also called the Member Services Guide or Evidence of Coverage) explains all your benefits, what is covered, and your rights. You can read it online, download it, or call Member Services to have one mailed to you for free.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
+ "languages": "Available in other languages; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Other",
+ "title": "Member Services - your main help line",
+ "description": "When you are not sure who to call, start with Molina Member Services. They can help you find a doctor, understand your benefits, get an interpreter, replace your ID card, set up a ride, or file a complaint. Call Monday through Friday, 7 a.m. to 7 p.m.",
+ "phone": "1-888-665-4621",
+ "url": "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medical/contact.aspx",
+ "languages": "Free interpreter help in any language; TTY 711",
+ "verified": true
+ }
+ ],
+ "sources": [
+ "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medical/contact.aspx",
+ "https://www.molinahealthcare.com/members/ca/en-us/mem/medicaid/medicaid.aspx",
+ "https://www.molinahealthcare.com/members/ca/en-US/mem/medicaid/medical/memguide.aspx",
+ "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/services/nurseadvice.aspx",
+ "https://molina.americanlogistics.com/",
+ "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/mtlhlth.aspx",
+ "https://medi-calrx.dhcs.ca.gov/",
+ "https://www.molinahealthcare.com/members/ca/en-us/hp/medicaid/medical/coverd/vision.aspx",
+ "https://www.molinahealthcare.com/marketplace/ca/en-us/Multi-Language-Interpreter-Services.aspx",
+ "https://member.molinahealthcare.com/Member/Login",
+ "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/quality/cna/cna.aspx",
+ "https://www.molinahealthcare.com/members/ca/mem/medicaid/medical/coverd/CalAIM/CalAIM.aspx",
+ "https://providersearch.molinahealthcare.com/Provider/ProviderSearch?memstate=ca&State=ca",
+ "https://dpss.lacounty.gov/en/keep-benefits.html",
+ "https://benefitscal.com/",
+ "https://smilecalifornia.org/"
+ ]
 }

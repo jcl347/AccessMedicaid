@@ -1,28 +1,28 @@
 {
-  "lastUpdated": "2026-06-04",
-  "county": "Los Angeles County",
-  "h1Note": "",
-  "categories": [
-    "Find a doctor",
-    "Get a ride (transportation)",
-    "Nurse advice line (24/7)",
-    "Mental health & substance use",
-    "Pharmacy & prescriptions",
-    "Dental",
-    "Vision",
-    "Language & interpreter help",
-    "Member ID card & online account",
-    "Renew Medi-Cal / keep coverage",
-    "Complaints & appeals (grievances)",
-    "Extra benefits & community supports (CalAIM)",
-    "Urgent & after-hours care",
-    "Member handbook & forms",
-    "Transportation to non-medical (NMT)",
-    "Other"
-  ],
-  "h1Finding": {
-    "confidence": "medium",
-    "bestInterpretation": "In the Medi-Cal context, \"H1\" is almost certainly a Medi-Cal AID CODE, not an immigration/visa term. On the California DHCS Aid Codes Master Chart, H1 is a full-scope, no-share-of-cost eligibility code in the infant/child poverty-level series (Infants ages 0-1 at roughly 200%-250% FPL; the H-series H1-H6 covers infants/children by age and FPL band). It is an internal eligibility classification a member would never see named as a 'barrier' - so 'issues like H1' most likely means paperwork/classification errors (e.g., being placed in a restricted vs. full-scope code) or a misremembered shorthand. The immigration reading (H-1B visa) was judged less likely because nobody shortens 'H-1B' to 'H1' as an access-barrier label.",
-    "evidence": "Confirmed on the official DHCS/Medi-Cal Aid Codes Master Chart (aidcodes.pdf) and Aid-Code-Chart-2024.pdf, where H1-H6 are listed under full-scope benefits. No source supported a 'health-literacy code' or standalone 'hospital classification' meaning."
-  }
+ "lastUpdated": "2026-06-04",
+ "county": "Los Angeles County",
+ "h1Note": "",
+ "categories": [
+ "Find a doctor",
+ "Get a ride (transportation)",
+ "Nurse advice line (24/7)",
+ "Mental health & substance use",
+ "Pharmacy & prescriptions",
+ "Dental",
+ "Vision",
+ "Language & interpreter help",
+ "Member ID card & online account",
+ "Renew Medi-Cal / keep coverage",
+ "Complaints & appeals (grievances)",
+ "Extra benefits & community supports (CalAIM)",
+ "Urgent & after-hours care",
+ "Member handbook & forms",
+ "Transportation to non-medical (NMT)",
+ "Other"
+ ],
+ "h1Finding": {
+ "confidence": "medium",
+ "bestInterpretation": "In the Medi-Cal context, \"H1\" is almost certainly a Medi-Cal AID CODE, not an immigration/visa term. On the California DHCS Aid Codes Master Chart, H1 is a full-scope, no-share-of-cost eligibility code in the infant/child poverty-level series (Infants ages 0-1 at roughly 200%-250% FPL; the H-series H1-H6 covers infants/children by age and FPL band). It is an internal eligibility classification a member would never see named as a 'barrier' - so 'issues like H1' most likely means paperwork/classification errors (e.g., being placed in a restricted vs. full-scope code) or a misremembered shorthand. The immigration reading (H-1B visa) was judged less likely because nobody shortens 'H-1B' to 'H1' as an access-barrier label.",
+ "evidence": "Confirmed on the official DHCS/Medi-Cal Aid Codes Master Chart (aidcodes.pdf) and Aid-Code-Chart-2024.pdf, where H1-H6 are listed under full-scope benefits. No source supported a 'health-literacy code' or standalone 'hospital classification' meaning."
+ }
 }

@@ -1,291 +1,291 @@
 {
-  "barriers": [
-    {
-      "id": "renewal-redetermination",
-      "name": "Coverage renewal paperwork and the end of unwinding flexibilities",
-      "memberVoice": "I got a thick packet in the mail and I'm scared I'll lose my Medi-Cal if I fill out one box wrong or miss the deadline.",
-      "description": "During the COVID continuous-coverage period, almost no one in Medi-Cal had to do an active renewal. Those temporary 'unwinding' flexibilities ended: they are no longer valid for applications dated after June 30, 2025 and for renewals due after the June 2025 renewal month. From now on, most members must actively return their annual renewal packet (or respond to a request for information), or they can be disenrolled even if they are still eligible. Keep your mailing address current with the county, watch for the renewal envelope, and respond by the deadline. There is still a 90-day 'cure' period to send back paperwork after a closure, but many people lose coverage simply because the form went to an old address or felt confusing.",
-      "affectedGroups": "All LA County Medi-Cal members, especially people who moved during the pandemic, people with unstable housing, seniors, people with limited literacy or English, and busy working families who never had to renew before.",
-      "solutions": [
-        {
-          "title": "LA County DPSS Customer Service Center (renewals, report address changes)",
-          "description": "Call the county to update your mailing address, ask about your renewal date, get help completing the renewal form, or submit documents. Open Mon-Fri 7:30 a.m.-5:30 p.m. This is the office that processes your renewal.",
-          "phone": "1-866-613-3777",
-          "url": "https://dpss.lacounty.gov/en/customer-service/csc.html"
-        },
-        {
-          "title": "BenefitsCal - renew online and upload documents",
-          "description": "Official California portal to complete your Medi-Cal renewal, update your address, and upload verification documents online instead of by mail. Create an account and link your case.",
-          "phone": "",
-          "url": "https://www.benefitscal.com"
-        },
-        {
-          "title": "DHCS 'Keep Your Coverage' / Medi-Cal renewal information",
-          "description": "State Department of Health Care Services guidance on what the renewal process looks like now that unwinding flexibilities have ended, what to watch for in the mail, and your rights during the renewal.",
-          "phone": "",
-          "url": "https://www.dhcs.ca.gov/toolkits/Pages/Medi-Cal-Continuous-Coverage-Unwinding.aspx"
-        },
-        {
-          "title": "L.A. Care Medi-Cal Renewal help (if L.A. Care is your plan)",
-          "description": "Your managed-care plan can remind you when your renewal is due and help you keep coverage. L.A. Care members can call Member Services or use the renewal FAQs page.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/medi-cal-renewal-faqs"
-        }
-      ]
-    },
-    {
-      "id": "language-access",
-      "name": "Language access and limited English proficiency (including Asian & Pacific Islander languages)",
-      "memberVoice": "When I call, no one speaks my language, so I just hang up and skip the appointment instead of asking for help.",
-      "description": "Many LA County members speak little or no English and need an interpreter to enroll, renew, or talk to a doctor. By law, Medi-Cal must provide free interpreting and translated notices in California's threshold languages, which include several Asian & Pacific Islander languages: Chinese, Korean, Tagalog, Vietnamese, Cambodian (Khmer), Hmong, Japanese, and Thai, along with Spanish, Armenian, Arabic, Farsi, Russian, Punjabi, and Hindi. On-demand phone interpreters in roughly 250 languages are available free. The barrier is that members often do not know interpreting is free and is their right, so they bring a child to translate or avoid care entirely. Medical interpreting at the point of care must never be billed to the member.",
-      "affectedGroups": "Limited-English-proficient members across LA County, including large Spanish-speaking, Chinese, Korean, Vietnamese, Tagalog/Filipino, Cambodian, Armenian, Farsi, and Russian-speaking communities; recent immigrants and elders are most affected.",
-      "solutions": [
-        {
-          "title": "Medi-Cal Beneficiary Helpline (free interpreters, ~250 languages)",
-          "description": "State Medi-Cal line that provides free spoken-language interpreting on demand. Ask for an interpreter in your language; the service is free. Open Mon-Fri 8 a.m.-5 p.m. TTY 1-800-430-7077.",
-          "phone": "1-800-541-5555",
-          "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Medi-CalFAQs2014b.aspx"
-        },
-        {
-          "title": "DHCS Non-Discrimination & Language Access (your rights to free interpreting)",
-          "description": "Official state page explaining your right to free interpreter services and translated documents, the threshold languages, and how to file a complaint if you are denied an interpreter (Office of Civil Rights 916-440-7370).",
-          "phone": "1-916-440-7370",
-          "url": "https://www.dhcs.ca.gov/Pages/Language_Access.aspx"
-        },
-        {
-          "title": "L.A. Care Member Services (request an interpreter for your plan/visit)",
-          "description": "Your managed-care plan provides free interpreters for appointments and phone calls in many Asian & Pacific Islander and other languages. Ask Member Services to arrange one before your visit. TTY 711.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
-        }
-      ]
-    },
-    {
-      "id": "transportation",
-      "name": "Transportation: no car, a sprawling county, parking, and underused NEMT/NMT benefits",
-      "memberVoice": "I don't drive, the clinic is two buses away, and I didn't know my plan could send a ride, so I just miss appointments.",
-      "description": "LA County is enormous and care can be far from home. Many members have no car, cannot afford gas or parking, or cannot ride public transit due to disability. Medi-Cal covers two transportation benefits that are widely underused: Non-Emergency Medical Transportation (NEMT, e.g., wheelchair van or ambulance when a doctor says it is medically needed) and Non-Medical Transportation (NMT, e.g., a free ride-share, bus pass, or mileage reimbursement to get to a covered appointment or the pharmacy). The benefit is free, but members must request it ahead of time, usually at least 2 business days before the appointment, and most members do not know it exists.",
-      "affectedGroups": "Members without a car, people with disabilities or mobility needs, seniors, residents of transit-poor parts of the county, and anyone who has to travel far for a specialist.",
-      "solutions": [
-        {
-          "title": "L.A. Care transportation (NEMT and NMT rides) via Member Services",
-          "description": "Call to arrange a free ride to a covered medical appointment or pharmacy. NMT covers ride-share, bus passes, or mileage; NEMT covers medically necessary van/ambulance with a doctor's order. Call at least 2 business days ahead. TTY 711.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/transportation"
-        },
-        {
-          "title": "Health Care Options (find your plan's transportation contact)",
-          "description": "If you are unsure which Medi-Cal plan you have, Health Care Options can tell you and point you to that plan's transportation/Member Services number so you can book a ride.",
-          "phone": "1-800-430-4263",
-          "url": "https://www.healthcareoptions.dhcs.ca.gov/"
-        },
-        {
-          "title": "DHCS Non-Emergency / Non-Medical Transportation benefit overview",
-          "description": "State explanation of the NEMT and NMT transportation benefits so members and navigators know what is covered, who qualifies, and how to ask for it.",
-          "phone": "",
-          "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx"
-        }
-      ]
-    },
-    {
-      "id": "immigration-fear",
-      "name": "Immigration-related fear and the older-adult full-scope expansion",
-      "memberVoice": "I'm afraid that signing up for Medi-Cal will hurt my immigration case or get my family noticed, so I stay away even though I'm sick.",
-      "description": "Many immigrant residents avoid enrolling or using Medi-Cal out of fear it will count against them as a 'public charge' or expose their family. In reality, USCIS does not count Medi-Cal (except long-term institutional care) in a public-charge determination, and using health coverage generally does not affect immigration status. Since May 1, 2022, California expanded full-scope Medi-Cal to all income-eligible adults age 50 and older regardless of immigration status (AB 133), and full-scope coverage for ages 26-49 followed in 2024 - so many older undocumented residents already qualify for complete benefits, not just emergency coverage. Note: under the 2025-26 state budget, new Medi-Cal enrollment for many undocumented adults is being frozen starting in 2026, which makes timely enrollment and trusted navigator help even more important. Fear, not eligibility, is the main barrier; trusted, confidential information helps.",
-      "affectedGroups": "Undocumented residents and mixed-status families, lawful permanent residents worried about future status, and immigrant elders age 50+ who may now qualify for full-scope coverage but are afraid to apply.",
-      "solutions": [
-        {
-          "title": "DHCS - Immigration Status and Medi-Cal Eligibility (official)",
-          "description": "State page explaining who is eligible regardless of immigration status, the older-adult and adult full-scope expansions, and that Medi-Cal use is confidential and generally not a public-charge factor.",
-          "phone": "",
-          "url": "https://www.dhcs.ca.gov/Medi-Cal/Pages/immigration-status-categories.aspx"
-        },
-        {
-          "title": "LA County DPSS - Full Scope Medi-Cal for Older Adult Expansion",
-          "description": "County policy page confirming adults 50+ can get full-scope Medi-Cal regardless of immigration status and how to apply locally.",
-          "phone": "1-866-613-3777",
-          "url": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/general/oae.html"
-        },
-        {
-          "title": "Protecting Immigrant Families - Know Your Rights (public charge)",
-          "description": "Plain-language, multilingual Know Your Rights materials explaining that Medi-Cal is generally safe to use and is not counted as public charge for most immigrants.",
-          "phone": "",
-          "url": "https://protectingimmigrantfamilies.org/"
-        },
-        {
-          "title": "Mental Health Advocacy Services - Immigrant Access to Medi-Cal",
-          "description": "LA-based legal-aid explainer on which immigrants qualify for Medi-Cal and confidentiality protections; useful for navigators and members with questions.",
-          "phone": "",
-          "url": "https://www.mhas-la.org/medi-cal-benefits/immigrant-access-to-medi-cal"
-        }
-      ]
-    },
-    {
-      "id": "provider-shortage",
-      "name": "Provider and specialist shortages and long appointment waits",
-      "memberVoice": "My doctor referred me to a specialist months ago and I still can't get an appointment - I feel like my care is stuck.",
-      "description": "Even with coverage, members struggle to find a primary doctor or specialist who is accepting Medi-Cal, and waits can be long. California sets timely-access standards: a routine primary care appointment should be available within 10 business days and a non-urgent specialist appointment within 15 business days of the request, with shorter limits for urgent care. Plans must also meet time-and-distance standards. In practice, specialists such as cardiologists, rheumatologists, and dermatologists are in short supply for Medi-Cal patients, and members often do not know these standards are enforceable or how to escalate when they are not met.",
-      "affectedGroups": "Members needing specialty, dental, or rural/underserved-area care; people with chronic or complex conditions; and anyone facing long waits or 'no Medi-Cal patients' responses.",
-      "solutions": [
-        {
-          "title": "Your plan's Member Services (request timely access / help finding a provider)",
-          "description": "If you cannot get an appointment within the legal wait-time standard, call your plan and ask them to find you an in-network provider or arrange out-of-network care. For L.A. Care: TTY 711.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
-        },
-        {
-          "title": "DMHC Help Center - file a timely-access or access-to-care complaint",
-          "description": "The California Department of Managed Health Care enforces appointment wait-time standards. If your plan cannot get you timely care, the DMHC Help Center can intervene. Files complaints and helps members.",
-          "phone": "1-888-466-2219",
-          "url": "https://www.dmhc.ca.gov/healthcareincalifornia/yourhealthcarerights/timelyaccesstocare.aspx"
-        },
-        {
-          "title": "Health Care Options - switch plans if your network is inadequate",
-          "description": "You can change Medi-Cal managed-care plans at any time if another plan has better provider availability for your needs. TTY 1-800-430-7077.",
-          "phone": "1-800-430-4263",
-          "url": "https://www.healthcareoptions.dhcs.ca.gov/"
-        }
-      ]
-    },
-    {
-      "id": "behavioral-health",
-      "name": "Behavioral health access (mental health and substance use)",
-      "memberVoice": "I'm struggling and I don't know who to call or whether Medi-Cal even covers therapy - so I just keep suffering.",
-      "description": "Members often do not know how to reach mental health or substance use care, or which door to use. In LA County, mild-to-moderate mental health services are usually handled through your Medi-Cal managed-care plan, while specialty (more serious) mental health services and crisis services are provided through the LA County Department of Mental Health (DMH) Help Line, which operates 24/7. Substance use services are also accessible through county lines. Stigma, language, and not knowing the entry point are major barriers, and crisis support like 988 and the Crisis Text Line is available immediately.",
-      "affectedGroups": "Members with depression, anxiety, trauma, serious mental illness, or substance use needs; youth and older adults; and people in crisis who do not know the entry point.",
-      "solutions": [
-        {
-          "title": "LA County DMH 24/7 Help Line (mental health & substance use access)",
-          "description": "The Los Angeles County Department of Mental Health Help Line is the 24/7 entry point for screening, referrals, crisis counseling, and linkage to Medi-Cal specialty mental health services.",
-          "phone": "1-800-854-7771",
-          "url": "https://dmh.lacounty.gov/get-help-now/"
-        },
-        {
-          "title": "988 Suicide & Crisis Lifeline",
-          "description": "Free, confidential crisis support 24/7 by call or text for anyone in emotional distress or a mental-health crisis. Call or text 988.",
-          "phone": "988",
-          "url": "https://988lifeline.org/"
-        },
-        {
-          "title": "Crisis Text Line",
-          "description": "Text HOME to 741741 to reach a trained crisis counselor by text, free and 24/7.",
-          "phone": "741741",
-          "url": "https://www.crisistextline.org/"
-        },
-        {
-          "title": "Your Medi-Cal plan Member Services (mild-to-moderate mental health)",
-          "description": "For non-crisis therapy and counseling (mild-to-moderate needs), call your managed-care plan to get connected to a behavioral health provider. For L.A. Care: TTY 711.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
-        }
-      ]
-    },
-    {
-      "id": "plan-choice-enrollment",
-      "name": "Confusing plan choice and enrollment (Health Care Options)",
-      "memberVoice": "I got a form asking me to pick a health plan and I have no idea which one is right for me or what happens if I do nothing.",
-      "description": "New LA County Medi-Cal members receive a Medi-Cal Choice Form from Health Care Options (HCO) and must pick a managed-care plan. The choices, networks, and deadlines are confusing, and if a member does nothing they may be auto-assigned to a plan that does not include their doctor. Members can choose or change their plan at any time by phone or online through HCO, and aligning the plan with their existing doctor or preferred clinic is key. Navigators can walk members through which plan includes their providers before they choose.",
-      "affectedGroups": "Newly eligible members, people who want to keep a specific doctor or clinic, and anyone auto-assigned to a plan that does not fit their needs.",
-      "solutions": [
-        {
-          "title": "Health Care Options (choose or change your Medi-Cal plan)",
-          "description": "Official enrollment broker for Medi-Cal managed care. Call to pick a plan, confirm your doctor is in-network, or switch plans at any time. Open Mon-Fri 8 a.m.-6 p.m. TTY 1-800-430-7077.",
-          "phone": "1-800-430-4263",
-          "url": "https://www.healthcareoptions.dhcs.ca.gov/"
-        },
-        {
-          "title": "DHCS Medi-Cal Managed Care Health Plan Directory (LA options)",
-          "description": "State directory of the managed-care plans available in Los Angeles County so you can compare plans and their networks before choosing.",
-          "phone": "",
-          "url": "https://www.dhcs.ca.gov/individuals/Pages/MMCDHealthPlanDir.aspx"
-        },
-        {
-          "title": "L.A. Care - How to enroll / join",
-          "description": "Step-by-step guidance for enrolling in and joining a Medi-Cal plan in LA County, including what the choice form looks like.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/health-plans/medi-cal/how-to-join"
-        }
-      ]
-    },
-    {
-      "id": "digital-divide",
-      "name": "Digital divide: no internet, no smartphone, or low digital skills",
-      "memberVoice": "They keep telling me to 'just go online and upload it,' but I don't have internet or a smartphone, and websites overwhelm me.",
-      "description": "More and more Medi-Cal tasks (renewing, uploading documents, choosing a plan, messaging a doctor, telehealth) assume reliable internet, a device, and digital literacy. Many members - especially seniors, low-income households, and limited-English speakers - have none of these, so the 'easy online' path becomes a barrier. The fix is to make sure members know every online task can also be done by phone, by mail, or in person, and to connect them to low-cost internet/device programs and in-person help at county offices, libraries, and community clinics.",
-      "affectedGroups": "Seniors, very low-income households, people experiencing homelessness, rural/transit-poor residents, and limited-English or low-literacy members who cannot complete online forms.",
-      "solutions": [
-        {
-          "title": "LA County DPSS - phone and in-person alternatives to online tasks",
-          "description": "Every Medi-Cal task you can do online can also be done by phone or in person at a DPSS office. Call to renew, report changes, or ask where to get in-person help instead of using a website.",
-          "phone": "1-866-613-3777",
-          "url": "https://dpss.lacounty.gov/en/customer-service/csc.html"
-        },
-        {
-          "title": "BenefitsCal help line (if you need help using the online portal)",
-          "description": "If you do want to use the online portal but get stuck, BenefitsCal has a support line and step-by-step help so you are not left to figure it out alone.",
-          "phone": "1-855-481-1632",
-          "url": "https://www.benefitscal.com"
-        },
-        {
-          "title": "California Broadband for All - low-cost internet and device programs",
-          "description": "California's digital-equity resources help low-income households find low-cost internet service and affordable devices so online health tasks become possible.",
-          "phone": "",
-          "url": "https://broadbandforall.cdt.ca.gov/"
-        }
-      ]
-    },
-    {
-      "id": "cost-medical-debt",
-      "name": "Cost and medical-debt fears",
-      "memberVoice": "I keep putting off care because I'm terrified of a bill I can't pay or debt that wrecks my credit.",
-      "description": "Many members avoid care because they fear a bill, even though Medi-Cal covers services with no or very low cost and most members have no share of cost. Members are often wrongly billed, or they carry old medical debt they think disqualifies them. Two protections help: Medi-Cal members should not be balance-billed for covered services by network providers, and as of January 1, 2025 California's SB 1061 makes it illegal to report medical debt to consumer credit agencies, and contracts that create medical debt must include specific protective language (effective July 1, 2025) or the debt is void. Members should know covered care is free or low-cost and that improper bills can be disputed.",
-      "affectedGroups": "Members who delay care for fear of bills, people with prior medical debt, dual-eligible and share-of-cost members confused about what they owe, and anyone improperly balance-billed.",
-      "solutions": [
-        {
-          "title": "Your Medi-Cal plan Member Services (dispute a wrongful bill)",
-          "description": "If you are billed for a covered service, call your plan; Medi-Cal members generally cannot be balance-billed by network providers for covered care. For L.A. Care: TTY 711.",
-          "phone": "1-888-839-9909",
-          "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
-        },
-        {
-          "title": "CA Attorney General - Medical debt consumer protections (SB 1061)",
-          "description": "Official Attorney General consumer alert explaining that medical debt may not appear on California credit reports and your rights under SB 1061.",
-          "phone": "",
-          "url": "https://oag.ca.gov/news/press-releases/california-it-remains-illegal-medical-debt-appear-credit-reports-attorney"
-        },
-        {
-          "title": "Health Consumer Alliance - free help with Medi-Cal billing problems",
-          "description": "Free help for Medi-Cal and other patients facing wrongful bills, denials, or medical-debt problems in California.",
-          "phone": "1-888-804-3536",
-          "url": "https://healthconsumer.org/"
-        }
-      ]
-    }
-  ],
-  "sources": [
-    "https://dpss.lacounty.gov/en/customer-service/csc.html",
-    "https://www.benefitscal.com",
-    "https://www.dhcs.ca.gov/toolkits/Pages/Medi-Cal-Continuous-Coverage-Unwinding.aspx",
-    "https://www.lacare.org/members/medi-cal-renewal-faqs",
-    "https://www.dhcs.ca.gov/Pages/Language_Access.aspx",
-    "https://www.lacare.org/members/handbook/important-phone-numbers",
-    "https://www.lacare.org/members/transportation",
-    "https://www.healthcareoptions.dhcs.ca.gov/",
-    "https://www.gov.ca.gov/2022/04/29/california-expands-medi-cal-to-all-eligible-adults-50-years-of-age-and-older/",
-    "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/general/oae.html",
-    "https://www.dhcs.ca.gov/Medi-Cal/Pages/immigration-status-categories.aspx",
-    "https://protectingimmigrantfamilies.org/",
-    "https://www.mhas-la.org/medi-cal-benefits/immigrant-access-to-medi-cal",
-    "https://www.dmhc.ca.gov/healthcareincalifornia/yourhealthcarerights/timelyaccesstocare.aspx",
-    "https://www.dhcs.ca.gov/individuals/Pages/MMCDHealthPlanDir.aspx",
-    "https://dmh.lacounty.gov/get-help-now/",
-    "https://988lifeline.org/",
-    "https://www.crisistextline.org/",
-    "https://www.lacare.org/health-plans/medi-cal/how-to-join",
-    "https://broadbandforall.cdt.ca.gov/",
-    "https://oag.ca.gov/news/press-releases/california-it-remains-illegal-medical-debt-appear-credit-reports-attorney",
-    "https://healthconsumer.org/",
-    "https://mcweb.apps.prd.cammis.medi-cal.ca.gov/assets/869D30AF-4BC7-4132-AF6A-AF75893E9221/aidcodes.pdf",
-    "https://www.dhcs.ca.gov/services/Documents/MMCD/Aid-Code-Chart-2024.pdf"
-  ]
+ "barriers": [
+ {
+ "id": "renewal-redetermination",
+ "name": "Coverage renewal paperwork and the end of unwinding flexibilities",
+ "memberVoice": "I got a thick packet in the mail and I'm scared I'll lose my Medi-Cal if I fill out one box wrong or miss the deadline.",
+ "description": "During the COVID continuous-coverage period, almost no one in Medi-Cal had to do an active renewal. Those temporary 'unwinding' flexibilities ended: they are no longer valid for applications dated after June 30, 2025 and for renewals due after the June 2025 renewal month. From now on, most members must actively return their annual renewal packet (or respond to a request for information), or they can be disenrolled even if they are still eligible. Keep your mailing address current with the county, watch for the renewal envelope, and respond by the deadline. There is still a 90-day 'cure' period to send back paperwork after a closure, but many people lose coverage simply because the form went to an old address or felt confusing.",
+ "affectedGroups": "All LA County Medi-Cal members, especially people who moved during the pandemic, people with unstable housing, seniors, people with limited literacy or English, and busy working families who never had to renew before.",
+ "solutions": [
+ {
+ "title": "LA County DPSS Customer Service Center (renewals, report address changes)",
+ "description": "Call the county to update your mailing address, ask about your renewal date, get help completing the renewal form, or submit documents. Open Mon-Fri 7:30 a.m.-5:30 p.m. This is the office that processes your renewal.",
+ "phone": "1-866-613-3777",
+ "url": "https://dpss.lacounty.gov/en/customer-service/csc.html"
+ },
+ {
+ "title": "BenefitsCal - renew online and upload documents",
+ "description": "Official California portal to complete your Medi-Cal renewal, update your address, and upload verification documents online instead of by mail. Create an account and link your case.",
+ "phone": "",
+ "url": "https://www.benefitscal.com"
+ },
+ {
+ "title": "DHCS 'Keep Your Coverage' / Medi-Cal renewal information",
+ "description": "State Department of Health Care Services guidance on what the renewal process looks like now that unwinding flexibilities have ended, what to watch for in the mail, and your rights during the renewal.",
+ "phone": "",
+ "url": "https://www.dhcs.ca.gov/toolkits/Pages/Medi-Cal-Continuous-Coverage-Unwinding.aspx"
+ },
+ {
+ "title": "L.A. Care Medi-Cal Renewal help (if L.A. Care is your plan)",
+ "description": "Your managed-care plan can remind you when your renewal is due and help you keep coverage. L.A. Care members can call Member Services or use the renewal FAQs page.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/medi-cal-renewal-faqs"
+ }
+ ]
+ },
+ {
+ "id": "language-access",
+ "name": "Language access and limited English proficiency (including Asian & Pacific Islander languages)",
+ "memberVoice": "When I call, no one speaks my language, so I just hang up and skip the appointment instead of asking for help.",
+ "description": "Many LA County members speak little or no English and need an interpreter to enroll, renew, or talk to a doctor. By law, Medi-Cal must provide free interpreting and translated notices in California's threshold languages, which include several Asian & Pacific Islander languages: Chinese, Korean, Tagalog, Vietnamese, Cambodian (Khmer), Hmong, Japanese, and Thai, along with Spanish, Armenian, Arabic, Farsi, Russian, Punjabi, and Hindi. On-demand phone interpreters in roughly 250 languages are available free. The barrier is that members often do not know interpreting is free and is their right, so they bring a child to translate or avoid care entirely. Medical interpreting at the point of care must never be billed to the member.",
+ "affectedGroups": "Limited-English-proficient members across LA County, including large Spanish-speaking, Chinese, Korean, Vietnamese, Tagalog/Filipino, Cambodian, Armenian, Farsi, and Russian-speaking communities; recent immigrants and elders are most affected.",
+ "solutions": [
+ {
+ "title": "Medi-Cal Beneficiary Helpline (free interpreters, ~250 languages)",
+ "description": "State Medi-Cal line that provides free spoken-language interpreting on demand. Ask for an interpreter in your language; the service is free. Open Mon-Fri 8 a.m.-5 p.m. TTY 1-800-430-7077.",
+ "phone": "1-800-541-5555",
+ "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Medi-CalFAQs2014b.aspx"
+ },
+ {
+ "title": "DHCS Non-Discrimination & Language Access (your rights to free interpreting)",
+ "description": "Official state page explaining your right to free interpreter services and translated documents, the threshold languages, and how to file a complaint if you are denied an interpreter (Office of Civil Rights 916-440-7370).",
+ "phone": "1-916-440-7370",
+ "url": "https://www.dhcs.ca.gov/Pages/Language_Access.aspx"
+ },
+ {
+ "title": "L.A. Care Member Services (request an interpreter for your plan/visit)",
+ "description": "Your managed-care plan provides free interpreters for appointments and phone calls in many Asian & Pacific Islander and other languages. Ask Member Services to arrange one before your visit. TTY 711.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
+ }
+ ]
+ },
+ {
+ "id": "transportation",
+ "name": "Transportation: no car, a sprawling county, parking, and underused NEMT/NMT benefits",
+ "memberVoice": "I don't drive, the clinic is two buses away, and I didn't know my plan could send a ride, so I just miss appointments.",
+ "description": "LA County is enormous and care can be far from home. Many members have no car, cannot afford gas or parking, or cannot ride public transit due to disability. Medi-Cal covers two transportation benefits that are widely underused: Non-Emergency Medical Transportation (NEMT, e.g., wheelchair van or ambulance when a doctor says it is medically needed) and Non-Medical Transportation (NMT, e.g., a free ride-share, bus pass, or mileage reimbursement to get to a covered appointment or the pharmacy). The benefit is free, but members must request it ahead of time, usually at least 2 business days before the appointment, and most members do not know it exists.",
+ "affectedGroups": "Members without a car, people with disabilities or mobility needs, seniors, residents of transit-poor parts of the county, and anyone who has to travel far for a specialist.",
+ "solutions": [
+ {
+ "title": "L.A. Care transportation (NEMT and NMT rides) via Member Services",
+ "description": "Call to arrange a free ride to a covered medical appointment or pharmacy. NMT covers ride-share, bus passes, or mileage; NEMT covers medically necessary van/ambulance with a doctor's order. Call at least 2 business days ahead. TTY 711.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/transportation"
+ },
+ {
+ "title": "Health Care Options (find your plan's transportation contact)",
+ "description": "If you are unsure which Medi-Cal plan you have, Health Care Options can tell you and point you to that plan's transportation/Member Services number so you can book a ride.",
+ "phone": "1-800-430-4263",
+ "url": "https://www.healthcareoptions.dhcs.ca.gov/"
+ },
+ {
+ "title": "DHCS Non-Emergency / Non-Medical Transportation benefit overview",
+ "description": "State explanation of the NEMT and NMT transportation benefits so members and navigators know what is covered, who qualifies, and how to ask for it.",
+ "phone": "",
+ "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx"
+ }
+ ]
+ },
+ {
+ "id": "immigration-fear",
+ "name": "Immigration-related fear and the older-adult full-scope expansion",
+ "memberVoice": "I'm afraid that signing up for Medi-Cal will hurt my immigration case or get my family noticed, so I stay away even though I'm sick.",
+ "description": "Many immigrant residents avoid enrolling or using Medi-Cal out of fear it will count against them as a 'public charge' or expose their family. In reality, USCIS does not count Medi-Cal (except long-term institutional care) in a public-charge determination, and using health coverage generally does not affect immigration status. Since May 1, 2022, California expanded full-scope Medi-Cal to all income-eligible adults age 50 and older regardless of immigration status (AB 133), and full-scope coverage for ages 26-49 followed in 2024 - so many older undocumented residents already qualify for complete benefits, not just emergency coverage. Note: under the 2025-26 state budget, new Medi-Cal enrollment for many undocumented adults is being frozen starting in 2026, which makes timely enrollment and trusted navigator help even more important. Fear, not eligibility, is the main barrier; trusted, confidential information helps.",
+ "affectedGroups": "Undocumented residents and mixed-status families, lawful permanent residents worried about future status, and immigrant elders age 50+ who may now qualify for full-scope coverage but are afraid to apply.",
+ "solutions": [
+ {
+ "title": "DHCS - Immigration Status and Medi-Cal Eligibility (official)",
+ "description": "State page explaining who is eligible regardless of immigration status, the older-adult and adult full-scope expansions, and that Medi-Cal use is confidential and generally not a public-charge factor.",
+ "phone": "",
+ "url": "https://www.dhcs.ca.gov/Medi-Cal/Pages/immigration-status-categories.aspx"
+ },
+ {
+ "title": "LA County DPSS - Full Scope Medi-Cal for Older Adult Expansion",
+ "description": "County policy page confirming adults 50+ can get full-scope Medi-Cal regardless of immigration status and how to apply locally.",
+ "phone": "1-866-613-3777",
+ "url": "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/general/oae.html"
+ },
+ {
+ "title": "Protecting Immigrant Families - Know Your Rights (public charge)",
+ "description": "Plain-language, multilingual Know Your Rights materials explaining that Medi-Cal is generally safe to use and is not counted as public charge for most immigrants.",
+ "phone": "",
+ "url": "https://protectingimmigrantfamilies.org/"
+ },
+ {
+ "title": "Mental Health Advocacy Services - Immigrant Access to Medi-Cal",
+ "description": "LA-based legal-aid explainer on which immigrants qualify for Medi-Cal and confidentiality protections; useful for navigators and members with questions.",
+ "phone": "",
+ "url": "https://www.mhas-la.org/medi-cal-benefits/immigrant-access-to-medi-cal"
+ }
+ ]
+ },
+ {
+ "id": "provider-shortage",
+ "name": "Provider and specialist shortages and long appointment waits",
+ "memberVoice": "My doctor referred me to a specialist months ago and I still can't get an appointment - I feel like my care is stuck.",
+ "description": "Even with coverage, members struggle to find a primary doctor or specialist who is accepting Medi-Cal, and waits can be long. California sets timely-access standards: a routine primary care appointment should be available within 10 business days and a non-urgent specialist appointment within 15 business days of the request, with shorter limits for urgent care. Plans must also meet time-and-distance standards. In practice, specialists such as cardiologists, rheumatologists, and dermatologists are in short supply for Medi-Cal patients, and members often do not know these standards are enforceable or how to escalate when they are not met.",
+ "affectedGroups": "Members needing specialty, dental, or rural/underserved-area care; people with chronic or complex conditions; and anyone facing long waits or 'no Medi-Cal patients' responses.",
+ "solutions": [
+ {
+ "title": "Your plan's Member Services (request timely access / help finding a provider)",
+ "description": "If you cannot get an appointment within the legal wait-time standard, call your plan and ask them to find you an in-network provider or arrange out-of-network care. For L.A. Care: TTY 711.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
+ },
+ {
+ "title": "DMHC Help Center - file a timely-access or access-to-care complaint",
+ "description": "The California Department of Managed Health Care enforces appointment wait-time standards. If your plan cannot get you timely care, the DMHC Help Center can intervene. Files complaints and helps members.",
+ "phone": "1-888-466-2219",
+ "url": "https://www.dmhc.ca.gov/healthcareincalifornia/yourhealthcarerights/timelyaccesstocare.aspx"
+ },
+ {
+ "title": "Health Care Options - switch plans if your network is inadequate",
+ "description": "You can change Medi-Cal managed-care plans at any time if another plan has better provider availability for your needs. TTY 1-800-430-7077.",
+ "phone": "1-800-430-4263",
+ "url": "https://www.healthcareoptions.dhcs.ca.gov/"
+ }
+ ]
+ },
+ {
+ "id": "behavioral-health",
+ "name": "Behavioral health access (mental health and substance use)",
+ "memberVoice": "I'm struggling and I don't know who to call or whether Medi-Cal even covers therapy - so I just keep suffering.",
+ "description": "Members often do not know how to reach mental health or substance use care, or which door to use. In LA County, mild-to-moderate mental health services are usually handled through your Medi-Cal managed-care plan, while specialty (more serious) mental health services and crisis services are provided through the LA County Department of Mental Health (DMH) Help Line, which operates 24/7. Substance use services are also accessible through county lines. Stigma, language, and not knowing the entry point are major barriers, and crisis support like 988 and the Crisis Text Line is available immediately.",
+ "affectedGroups": "Members with depression, anxiety, trauma, serious mental illness, or substance use needs; youth and older adults; and people in crisis who do not know the entry point.",
+ "solutions": [
+ {
+ "title": "LA County DMH 24/7 Help Line (mental health & substance use access)",
+ "description": "The Los Angeles County Department of Mental Health Help Line is the 24/7 entry point for screening, referrals, crisis counseling, and linkage to Medi-Cal specialty mental health services.",
+ "phone": "1-800-854-7771",
+ "url": "https://dmh.lacounty.gov/get-help-now/"
+ },
+ {
+ "title": "988 Suicide & Crisis Lifeline",
+ "description": "Free, confidential crisis support 24/7 by call or text for anyone in emotional distress or a mental-health crisis. Call or text 988.",
+ "phone": "988",
+ "url": "https://988lifeline.org/"
+ },
+ {
+ "title": "Crisis Text Line",
+ "description": "Text HOME to 741741 to reach a trained crisis counselor by text, free and 24/7.",
+ "phone": "741741",
+ "url": "https://www.crisistextline.org/"
+ },
+ {
+ "title": "Your Medi-Cal plan Member Services (mild-to-moderate mental health)",
+ "description": "For non-crisis therapy and counseling (mild-to-moderate needs), call your managed-care plan to get connected to a behavioral health provider. For L.A. Care: TTY 711.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
+ }
+ ]
+ },
+ {
+ "id": "plan-choice-enrollment",
+ "name": "Confusing plan choice and enrollment (Health Care Options)",
+ "memberVoice": "I got a form asking me to pick a health plan and I have no idea which one is right for me or what happens if I do nothing.",
+ "description": "New LA County Medi-Cal members receive a Medi-Cal Choice Form from Health Care Options (HCO) and must pick a managed-care plan. The choices, networks, and deadlines are confusing, and if a member does nothing they may be auto-assigned to a plan that does not include their doctor. Members can choose or change their plan at any time by phone or online through HCO, and aligning the plan with their existing doctor or preferred clinic is key. Navigators can walk members through which plan includes their providers before they choose.",
+ "affectedGroups": "Newly eligible members, people who want to keep a specific doctor or clinic, and anyone auto-assigned to a plan that does not fit their needs.",
+ "solutions": [
+ {
+ "title": "Health Care Options (choose or change your Medi-Cal plan)",
+ "description": "Official enrollment broker for Medi-Cal managed care. Call to pick a plan, confirm your doctor is in-network, or switch plans at any time. Open Mon-Fri 8 a.m.-6 p.m. TTY 1-800-430-7077.",
+ "phone": "1-800-430-4263",
+ "url": "https://www.healthcareoptions.dhcs.ca.gov/"
+ },
+ {
+ "title": "DHCS Medi-Cal Managed Care Health Plan Directory (LA options)",
+ "description": "State directory of the managed-care plans available in Los Angeles County so you can compare plans and their networks before choosing.",
+ "phone": "",
+ "url": "https://www.dhcs.ca.gov/individuals/Pages/MMCDHealthPlanDir.aspx"
+ },
+ {
+ "title": "L.A. Care - How to enroll / join",
+ "description": "Step-by-step guidance for enrolling in and joining a Medi-Cal plan in LA County, including what the choice form looks like.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/health-plans/medi-cal/how-to-join"
+ }
+ ]
+ },
+ {
+ "id": "digital-divide",
+ "name": "Digital divide: no internet, no smartphone, or low digital skills",
+ "memberVoice": "They keep telling me to 'just go online and upload it,' but I don't have internet or a smartphone, and websites overwhelm me.",
+ "description": "More and more Medi-Cal tasks (renewing, uploading documents, choosing a plan, messaging a doctor, telehealth) assume reliable internet, a device, and digital literacy. Many members - especially seniors, low-income households, and limited-English speakers - have none of these, so the 'easy online' path becomes a barrier. The fix is to make sure members know every online task can also be done by phone, by mail, or in person, and to connect them to low-cost internet/device programs and in-person help at county offices, libraries, and community clinics.",
+ "affectedGroups": "Seniors, very low-income households, people experiencing homelessness, rural/transit-poor residents, and limited-English or low-literacy members who cannot complete online forms.",
+ "solutions": [
+ {
+ "title": "LA County DPSS - phone and in-person alternatives to online tasks",
+ "description": "Every Medi-Cal task you can do online can also be done by phone or in person at a DPSS office. Call to renew, report changes, or ask where to get in-person help instead of using a website.",
+ "phone": "1-866-613-3777",
+ "url": "https://dpss.lacounty.gov/en/customer-service/csc.html"
+ },
+ {
+ "title": "BenefitsCal help line (if you need help using the online portal)",
+ "description": "If you do want to use the online portal but get stuck, BenefitsCal has a support line and step-by-step help so you are not left to figure it out alone.",
+ "phone": "1-855-481-1632",
+ "url": "https://www.benefitscal.com"
+ },
+ {
+ "title": "California Broadband for All - low-cost internet and device programs",
+ "description": "California's digital-equity resources help low-income households find low-cost internet service and affordable devices so online health tasks become possible.",
+ "phone": "",
+ "url": "https://broadbandforall.cdt.ca.gov/"
+ }
+ ]
+ },
+ {
+ "id": "cost-medical-debt",
+ "name": "Cost and medical-debt fears",
+ "memberVoice": "I keep putting off care because I'm terrified of a bill I can't pay or debt that wrecks my credit.",
+ "description": "Many members avoid care because they fear a bill, even though Medi-Cal covers services with no or very low cost and most members have no share of cost. Members are often wrongly billed, or they carry old medical debt they think disqualifies them. Two protections help: Medi-Cal members should not be balance-billed for covered services by network providers, and as of January 1, 2025 California's SB 1061 makes it illegal to report medical debt to consumer credit agencies, and contracts that create medical debt must include specific protective language (effective July 1, 2025) or the debt is void. Members should know covered care is free or low-cost and that improper bills can be disputed.",
+ "affectedGroups": "Members who delay care for fear of bills, people with prior medical debt, dual-eligible and share-of-cost members confused about what they owe, and anyone improperly balance-billed.",
+ "solutions": [
+ {
+ "title": "Your Medi-Cal plan Member Services (dispute a wrongful bill)",
+ "description": "If you are billed for a covered service, call your plan; Medi-Cal members generally cannot be balance-billed by network providers for covered care. For L.A. Care: TTY 711.",
+ "phone": "1-888-839-9909",
+ "url": "https://www.lacare.org/members/handbook/important-phone-numbers"
+ },
+ {
+ "title": "CA Attorney General - Medical debt consumer protections (SB 1061)",
+ "description": "Official Attorney General consumer alert explaining that medical debt may not appear on California credit reports and your rights under SB 1061.",
+ "phone": "",
+ "url": "https://oag.ca.gov/news/press-releases/california-it-remains-illegal-medical-debt-appear-credit-reports-attorney"
+ },
+ {
+ "title": "Health Consumer Alliance - free help with Medi-Cal billing problems",
+ "description": "Free help for Medi-Cal and other patients facing wrongful bills, denials, or medical-debt problems in California.",
+ "phone": "1-888-804-3536",
+ "url": "https://healthconsumer.org/"
+ }
+ ]
+ }
+ ],
+ "sources": [
+ "https://dpss.lacounty.gov/en/customer-service/csc.html",
+ "https://www.benefitscal.com",
+ "https://www.dhcs.ca.gov/toolkits/Pages/Medi-Cal-Continuous-Coverage-Unwinding.aspx",
+ "https://www.lacare.org/members/medi-cal-renewal-faqs",
+ "https://www.dhcs.ca.gov/Pages/Language_Access.aspx",
+ "https://www.lacare.org/members/handbook/important-phone-numbers",
+ "https://www.lacare.org/members/transportation",
+ "https://www.healthcareoptions.dhcs.ca.gov/",
+ "https://www.gov.ca.gov/2022/04/29/california-expands-medi-cal-to-all-eligible-adults-50-years-of-age-and-older/",
+ "https://my.dpss.lacounty.gov/public/en/home/epolicy/program/medi-cal/general/oae.html",
+ "https://www.dhcs.ca.gov/Medi-Cal/Pages/immigration-status-categories.aspx",
+ "https://protectingimmigrantfamilies.org/",
+ "https://www.mhas-la.org/medi-cal-benefits/immigrant-access-to-medi-cal",
+ "https://www.dmhc.ca.gov/healthcareincalifornia/yourhealthcarerights/timelyaccesstocare.aspx",
+ "https://www.dhcs.ca.gov/individuals/Pages/MMCDHealthPlanDir.aspx",
+ "https://dmh.lacounty.gov/get-help-now/",
+ "https://988lifeline.org/",
+ "https://www.crisistextline.org/",
+ "https://www.lacare.org/health-plans/medi-cal/how-to-join",
+ "https://broadbandforall.cdt.ca.gov/",
+ "https://oag.ca.gov/news/press-releases/california-it-remains-illegal-medical-debt-appear-credit-reports-attorney",
+ "https://healthconsumer.org/",
+ "https://mcweb.apps.prd.cammis.medi-cal.ca.gov/assets/869D30AF-4BC7-4132-AF6A-AF75893E9221/aidcodes.pdf",
+ "https://www.dhcs.ca.gov/services/Documents/MMCD/Aid-Code-Chart-2024.pdf"
+ ]
 }
