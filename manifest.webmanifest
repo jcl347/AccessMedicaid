@@ -1,0 +1,17 @@
+{
+  "name": "Access Medi-Cal LA",
+  "short_name": "Medi-Cal LA",
+  "description": "Find your Medi-Cal care and resources across greater Los Angeles, in any language.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b2447",
+  "theme_color": "#0b2447",
+  "categories": ["health", "medical", "government"],
+  "lang": "en",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

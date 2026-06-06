@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Access Medi-Cal LA">
+  <rect width="512" height="512" rx="104" fill="#0b2447"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#ffffff" stroke-width="20"/>
+  <polygon points="336,176 286,286 176,336 226,226" fill="#5aa2ec"/>
+  <polygon points="336,176 286,286 256,256" fill="#2b86e0"/>
+  <circle cx="256" cy="256" r="14" fill="#ffffff"/>
+</svg>

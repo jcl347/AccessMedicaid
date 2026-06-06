@@ -1,0 +1,31 @@
+name: Verify Medi-Cal data
+
+# Cron that makes sure the data is still real: checks every resource link is
+# reachable and that each phone number still appears on its source page.
+# Runs weekly (and on demand). A red run emails the repo owner via GitHub.
+
+on:
+  schedule:
+    - cron: "17 13 * * 1"   # Mondays 13:17 UTC (~6:17am Pacific)
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Run data verification
+        run: node scripts/verify-data.mjs
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-report
+          path: data/verification-report.json
+          if-no-files-found: warn

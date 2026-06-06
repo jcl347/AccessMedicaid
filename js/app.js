@@ -36,6 +36,9 @@
  grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
  message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
  check: '<polyline points="20 6 9 17 4 12"/>',
+ star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+ calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+ download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
  };
  var CAT_ICON = {
  "Find a doctor": "plusCircle", "Get a ride (transportation)": "car", "Nurse advice line (24/7)": "phone",
@@ -157,7 +160,7 @@
  card.addEventListener("click", function () {
  state.planId = p.id === "__all__" ? null : p.id;
  store(false, STORE.plan, state.planId || "");
- renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers();
+ renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit();
  $("#needs-step").scrollIntoView({ block: "start" });
  });
  return card;
@@ -229,6 +232,12 @@
  actions.appendChild(el("a", { class: "btn btn-ghost", href: telHref(tty), html: svg("phone") + "<span>TTY (deaf/hard of hearing): " + tty + "</span>" }));
  }
  if (r.url) actions.appendChild(el("a", { class: "btn btn-link", href: r.url, target: "_blank", rel: "noopener", html: "<span>Open website</span>" + svg("external") }));
+ if (r.phone || r.url) {
+ var fav = isFav(r);
+ var star = el("button", { class: "btn btn-ghost fav-btn" + (fav ? " on" : ""), type: "button", "aria-pressed": fav ? "true" : "false", html: svg("star") + "<span>" + (fav ? "Saved" : "Save") + "</span>" });
+ star.addEventListener("click", function () { var on = toggleFav(r); star.classList.toggle("on", on); star.setAttribute("aria-pressed", on ? "true" : "false"); star.querySelector("span").textContent = on ? "Saved" : "Save"; renderToolkit(); });
+ actions.appendChild(star);
+ }
  actions.appendChild(el("span", { class: "verify-badge" + (r.verified ? "" : " unverified"), text: r.verified ? "✓ Checked" : "⚠ Please confirm" }));
  var note = null;
  if (r.category === "Find a doctor" && r.phone) {
@@ -346,6 +355,172 @@
  var ul = el("ul", {});
  Object.keys(urls).forEach(function (u) { ul.appendChild(el("li", {}, [el("a", { href: u, target: "_blank", rel: "noopener", text: u })])); });
  box.innerHTML = ""; box.appendChild(ul.children.length ? ul : el("p", { text: "Sources are on each plan's official website." }));
+ }
+
+ /* ---------- engagement: toolkit (Care Card, favorites, checklist, renewal) ---------- */
+ var STATE_RX = "1-800-977-2273", STATE_DENTAL = "1-800-322-6384";
+ function lsGet(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }
+ function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+ function favKey(r) { return (state.planId || "all") + "|" + r.category + "|" + r.title; }
+ function getFavs() { return lsGet("amla.saved", []); }
+ function isFav(r) { var k = favKey(r); return getFavs().some(function (x) { return x.key === k; }); }
+ function toggleFav(r) {
+ var a = getFavs(), k = favKey(r), i = -1;
+ a.forEach(function (x, idx) { if (x.key === k) i = idx; });
+ if (i >= 0) { a.splice(i, 1); lsSet("amla.saved", a); return false; }
+ a.push({ key: k, planName: (getPlan() || {}).name || "", category: r.category, title: r.title, phone: r.phone || "", url: r.url || "" });
+ lsSet("amla.saved", a); return true;
+ }
+
+ var CHECK = [
+ "Find and save my plan's Member Services number",
+ "Pick or confirm my main doctor (PCP)",
+ "Set up my online member account or app",
+ "Know my Medi-Cal renewal month and set a reminder",
+ "Save the 24/7 nurse line and the 988 crisis line",
+ ];
+ function getChecks() { var a = lsGet("amla.checklist", []); return CHECK.map(function (_, i) { return !!a[i]; }); }
+ function setCheck(i, v) { var a = getChecks(); a[i] = v; lsSet("amla.checklist", a); }
+
+ function renewIcs(ym) {
+ var y = ym.slice(0, 4), m = ym.slice(5, 7), dt = y + m + "01";
+ return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AccessMediCalLA//EN", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
+ "UID:medical-renew-" + ym + "@accessmedicaid", "DTSTART;VALUE=DATE:" + dt, "RRULE:FREQ=YEARLY",
+ "SUMMARY:Renew my Medi-Cal", "DESCRIPTION:Renew your Medi-Cal so you do not lose coverage. Watch your mail and check BenefitsCal.com. Call your county if you need help.",
+ "BEGIN:VALARM", "TRIGGER:-P21D", "ACTION:DISPLAY", "DESCRIPTION:Medi-Cal renewal is coming up", "END:VALARM",
+ "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+ }
+ function renewGoogleUrl(ym) {
+ var y = ym.slice(0, 4), m = ym.slice(5, 7);
+ return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent("Renew my Medi-Cal") +
+ "&recur=" + encodeURIComponent("RRULE:FREQ=YEARLY") + "&dates=" + y + m + "01/" + y + m + "02" +
+ "&details=" + encodeURIComponent("Renew your Medi-Cal so you do not lose coverage. Check BenefitsCal.com.");
+ }
+ function monthsUntil(ym) {
+ try {
+ var now = new Date(), cy = now.getFullYear(), cm = now.getMonth() + 1, tm = parseInt(ym.slice(5, 7), 10);
+ var diff = tm - cm; if (diff < 0) diff += 12; return diff;
+ } catch (e) { return null; }
+ }
+
+ function careNumbers(plan) {
+ var rows = [];
+ if (plan.memberServicesPhone) rows.push({ label: "Member Services", phone: plan.memberServicesPhone });
+ if (plan.nurseAdviceLine) rows.push({ label: "24/7 Nurse advice", phone: plan.nurseAdviceLine });
+ if (plan.ttyPhone) rows.push({ label: "TTY (deaf/HoH)", phone: plan.ttyPhone });
+ rows.push({ label: "Prescriptions (Medi-Cal Rx)", phone: STATE_RX });
+ rows.push({ label: "Dental (Medi-Cal Dental)", phone: STATE_DENTAL });
+ rows.push({ label: "Crisis line", phone: "988" });
+ rows.push({ label: "Emergencies", phone: "911" });
+ return rows;
+ }
+ function careCardText(plan) {
+ var lines = ["My Medi-Cal Care Card - " + plan.name];
+ careNumbers(plan).forEach(function (r) { lines.push(r.label + ": " + r.phone); });
+ if (plan.memberPortalUrl) lines.push("Online account: " + plan.memberPortalUrl);
+ if (plan.findADoctorUrl) lines.push("Find a doctor: " + plan.findADoctorUrl);
+ lines.push("(from Access Medi-Cal LA)");
+ return lines.join("\n");
+ }
+
+ function renderToolkit() {
+ var box = $("#toolkitBody"); if (!box) return; box.innerHTML = "";
+ var plan = getPlan();
+
+ // ---- Care Card ----
+ var card = el("div", { class: "tk-card care-card" });
+ if (plan) {
+ card.setAttribute("style", "--plan-color:" + (plan.brandColor || "#0a5dc2"));
+ card.appendChild(el("div", { class: "tk-head", html: svg("creditCard") + "<span>Your Care Card - " + plan.name + "</span>" }));
+ var grid = el("div", { class: "care-nums" });
+ careNumbers(plan).forEach(function (r) {
+ grid.appendChild(el("a", { class: "care-num", href: telHref(r.phone) }, [
+ el("span", { class: "cn-label", text: r.label }),
+ el("span", { class: "cn-phone", html: svg("phone") + "<span>" + r.phone + "</span>" }),
+ ]));
+ });
+ card.appendChild(grid);
+ var acts = el("div", { class: "tk-actions" });
+ acts.appendChild(el("a", { class: "btn btn-call", href: "sms:?&body=" + encodeURIComponent(careCardText(plan)), html: svg("message") + "<span>Text these to my phone</span>" }));
+ var pr = el("button", { class: "btn btn-ghost", type: "button", html: svg("download") + "<span>Print / Save as PDF</span>" });
+ pr.addEventListener("click", function () { window.print(); });
+ acts.appendChild(pr);
+ card.appendChild(acts);
+ } else {
+ card.appendChild(el("div", { class: "tk-head", html: svg("creditCard") + "<span>Your Care Card</span>" }));
+ card.appendChild(el("p", { class: "muted", html: "Pick your health plan in <a href='#plan-step'>Step 1</a> and your plan's key phone numbers will appear here, ready to text to your phone or print." }));
+ }
+ box.appendChild(card);
+
+ // ---- Renewal reminder ----
+ var rcard = el("div", { class: "tk-card" });
+ rcard.appendChild(el("div", { class: "tk-head", html: svg("calendar") + "<span>Never lose coverage: renewal reminder</span>" }));
+ var saved = store(true, "amla.renew") || "";
+ var row = el("div", { class: "renew-row" });
+ var lbl = el("label", { class: "renew-label", for: "renewMonth", text: "My Medi-Cal renews in:" });
+ var input = el("input", { type: "month", id: "renewMonth", class: "zip-input" });
+ if (saved) input.value = saved;
+ row.appendChild(lbl); row.appendChild(input);
+ rcard.appendChild(row);
+ var out = el("div", { class: "renew-out" });
+ rcard.appendChild(out);
+ function paintRenew() {
+ out.innerHTML = "";
+ var ym = input.value;
+ if (!ym) { out.appendChild(el("p", { class: "muted", text: "Set your renewal month to get a reminder and a countdown. Renewing on time is the #1 way people keep their Medi-Cal." })); return; }
+ store(false, "amla.renew", ym);
+ var mu = monthsUntil(ym);
+ out.appendChild(el("p", { class: "renew-count", text: mu === 0 ? "Your renewal month is this month - act now." : ("About " + mu + " month" + (mu === 1 ? "" : "s") + " until your renewal month.") }));
+ var a = el("div", { class: "tk-actions" });
+ var blob = new Blob([renewIcs(ym)], { type: "text/calendar" });
+ var u = URL.createObjectURL(blob);
+ a.appendChild(el("a", { class: "btn btn-call", href: u, download: "medi-cal-renewal.ics", html: svg("download") + "<span>Add to my calendar</span>" }));
+ a.appendChild(el("a", { class: "btn btn-ghost", href: renewGoogleUrl(ym), target: "_blank", rel: "noopener", html: svg("calendar") + "<span>Add to Google Calendar</span>" }));
+ out.appendChild(a);
+ }
+ input.addEventListener("change", paintRenew);
+ paintRenew();
+ box.appendChild(rcard);
+
+ // ---- Get-started checklist ----
+ var ck = el("div", { class: "tk-card" });
+ var checks = getChecks(); var done = checks.filter(Boolean).length;
+ ck.appendChild(el("div", { class: "tk-head", html: svg("check") + "<span>Get started: " + done + " of " + CHECK.length + " done</span>" }));
+ var bar = el("div", { class: "progress" }, [el("span", { style: "width:" + Math.round(done / CHECK.length * 100) + "%" })]);
+ ck.appendChild(bar);
+ var ul = el("ul", { class: "checklist" });
+ CHECK.forEach(function (label, i) {
+ var id = "chk" + i;
+ var liInput = el("input", { type: "checkbox", id: id });
+ if (checks[i]) liInput.setAttribute("checked", "checked");
+ liInput.addEventListener("change", function () { setCheck(i, liInput.checked); renderToolkit(); });
+ ul.appendChild(el("li", {}, [liInput, el("label", { for: id, text: label })]));
+ });
+ ck.appendChild(ul);
+ box.appendChild(ck);
+
+ // ---- Saved resources ----
+ var favs = getFavs();
+ var sc = el("div", { class: "tk-card" });
+ sc.appendChild(el("div", { class: "tk-head", html: svg("star") + "<span>Saved resources (" + favs.length + ")</span>" }));
+ if (!favs.length) {
+ sc.appendChild(el("p", { class: "muted", text: "Tap Save on any resource and it will appear here for quick access next time you visit." }));
+ } else {
+ var sl = el("div", { class: "saved-list" });
+ favs.forEach(function (f) {
+ var a = el("div", { class: "saved-item" });
+ a.appendChild(el("div", { class: "si-title", text: f.title + (f.planName ? " - " + f.planName : "") }));
+ var act = el("div", { class: "near-actions" });
+ if (f.phone) act.appendChild(el("a", { class: "btn btn-call", href: telHref(f.phone), html: svg("phone") + "<span>Call: " + f.phone + "</span>" }));
+ if (f.url) act.appendChild(el("a", { class: "btn btn-ghost", href: f.url, target: "_blank", rel: "noopener", html: "<span>Open</span>" + svg("external") }));
+ var rm = el("button", { class: "btn btn-ghost", type: "button", html: "<span>Remove</span>" });
+ rm.addEventListener("click", function () { var arr = getFavs().filter(function (x) { return x.key !== f.key; }); lsSet("amla.saved", arr); renderToolkit(); renderResults(); renderState(); });
+ act.appendChild(rm); a.appendChild(act); sl.appendChild(a);
+ });
+ sc.appendChild(sl);
+ }
+ box.appendChild(sc);
+ flow(box);
  }
 
  /* ---------- barriers (scannable; plan-aware) ---------- */
@@ -788,8 +963,9 @@
  var sp = store(true, STORE.plan);
  if (sp && DATA.plans.some(function (p) { return p.id === sp; })) state.planId = sp;
  }
- renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources();
+ renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit();
  initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); initReveal();
+ if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
  }
  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
