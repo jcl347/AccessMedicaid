@@ -1,16 +1,14 @@
 /* ============================================================
    Access Medi-Cal LA — app logic (vanilla JS, no build step)
    Reads window.AM_DATA (see js/data.js).
-   Features: county-grouped plan picker, task search, dynamic
-   web-mining (/api/live), "find care near me" maps, full-page
-   translation, text-size, read-aloud, print.
    ============================================================ */
 (function () {
   "use strict";
 
   var DATA = window.AM_DATA || { plans: [], stateResources: [], barriers: [], categories: [], serviceAreas: [], meta: {} };
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  /* ---------- inline SVG icon set (Feather-style, MIT-spirit) ---------- */
+  /* ---------- inline SVG icon set ---------- */
   var P = {
     plusCircle: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>',
     car: '<rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
@@ -36,35 +34,25 @@
     hospital: '<path d="M3 22V8l9-5 9 5v14"/><path d="M9 22v-5h6v5"/><line x1="12" y1="7" x2="12" y2="13"/><line x1="9" y1="10" x2="15" y2="10"/>',
     users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
     grid: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
-    bolt: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    check: '<polyline points="20 6 9 17 4 12"/>',
   };
   var CAT_ICON = {
-    "Find a doctor": "plusCircle",
-    "Get a ride (transportation)": "car",
-    "Nurse advice line (24/7)": "phone",
-    "Mental health & substance use": "heart",
-    "Pharmacy & prescriptions": "pill",
-    "Dental": "smile",
-    "Vision": "eye",
-    "Language & interpreter help": "globe",
-    "Member ID card & online account": "creditCard",
-    "Renew Medi-Cal / keep coverage": "refresh",
-    "Complaints & appeals (grievances)": "shield",
-    "Extra benefits & community supports (CalAIM)": "gift",
-    "Urgent & after-hours care": "clock",
-    "Member handbook & forms": "book",
-    "Transportation to non-medical (NMT)": "bag",
-    "Other": "info",
+    "Find a doctor": "plusCircle", "Get a ride (transportation)": "car", "Nurse advice line (24/7)": "phone",
+    "Mental health & substance use": "heart", "Pharmacy & prescriptions": "pill", "Dental": "smile",
+    "Vision": "eye", "Language & interpreter help": "globe", "Member ID card & online account": "creditCard",
+    "Renew Medi-Cal / keep coverage": "refresh", "Complaints & appeals (grievances)": "shield",
+    "Extra benefits & community supports (CalAIM)": "gift", "Urgent & after-hours care": "clock",
+    "Member handbook & forms": "book", "Transportation to non-medical (NMT)": "bag", "Other": "info",
   };
   function svg(name, cls) {
-    var paths = P[name] || P.info;
-    return '<svg class="' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + paths + "</svg>";
+    return '<svg class="' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[name] || P.info) + "</svg>";
   }
   function catIcon(cat, cls) { return svg(CAT_ICON[cat] || "info", cls); }
 
   /* ---------- state ---------- */
   var STORE = { plan: "amla.plan", size: "amla.textsize", zip: "amla.zip", lang: "amla.lang" };
-  var state = { planId: null, category: null, query: "", care: "urgent care", loc: "" };
+  var state = { planId: null, category: null, query: "", care: "urgent care", loc: "", zip: "" };
 
   /* ---------- helpers ---------- */
   function $(s, c) { return (c || document).querySelector(s); }
@@ -84,20 +72,43 @@
   function getPlan() { return DATA.plans.filter(function (p) { return p.id === state.planId; })[0] || null; }
   function shortLabel(c) { return c.replace(/\s*\(.*?\)\s*/g, "").trim(); }
 
+  /* ---------- animations ---------- */
+  function flow(container) {
+    if (!container || reduceMotion) return;
+    Array.prototype.forEach.call(container.children, function (c, i) {
+      c.classList.remove("flow"); void c.offsetWidth;
+      c.style.animationDelay = Math.min(i * 45, 380) + "ms";
+      c.classList.add("flow");
+    });
+  }
+  function initReveal() {
+    var els = document.querySelectorAll("[data-reveal]");
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(els, function (e) { e.classList.add("reveal-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (ents) {
+      ents.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("reveal-in"); io.unobserve(en.target); } });
+    }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+    Array.prototype.forEach.call(els, function (e) { io.observe(e); });
+  }
+
+  /* ---------- resources ---------- */
   function planResources(plan) {
     if (!plan) return [];
-    var out = [];
+    var out = [], present = {};
+    (plan.resources || []).forEach(function (r) { present[r.category] = true; });
     function add(cat, title, desc, phone, url, langs) {
       if (!phone && !url) return;
       out.push({ category: cat, title: title, description: desc || "", phone: phone || "", url: url || "", languages: langs || "", verified: true, _essential: true });
     }
-    add("Member ID card & online account", "Call " + plan.name + " Member Services",
-      "Your plan's main help line. Ask any question about your coverage — interpreters are free." + (plan.memberServicesHours ? " Hours: " + plan.memberServicesHours : ""),
-      plan.memberServicesPhone, plan.memberPortalUrl, "Free interpreters in all languages");
+    // TTY is unique info — always include it.
     if (plan.ttyPhone) add("Member ID card & online account", "TTY line (deaf / hard of hearing)", "For members who are deaf, hard of hearing, or have a speech disability.", plan.ttyPhone, "", "");
-    if (plan.nurseAdviceLine) add("Nurse advice line (24/7)", "24/7 Nurse Advice Line", "Talk to a nurse any time, day or night, about a health question or symptom.", plan.nurseAdviceLine, "", "");
-    if (plan.findADoctorUrl) add("Find a doctor", "Find a doctor or clinic in your plan", "Search for a doctor, specialist, or clinic that takes your plan.", "", plan.findADoctorUrl, "");
-    if (plan.memberHandbookUrl) add("Member handbook & forms", "Your Member Handbook", "The full guide to your benefits, rights, and how to get care.", "", plan.memberHandbookUrl, "");
+    // Other synthesized cards only when the researched data doesn't already cover that category (avoids duplicates).
+    if (!present["Member ID card & online account"]) add("Member ID card & online account", "Call " + plan.name + " Member Services", "Your plan's main help line. Ask any question — interpreters are free." + (plan.memberServicesHours ? " Hours: " + plan.memberServicesHours : ""), plan.memberServicesPhone, plan.memberPortalUrl, "Free interpreters in all languages");
+    if (!present["Nurse advice line (24/7)"] && plan.nurseAdviceLine) add("Nurse advice line (24/7)", "24/7 Nurse Advice Line", "Talk to a nurse any time, day or night.", plan.nurseAdviceLine, "", "");
+    if (!present["Find a doctor"] && plan.findADoctorUrl) add("Find a doctor", "Find a doctor or clinic in your plan", "Search the online directory, or call Member Services and they'll help you find or switch to any doctor.", plan.memberServicesPhone, plan.findADoctorUrl, "");
+    if (!present["Member handbook & forms"] && plan.memberHandbookUrl) add("Member handbook & forms", "Your Member Handbook", "The full guide to your benefits, rights, and how to get care.", "", plan.memberHandbookUrl, "");
     (plan.resources || []).forEach(function (r) { out.push(r); });
     return out;
   }
@@ -105,16 +116,14 @@
     if (state.category && r.category !== state.category) return false;
     if (state.query) {
       var q = state.query.toLowerCase();
-      var hay = (r.title + " " + r.description + " " + r.category + " " + (r.languages || "")).toLowerCase();
-      if (hay.indexOf(q) === -1) return false;
+      if ((r.title + " " + r.description + " " + r.category + " " + (r.languages || "")).toLowerCase().indexOf(q) === -1) return false;
     }
     return true;
   }
 
-  /* ---------- plan picker (grouped by county) ---------- */
+  /* ---------- plan picker ---------- */
   function renderPlanPicker() {
-    var wrap = $("#planPicker");
-    wrap.innerHTML = "";
+    var wrap = $("#planPicker"); wrap.innerHTML = "";
     var areas = DATA.serviceAreas && DATA.serviceAreas.length ? DATA.serviceAreas : ["Los Angeles County"];
     areas.forEach(function (area) {
       var inArea = DATA.plans.filter(function (p) { return p.serviceArea === area; });
@@ -123,23 +132,18 @@
       group.appendChild(el("div", { class: "county-title", html: svg("mapPin") + "<span>" + area + "</span>" }));
       var grid = el("div", { class: "plan-grid" });
       inArea.forEach(function (p) { grid.appendChild(planCard(p)); });
-      group.appendChild(grid);
-      wrap.appendChild(group);
+      group.appendChild(grid); wrap.appendChild(group);
     });
-    // "not sure" option
     var extra = el("div", { class: "county-group" });
     extra.appendChild(el("div", { class: "county-title", html: svg("info") + "<span>Not sure?</span>" }));
     var g2 = el("div", { class: "plan-grid" });
-    g2.appendChild(planCard({ id: "__all__", name: "I'm not sure / show me everything", relationship: "See resources that work for every plan and statewide", brandColor: "#6b7c8e" }));
-    extra.appendChild(g2);
-    wrap.appendChild(extra);
+    g2.appendChild(planCard({ id: "__all__", name: "I'm not sure / show me everything", relationship: "See resources that work for every plan and statewide", brandColor: "#687888" }));
+    extra.appendChild(g2); wrap.appendChild(extra);
+    flow(wrap);
   }
   function planCard(p) {
     var checked = state.planId === p.id || (p.id === "__all__" && !state.planId);
-    var card = el("button", {
-      class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false",
-      "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0f766e"),
-    }, [
+    var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, [
       el("span", { class: "pc-name", text: p.name }),
       el("span", { class: "pc-rel", text: p.relationship || "" }),
       el("span", { class: "pc-check", text: "✓ Selected" }),
@@ -147,28 +151,24 @@
     card.addEventListener("click", function () {
       state.planId = p.id === "__all__" ? null : p.id;
       store(false, STORE.plan, state.planId || "");
-      renderPlanPicker(); renderNeeds(); renderResults();
+      renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers();
       $("#needs-step").scrollIntoView({ block: "start" });
     });
     return card;
   }
 
-  /* ---------- needs grid ---------- */
+  /* ---------- needs ---------- */
   function renderNeeds() {
-    var grid = $("#needsGrid");
-    grid.innerHTML = "";
+    var grid = $("#needsGrid"); grid.innerHTML = "";
     var plan = getPlan();
     var pool = (plan ? planResources(plan) : []).concat(DATA.stateResources || []);
-    var counts = {};
-    pool.forEach(function (r) { counts[r.category] = (counts[r.category] || 0) + 1; });
+    var counts = {}; pool.forEach(function (r) { counts[r.category] = (counts[r.category] || 0) + 1; });
     var cats = (DATA.categories && DATA.categories.length ? DATA.categories : Object.keys(CAT_ICON)).filter(function (c) { return counts[c]; });
-
     var all = el("button", { class: "need-tile", type: "button", "aria-pressed": state.category ? "false" : "true" }, [
       el("span", { html: svg("grid", "nt-ic") }), el("span", { class: "nt-label", text: "Show all" }),
     ]);
     all.addEventListener("click", function () { state.category = null; renderNeeds(); renderResults(); });
     grid.appendChild(all);
-
     cats.forEach(function (c) {
       var tile = el("button", { class: "need-tile", type: "button", "aria-pressed": state.category === c ? "true" : "false" }, [
         el("span", { html: catIcon(c, "nt-ic") }),
@@ -190,24 +190,41 @@
     if (r.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(r.phone), html: svg("phone") + "<span>Call " + r.phone + "</span>" }));
     if (r.url) actions.appendChild(el("a", { class: "btn btn-link", href: r.url, target: "_blank", rel: "noopener", html: "<span>Open website</span>" + svg("external") }));
     actions.appendChild(el("span", { class: "verify-badge" + (r.verified ? "" : " unverified"), text: r.verified ? "✓ Checked" : "⚠ Please confirm" }));
+    var note = null;
+    if (r.category === "Find a doctor" && r.phone) {
+      note = el("p", { class: "rc-note", html: svg("info") + "<span>The phone number is your plan's main <strong>Member Services</strong> line — one number that helps you find or switch to <strong>any</strong> doctor in the plan. The website is the full searchable directory.</span>" });
+    }
     return el("div", { class: "res-card" }, [
       el("span", { class: "rc-cat", html: catIcon(r.category) + "<span>" + r.category + "</span>" }),
       el("h3", { text: r.title }),
       el("p", { class: "rc-desc", text: r.description }),
       r.languages ? el("p", { class: "rc-lang", html: svg("globe") + "<span>" + r.languages + "</span>" }) : null,
       actions,
+      note,
     ]);
+  }
+
+  function renderPlanContext(plan) {
+    var box = $("#planContext"); if (!box) return; box.innerHTML = "";
+    if (!plan) return;
+    var bar = el("div", { class: "plan-context", style: "--plan-color:" + (plan.brandColor || "#0a5dc2") });
+    bar.appendChild(el("span", { class: "pcx-title", html: "Your plan: " + plan.name + "<small>" + (plan.serviceArea || "") + " · the links below are for your plan</small>" }));
+    if (plan.memberServicesPhone) bar.appendChild(el("a", { class: "btn btn-call", href: telHref(plan.memberServicesPhone), html: svg("phone") + "<span>Member Services</span>" }));
+    if (plan.findADoctorUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.findADoctorUrl, target: "_blank", rel: "noopener", html: svg("plusCircle") + "<span>Find a doctor</span>" }));
+    if (plan.memberPortalUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.memberPortalUrl, target: "_blank", rel: "noopener", html: svg("creditCard") + "<span>Member portal</span>" }));
+    if (plan.memberHandbookUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.memberHandbookUrl, target: "_blank", rel: "noopener", html: svg("book") + "<span>Handbook</span>" }));
+    box.appendChild(bar);
   }
 
   function renderResults() {
     var list = $("#resultsList"), ctx = $("#resultsContext"), plan = getPlan();
     list.innerHTML = "";
+    renderPlanContext(plan);
     var items = (plan ? planResources(plan) : []).filter(matches);
     var catLabel = state.category ? "“" + shortLabel(state.category) + "”" : "all topics";
     ctx.textContent = plan
       ? "Showing " + items.length + " resource" + (items.length === 1 ? "" : "s") + " for " + plan.name + " — " + catLabel + ". Statewide help is below."
       : "Pick your plan above to see resources for your plan. For now, here is help that works with every plan, below.";
-
     if (!plan) {
       clearLive();
       list.appendChild(el("div", { class: "empty-note", html: "👆 <strong>Choose your health plan above</strong> to see your plan's doctors, nurse line, rides, and more." }));
@@ -217,8 +234,8 @@
       list.appendChild(el("div", { class: "empty-note", html: "Nothing here for that topic yet. Try <strong>Show all</strong>, search above, or call your plan's Member Services — they can help with anything." }));
     } else {
       items.forEach(function (r) { list.appendChild(resCard(r)); });
+      flow(list);
     }
-    // dynamic web-mining when a specific topic is chosen
     if (state.category) mineForCategory(plan, state.category); else clearLive();
   }
 
@@ -227,7 +244,6 @@
   function bestUrlFor(plan, category) {
     var items = (plan.resources || []).filter(function (r) { return r.category === category && r.url && /^https?:/.test(r.url); });
     if (!items.length) return "";
-    // prefer the plan's own domain
     var own = items.filter(function (r) { return sameBrand(r.url, plan); })[0];
     return (own || items[0]).url;
   }
@@ -235,8 +251,7 @@
     try { var h = new URL(url).hostname; var ph = new URL(plan.website).hostname.replace(/^www\./, ""); var base = ph.split(".").slice(-2).join("."); return h.indexOf(base) !== -1; } catch (e) { return false; }
   }
   function mineForCategory(plan, category) {
-    var panel = $("#livePanel");
-    if (!panel) return;
+    var panel = $("#livePanel"); if (!panel) return;
     var url = bestUrlFor(plan, category);
     if (!url) { panel.innerHTML = ""; return; }
     var host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
@@ -248,18 +263,12 @@
     var token = (state._mineToken = (state._mineToken || 0) + 1);
     fetch("/api/live?url=" + encodeURIComponent(url), { headers: { Accept: "application/json" } })
       .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (token !== state._mineToken) return; // superseded
-        if (!d || !d.ok) { panel.innerHTML = ""; return; }
-        renderLive(panel, d, category);
-      })
+      .then(function (d) { if (token !== state._mineToken) return; if (!d || !d.ok) { panel.innerHTML = ""; return; } renderLive(panel, d, category); })
       .catch(function () { if (token === state._mineToken) panel.innerHTML = ""; });
   }
   function renderLive(panel, d, category) {
     var phones = el("div", { class: "live-phones" });
-    (d.phones || []).slice(0, 4).forEach(function (ph) {
-      phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + ph + "</span>" }));
-    });
+    (d.phones || []).slice(0, 4).forEach(function (ph) { phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + ph + "</span>" })); });
     var when = "just now";
     try { var diff = (Date.now() - new Date(d.fetchedAt).getTime()) / 1000; when = diff < 90 ? "just now" : Math.round(diff / 60) + " min ago"; } catch (e) {}
     panel.innerHTML = "";
@@ -274,34 +283,12 @@
     ]));
   }
 
-  /* ---------- statewide + barriers + sources ---------- */
+  /* ---------- statewide + sources ---------- */
   function renderState() {
     var list = $("#stateList"); list.innerHTML = "";
     (DATA.stateResources || []).filter(matches).forEach(function (r) { list.appendChild(resCard(r)); });
     if (!list.children.length) list.appendChild(el("div", { class: "empty-note", text: "No statewide resources match your search. Clear the search box to see all." }));
-  }
-  function renderBarriers() {
-    var wrap = $("#barriersList"); wrap.innerHTML = "";
-    (DATA.barriers || []).forEach(function (b) {
-      var sols = el("div", { class: "b-solutions" });
-      (b.solutions || []).forEach(function (s) {
-        var a = el("div", { class: "res-actions" });
-        if (s.phone) a.appendChild(el("a", { class: "btn btn-call", href: telHref(s.phone), html: svg("phone") + "<span>" + s.phone + "</span>" }));
-        if (s.url) a.appendChild(el("a", { class: "btn btn-link", href: s.url, target: "_blank", rel: "noopener", html: "<span>Open</span>" + svg("external") }));
-        sols.appendChild(el("div", { class: "b-sol" }, [el("div", { class: "bs-title", text: s.title }), el("div", { class: "bs-desc", text: s.description }), (s.phone || s.url) ? a : null]));
-      });
-      wrap.appendChild(el("details", { class: "barrier" }, [
-        el("summary", {}, [
-          el("span", { html: svg("shield", "b-ic") }),
-          el("span", {}, [el("span", { class: "b-name", text: b.name }), b.memberVoice ? el("span", { class: "b-voice", text: "“" + b.memberVoice + "”" }) : null]),
-        ]),
-        el("div", { class: "barrier-body" }, [
-          el("p", { class: "b-desc", text: b.description }),
-          b.affectedGroups ? el("p", { class: "b-affected", text: "Who this affects most: " + b.affectedGroups }) : null,
-          sols,
-        ]),
-      ]));
-    });
+    else flow(list);
   }
   function renderSources() {
     var box = $("#sourcesList"); var urls = {};
@@ -311,6 +298,53 @@
     var ul = el("ul", {});
     Object.keys(urls).forEach(function (u) { ul.appendChild(el("li", {}, [el("a", { href: u, target: "_blank", rel: "noopener", text: u })])); });
     box.innerHTML = ""; box.appendChild(ul.children.length ? ul : el("p", { text: "Sources are on each plan's official website." }));
+  }
+
+  /* ---------- barriers (scannable; plan-aware) ---------- */
+  function firstSentence(t) { var m = (t || "").match(/^(.*?[.!?])(\s|$)/); return m ? m[1] : (t || ""); }
+  function dynamizeSolution(sol, plan) {
+    if (!plan) return sol;
+    var t = (sol.title || "").toLowerCase();
+    var generic = sol.phone === "1-888-839-9909" || t.indexOf("your plan") !== -1 || t.indexOf("your medi-cal plan") !== -1 || (t.indexOf("l.a. care member") !== -1);
+    if (!generic) return sol;
+    var title = sol.title.replace(/l\.?a\.?\s*care(\s+health\s+plan)?/ig, plan.name).replace(/your medi-cal plan/ig, plan.name).replace(/your plan/ig, plan.name);
+    if (title.toLowerCase().indexOf(plan.name.toLowerCase().slice(0, 6)) === -1) title = plan.name + " — " + sol.title;
+    return { title: title, description: sol.description, phone: plan.memberServicesPhone || sol.phone, url: plan.website || sol.url };
+  }
+  function renderBarriers() {
+    var wrap = $("#barriersList"); if (!wrap) return; wrap.innerHTML = "";
+    var plan = getPlan();
+    (DATA.barriers || []).forEach(function (b) {
+      var sols = el("div", { class: "b-solutions" });
+      (b.solutions || []).forEach(function (s0) {
+        var s = dynamizeSolution(s0, plan);
+        var a = el("div", { class: "res-actions" });
+        if (s.phone) a.appendChild(el("a", { class: "btn btn-call", href: telHref(s.phone), html: svg("phone") + "<span>" + s.phone + "</span>" }));
+        if (s.url) a.appendChild(el("a", { class: "btn btn-link", href: s.url, target: "_blank", rel: "noopener", html: "<span>Open</span>" + svg("external") }));
+        sols.appendChild(el("div", { class: "b-sol" }, [el("div", { class: "bs-title", text: s.title }), el("div", { class: "bs-desc", text: s.description }), (s.phone || s.url) ? a : null]));
+      });
+      var body = el("div", { class: "barrier-body" }, [
+        b.memberVoice ? el("div", { class: "b-voice", html: svg("message") + "<span>“" + b.memberVoice + "”</span>" }) : null,
+        el("div", { class: "b-howto", html: svg("check") + "<span>How we help — who to call</span>" }),
+        sols,
+        el("details", { class: "b-why" }, [
+          el("summary", { text: "Why this happens" }),
+          el("p", { class: "b-why-text", text: b.description }),
+          b.affectedGroups ? el("p", { class: "b-affected", text: "Who this affects most: " + b.affectedGroups }) : null,
+        ]),
+      ]);
+      wrap.appendChild(el("details", { class: "barrier" }, [
+        el("summary", {}, [
+          el("span", { html: svg("shield", "b-ic") }),
+          el("span", {}, [
+            el("span", { class: "b-name", text: b.name }),
+            el("span", { class: "b-tag", text: firstSentence(b.description).slice(0, 90) + (firstSentence(b.description).length > 90 ? "…" : "") }),
+          ]),
+        ]),
+        body,
+      ]));
+    });
+    flow(wrap);
   }
 
   /* ---------- maps: find care near me ---------- */
@@ -325,15 +359,14 @@
   ];
   function mapQueryLoc() { return state.loc || state.zip || "Los Angeles, CA"; }
   function renderChips() {
-    var row = $("#careChips"); row.innerHTML = "";
+    var row = $("#careChips"); if (!row) return; row.innerHTML = "";
     CARE_TYPES.forEach(function (c) {
-      var pressed = state.care === c.key;
-      var chip = el("button", { class: "chip", type: "button", "aria-pressed": pressed ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
+      var chip = el("button", { class: "chip", type: "button", "aria-pressed": state.care === c.key ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
       chip.addEventListener("click", function () {
         if (c.key === "__plan_doctors__") {
           var plan = getPlan();
           if (plan && plan.findADoctorUrl) { window.open(plan.findADoctorUrl, "_blank", "noopener"); }
-          else { alert("Pick your health plan first (Step 1) to search your plan's doctors. Showing clinics on the map instead."); state.care = "community health center FQHC clinic"; renderChips(); updateMap(); }
+          else { state.care = "community health center FQHC clinic"; renderChips(); updateMap(); alert("Pick your health plan first (Step 1) to search your plan's doctors. Showing community clinics on the map for now."); }
           return;
         }
         state.care = c.key; renderChips(); updateMap();
@@ -344,25 +377,23 @@
   function updateMap() {
     var loc = mapQueryLoc();
     var q = state.care.replace("__plan_doctors__", "doctor") + " near " + loc;
-    var frame = $("#mapFrame");
-    if (frame) frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&output=embed";
-    var open = $("#mapOpen");
-    if (open) open.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
-    var label = $("#mapLabel");
-    if (label) label.textContent = "Showing " + (CARE_TYPES.filter(function (c) { return c.key === state.care; })[0] || { label: state.care }).label.toLowerCase() + " near " + loc + ".";
+    var frame = $("#mapFrame"); if (frame) frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&output=embed";
+    var open = $("#mapOpen"); if (open) open.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+    var label = $("#mapLabel"); if (label) label.textContent = "Showing " + (CARE_TYPES.filter(function (c) { return c.key === state.care; })[0] || { label: state.care }).label.toLowerCase() + " near " + loc + ".";
   }
   function initNearMe() {
     state.zip = store(true, STORE.zip) || "";
     var zip = $("#zipInput");
     if (zip) {
       zip.value = state.zip;
-      zip.addEventListener("change", function () { state.zip = zip.value.trim(); state.loc = ""; store(false, STORE.zip, state.zip); updateMap(); });
-      zip.addEventListener("keydown", function (e) { if (e.key === "Enter") { state.zip = zip.value.trim(); state.loc = ""; store(false, STORE.zip, state.zip); updateMap(); } });
+      function apply() { state.zip = zip.value.trim(); state.loc = ""; store(false, STORE.zip, state.zip); updateMap(); }
+      zip.addEventListener("change", apply);
+      zip.addEventListener("keydown", function (e) { if (e.key === "Enter") apply(); });
     }
     var locate = $("#locateBtn");
     if (locate) locate.addEventListener("click", function () {
       if (!navigator.geolocation) { alert("Your browser can't share location. Please type your ZIP code instead."); return; }
-      locate.textContent = "Locating…";
+      locate.innerHTML = "<span>Locating…</span>";
       navigator.geolocation.getCurrentPosition(
         function (pos) { state.loc = pos.coords.latitude.toFixed(4) + "," + pos.coords.longitude.toFixed(4); locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; updateMap(); },
         function () { locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; alert("We couldn't get your location. Please type your ZIP code instead."); }
@@ -371,7 +402,28 @@
     renderChips(); updateMap();
   }
 
-  /* ---------- language / full-page translation ---------- */
+  /* ---------- hero quick chips ---------- */
+  var HERO_CHIPS = [
+    { cat: "Get a ride (transportation)", label: "Get a ride", icon: "car" },
+    { cat: "Nurse advice line (24/7)", label: "Talk to a nurse", icon: "phone" },
+    { cat: "Mental health & substance use", label: "Mental health", icon: "heart" },
+    { cat: "Renew Medi-Cal / keep coverage", label: "Renew Medi-Cal", icon: "refresh" },
+    { cat: "Find a doctor", label: "Find a doctor", icon: "plusCircle" },
+  ];
+  function buildHeroChips() {
+    var row = $("#heroChips"); if (!row) return;
+    HERO_CHIPS.forEach(function (c) {
+      var chip = el("button", { class: "hero-chip", type: "button", html: svg(c.icon) + "<span>" + c.label + "</span>" });
+      chip.addEventListener("click", function () {
+        state.category = c.cat; renderNeeds(); renderResults();
+        if (!getPlan()) { $("#plan-step").scrollIntoView({ block: "start" }); }
+        else { $("#results").scrollIntoView({ block: "start" }); }
+      });
+      row.appendChild(chip);
+    });
+  }
+
+  /* ---------- language / translation ---------- */
   var LANGS = [
     { c: "en", n: "English" }, { c: "es", n: "Español" }, { c: "zh-CN", n: "中文 (简)" }, { c: "zh-TW", n: "中文 (繁)" },
     { c: "vi", n: "Tiếng Việt" }, { c: "ko", n: "한국어" }, { c: "hy", n: "Հայերեն" }, { c: "tl", n: "Tagalog" },
@@ -381,36 +433,24 @@
   function setCookie(name, value) {
     var host = location.hostname;
     document.cookie = name + "=" + value + ";path=/";
-    if (host) {
-      document.cookie = name + "=" + value + ";path=/;domain=" + host;
-      document.cookie = name + "=" + value + ";path=/;domain=." + host;
-    }
+    if (host) { document.cookie = name + "=" + value + ";path=/;domain=" + host; document.cookie = name + "=" + value + ";path=/;domain=." + host; }
   }
   function applyLang(code) {
     store(false, STORE.lang, code);
-    var btnLabel = $("#langLabel");
-    if (btnLabel) { var f = LANGS.filter(function (l) { return l.c === code; })[0]; btnLabel.textContent = f ? f.n : "Language"; }
+    var lbl = $("#langLabel"); if (lbl) { var f = LANGS.filter(function (l) { return l.c === code; })[0]; lbl.textContent = f ? f.n : "Language"; }
     Array.prototype.forEach.call(document.querySelectorAll(".lang-opt"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-lang") === code ? "true" : "false"); });
-    if (code === "en") {
-      setCookie("googtrans", "/en/en");
-      var combo0 = document.querySelector("select.goog-te-combo");
-      if (combo0) { combo0.value = "en"; combo0.dispatchEvent(new Event("change")); } else { location.reload(); }
-      return;
-    }
     setCookie("googtrans", "/en/" + code);
     var combo = document.querySelector("select.goog-te-combo");
-    if (combo) { combo.value = code; combo.dispatchEvent(new Event("change")); }
-    else { location.reload(); }
+    if (combo) { combo.value = code; combo.dispatchEvent(new Event("change")); } else { location.reload(); }
   }
   function buildLangMenu() {
-    var menu = $("#langMenu");
-    if (!menu) return;
+    var menu = $("#langMenu"); if (!menu) return;
     LANGS.forEach(function (l) {
       var b = el("button", { class: "lang-opt", type: "button", "data-lang": l.c, text: l.n });
       b.addEventListener("click", function () { applyLang(l.c); menu.classList.remove("open"); });
       menu.appendChild(b);
     });
-    menu.appendChild(el("div", { class: "lang-note", text: "Whole-page translation powered by Google Translate. You can also use your browser's built-in Translate." }));
+    menu.appendChild(el("div", { class: "lang-note", text: "Whole-page translation by Google Translate. You can also use your browser's built-in Translate." }));
     var btn = $("#langBtn");
     btn.addEventListener("click", function () { var open = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", open ? "true" : "false"); });
     document.addEventListener("click", function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove("open"); });
@@ -448,7 +488,7 @@
   }
   function initMeta() {
     var lu = $("#lastUpdated"); var m = DATA.meta || {};
-    if (lu) lu.textContent = "Last updated: " + (m.lastUpdated || "—") + ". Covers " + (DATA.plans.length) + " Medi-Cal plans across " + (m.region || "the greater Los Angeles region") + ".";
+    if (lu) lu.textContent = "Last updated: " + (m.lastUpdated || "—") + ". Covers " + DATA.plans.length + " Medi-Cal plans across " + (m.region || "the greater Los Angeles region") + ".";
   }
 
   /* ---------- init ---------- */
@@ -456,7 +496,7 @@
     var sp = store(true, STORE.plan);
     if (sp && DATA.plans.some(function (p) { return p.id === sp; })) state.planId = sp;
     renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources();
-    initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu();
+    initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); initReveal();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
