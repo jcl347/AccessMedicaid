@@ -122,32 +122,38 @@
   }
 
   /* ---------- plan picker ---------- */
+  function countyGroup(title, plans, showArea) {
+    var group = el("div", { class: "county-group" });
+    group.appendChild(el("div", { class: "county-title", html: svg("mapPin") + "<span>" + title + "</span>" }));
+    var grid = el("div", { class: "plan-grid" });
+    plans.forEach(function (p) { grid.appendChild(planCard(p, showArea)); });
+    group.appendChild(grid);
+    return group;
+  }
   function renderPlanPicker() {
     var wrap = $("#planPicker"); wrap.innerHTML = "";
-    var areas = DATA.serviceAreas && DATA.serviceAreas.length ? DATA.serviceAreas : ["Los Angeles County"];
-    areas.forEach(function (area) {
-      var inArea = DATA.plans.filter(function (p) { return p.serviceArea === area; });
-      if (!inArea.length) return;
-      var group = el("div", { class: "county-group" });
-      group.appendChild(el("div", { class: "county-title", html: svg("mapPin") + "<span>" + area + "</span>" }));
-      var grid = el("div", { class: "plan-grid" });
-      inArea.forEach(function (p) { grid.appendChild(planCard(p)); });
-      group.appendChild(grid); wrap.appendChild(group);
-    });
+    var primary = "Los Angeles County";
+    var la = DATA.plans.filter(function (p) { return p.serviceArea === primary; });
+    var others = DATA.plans.filter(function (p) { return p.serviceArea !== primary; });
+    // LA County keeps its own grid (it fills the row). All surrounding-county plans
+    // share ONE grid so single-plan counties sit side by side (no stacked blank rows).
+    if (la.length) wrap.appendChild(countyGroup(primary, la, false));
+    if (others.length) wrap.appendChild(countyGroup("Greater LA region — surrounding counties", others, true));
     var extra = el("div", { class: "county-group" });
-    extra.appendChild(el("div", { class: "county-title", html: svg("info") + "<span>Not sure?</span>" }));
+    extra.appendChild(el("div", { class: "county-title", html: svg("info") + "<span>Not sure which plan?</span>" }));
     var g2 = el("div", { class: "plan-grid" });
-    g2.appendChild(planCard({ id: "__all__", name: "I'm not sure / show me everything", relationship: "See resources that work for every plan and statewide", brandColor: "#687888" }));
+    g2.appendChild(planCard({ id: "__all__", name: "I'm not sure / show me everything", relationship: "See resources that work for every plan and statewide", brandColor: "#687888" }, false));
     extra.appendChild(g2); wrap.appendChild(extra);
     flow(wrap);
   }
-  function planCard(p) {
+  function planCard(p, showArea) {
     var checked = state.planId === p.id || (p.id === "__all__" && !state.planId);
-    var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, [
-      el("span", { class: "pc-name", text: p.name }),
-      el("span", { class: "pc-rel", text: p.relationship || "" }),
-      el("span", { class: "pc-check", text: "✓ Selected" }),
-    ]);
+    var kids = [];
+    if (showArea && p.serviceArea) kids.push(el("span", { class: "pc-area", text: p.serviceArea }));
+    kids.push(el("span", { class: "pc-name", text: p.name }));
+    kids.push(el("span", { class: "pc-rel", text: p.relationship || "" }));
+    kids.push(el("span", { class: "pc-check", text: "✓ Selected" }));
+    var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, kids);
     card.addEventListener("click", function () {
       state.planId = p.id === "__all__" ? null : p.id;
       store(false, STORE.plan, state.planId || "");
@@ -185,9 +191,43 @@
   }
 
   /* ---------- resource cards ---------- */
+  // Say what a number is FOR, so when several appear it's clear which does what.
+  function phonePurpose(r) {
+    var c = r.category, t = (r.title || "").toLowerCase();
+    if (t.indexOf("tty") >= 0) return "TTY";
+    switch (c) {
+      case "Nurse advice line (24/7)": return "Nurse line";
+      case "Urgent & after-hours care": return "Nurse line";
+      case "Mental health & substance use": return "Behavioral health";
+      case "Get a ride (transportation)": return "Ride line";
+      case "Transportation to non-medical (NMT)": return "Ride line";
+      case "Pharmacy & prescriptions": return "Medi-Cal Rx";
+      case "Dental": return "Medi-Cal Dental";
+      case "Vision": return "Vision";
+      case "Complaints & appeals (grievances)": return "Grievances";
+      case "Renew Medi-Cal / keep coverage": return "Renew / county";
+      case "Find a doctor": return "Member Services";
+      case "Member ID card & online account": return "Member Services";
+      case "Language & interpreter help": return "Member Services";
+      default: return "";
+    }
+  }
+  function parseTTY(r) {
+    var src = (r.languages || "") + " " + (r.description || "");
+    var m = src.match(/\b(?:TTY|TDD)\b[^0-9]{0,6}(711|1?[-\s]?\d{3}[-\s]?\d{3}[-\s]?\d{4})/i);
+    return m ? m[1].trim() : "";
+  }
   function resCard(r) {
     var actions = el("div", { class: "res-actions" });
-    if (r.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(r.phone), html: svg("phone") + "<span>Call " + r.phone + "</span>" }));
+    if (r.phone) {
+      var purpose = phonePurpose(r);
+      var label = purpose ? "Call " + purpose + ": " + r.phone : "Call " + r.phone;
+      actions.appendChild(el("a", { class: "btn btn-call", href: telHref(r.phone), html: svg("phone") + "<span>" + label + "</span>" }));
+    }
+    var tty = parseTTY(r);
+    if (tty && tty.replace(/\D/g, "") !== String(r.phone || "").replace(/\D/g, "")) {
+      actions.appendChild(el("a", { class: "btn btn-ghost", href: telHref(tty), html: svg("phone") + "<span>TTY (deaf/hard of hearing): " + tty + "</span>" }));
+    }
     if (r.url) actions.appendChild(el("a", { class: "btn btn-link", href: r.url, target: "_blank", rel: "noopener", html: "<span>Open website</span>" + svg("external") }));
     actions.appendChild(el("span", { class: "verify-badge" + (r.verified ? "" : " unverified"), text: r.verified ? "✓ Checked" : "⚠ Please confirm" }));
     var note = null;
@@ -276,7 +316,7 @@
       el("div", { class: "live-head", html: '<span class="live-badge"><span class="dot"></span> LIVE</span> <span>Latest for ' + shortLabel(category) + "</span>" }),
       d.title ? el("div", { class: "live-body", text: d.title }) : null,
       d.snippet ? el("div", { class: "live-body muted", text: d.snippet }) : null,
-      (d.phones && d.phones.length) ? phones : null,
+      (d.phones && d.phones.length) ? el("div", {}, [el("div", { class: "live-sub", text: "Phone numbers found on this page (tap to call; open the page to see what each is for):" }), phones]) : null,
       el("div", { class: "live-meta", html: svg("compass") + "<span>Pulled live from <strong>" + d.host + "</strong> · " + when + "</span>" }, [
         el("a", { class: "btn btn-ghost", href: d.url, target: "_blank", rel: "noopener", html: "<span>View page</span>" + svg("external") }),
       ]),
@@ -347,59 +387,159 @@
     flow(wrap);
   }
 
-  /* ---------- maps: find care near me ---------- */
+  /* ---------- maps: find care near me (geospatial) ---------- */
   var CARE_TYPES = [
-    { key: "urgent care", label: "Urgent care", icon: "clock" },
-    { key: "emergency room", label: "Emergency room", icon: "hospital" },
-    { key: "community health center FQHC clinic", label: "Community clinic", icon: "users" },
+    { key: "urgent_care", label: "Urgent care", icon: "clock" },
+    { key: "hospital", label: "Emergency room", icon: "hospital" },
+    { key: "clinic", label: "Community clinic", icon: "users" },
     { key: "pharmacy", label: "Pharmacy", icon: "pill" },
-    { key: "Medi-Cal dentist", label: "Dentist", icon: "smile" },
-    { key: "mental health clinic", label: "Mental health", icon: "heart" },
-    { key: "__plan_doctors__", label: "My plan's doctors", icon: "plusCircle" },
+    { key: "dentist", label: "Dentist", icon: "smile" },
+    { key: "mental_health", label: "Mental health", icon: "heart" },
+    { key: "doctor", label: "Doctors", icon: "plusCircle" },
   ];
-  function mapQueryLoc() { return state.loc || state.zip || "Los Angeles, CA"; }
-  function renderChips() {
+  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
+  var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", radius: 8047, map: null, layer: null, t: 0 };
+
+  function haversineMi(a, b) {
+    var R = 3958.8, dLat = (b.lat - a.lat) * Math.PI / 180, dLng = (b.lng - a.lng) * Math.PI / 180;
+    var s = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+  }
+  function escapeHtml(s) { return String(s || "").replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function shortAddr(s) { return s.split(",").slice(0, 3).join(",").trim(); }
+  function careLabel() { var c = CARE_TYPES.filter(function (x) { return x.key === geo.care; })[0]; return c ? c.label : geo.care; }
+  function miFor(m) { return (m / 1609).toFixed(0); }
+  function gmapsSearch() { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(careLabel() + " near " + geo.label); }
+  function dirUrl(lat, lng, mode) { return "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng + "&travelmode=" + (mode || "driving"); }
+  function setMapLabel(t) { var l = $("#mapLabel"); if (l) l.textContent = t; }
+
+  function renderCareChips() {
     var row = $("#careChips"); if (!row) return; row.innerHTML = "";
     CARE_TYPES.forEach(function (c) {
-      var chip = el("button", { class: "chip", type: "button", "aria-pressed": state.care === c.key ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
-      chip.addEventListener("click", function () {
-        if (c.key === "__plan_doctors__") {
-          var plan = getPlan();
-          if (plan && plan.findADoctorUrl) { window.open(plan.findADoctorUrl, "_blank", "noopener"); }
-          else { state.care = "community health center FQHC clinic"; renderChips(); updateMap(); alert("Pick your health plan first (Step 1) to search your plan's doctors. Showing community clinics on the map for now."); }
-          return;
-        }
-        state.care = c.key; renderChips(); updateMap();
-      });
+      var chip = el("button", { class: "chip", type: "button", "aria-pressed": geo.care === c.key ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
+      chip.addEventListener("click", function () { geo.care = c.key; renderCareChips(); runSearch(); });
       row.appendChild(chip);
     });
   }
-  function updateMap() {
-    var loc = mapQueryLoc();
-    var q = state.care.replace("__plan_doctors__", "doctor") + " near " + loc;
-    var frame = $("#mapFrame"); if (frame) frame.src = "https://www.google.com/maps?q=" + encodeURIComponent(q) + "&output=embed";
-    var open = $("#mapOpen"); if (open) open.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
-    var label = $("#mapLabel"); if (label) label.textContent = "Showing " + (CARE_TYPES.filter(function (c) { return c.key === state.care; })[0] || { label: state.care }).label.toLowerCase() + " near " + loc + ".";
+  function renderRadiusChips() {
+    var row = $("#radiusChips"); if (!row) return; row.innerHTML = "";
+    RADII.forEach(function (r) {
+      var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.radius === r.m ? "true" : "false", text: r.label });
+      chip.addEventListener("click", function () { geo.radius = r.m; renderRadiusChips(); runSearch(); });
+      row.appendChild(chip);
+    });
   }
+
+  function ensureMap() {
+    if (geo.map || !window.L) return geo.map;
+    var node = $("#map"); if (!node) return null;
+    geo.map = L.map(node, { scrollWheelZoom: false }).setView([geo.center.lat, geo.center.lng], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors" }).addTo(geo.map);
+    geo.layer = L.layerGroup().addTo(geo.map);
+    setTimeout(function () { if (geo.map) geo.map.invalidateSize(); }, 250);
+    return geo.map;
+  }
+  function mapFallback() {
+    var node = $("#map"); if (!node) return;
+    node.innerHTML = "";
+    node.appendChild(el("iframe", { class: "map-frame", title: "Map of nearby care", loading: "lazy", src: "https://www.google.com/maps?q=" + encodeURIComponent(careLabel() + " near " + geo.label) + "&output=embed" }));
+  }
+
+  function runSearch() {
+    var open = $("#mapOpen"); if (open) open.href = gmapsSearch();
+    if (!window.L) { mapFallback(); setMapLabel("Showing " + careLabel().toLowerCase() + " near " + geo.label + "."); return; }
+    var map = ensureMap(); if (!map) return;
+    map.setView([geo.center.lat, geo.center.lng], geo.radius > 16000 ? 10 : geo.radius > 8000 ? 11 : 12);
+    if (geo.layer) geo.layer.clearLayers();
+    L.circleMarker([geo.center.lat, geo.center.lng], { radius: 8, color: "#fff", weight: 3, fillColor: "#c0395f", fillOpacity: 1 }).addTo(geo.layer).bindPopup("You searched here:<br>" + escapeHtml(geo.label));
+    L.circle([geo.center.lat, geo.center.lng], { radius: geo.radius, color: "#0a5dc2", weight: 1, fillColor: "#0a5dc2", fillOpacity: .06 }).addTo(geo.layer);
+    setMapLabel("Searching for " + careLabel().toLowerCase() + " within " + miFor(geo.radius) + " miles of " + geo.label + "…");
+    var list = $("#nearList"); if (list) list.innerHTML = '<div class="empty-note">Searching the map for the closest places…</div>';
+    var token = (geo.t = geo.t + 1);
+    fetch("/api/nearby?lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + geo.radius, { headers: { Accept: "application/json" } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (token !== geo.t) return;
+        if (!d || !d.ok) { setMapLabel("We couldn't load places right now — use “Open this search in Google Maps” below."); if (list) list.innerHTML = ""; return; }
+        var places = (d.places || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; }).sort(function (a, b) { return a.dist - b.dist; });
+        places.forEach(function (p) {
+          L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .92 }).addTo(geo.layer)
+            .bindPopup("<strong>" + escapeHtml(p.name) + "</strong><br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>');
+        });
+        setMapLabel(places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + miFor(geo.radius) + " mi of " + geo.label + " — all shown on the map, nearest listed first:") : ("No " + careLabel().toLowerCase() + " found within " + miFor(geo.radius) + " mi. Try a wider radius."));
+        renderNearList(places.slice(0, 20));
+      })
+      .catch(function () { if (token === geo.t) { setMapLabel("We couldn't load places right now — use “Open this search in Google Maps” below."); if (list) list.innerHTML = ""; } });
+  }
+
+  function renderNearList(places) {
+    var list = $("#nearList"); if (!list) return; list.innerHTML = "";
+    if (!places.length) return;
+    places.forEach(function (p) {
+      var actions = el("div", { class: "near-actions" });
+      if (p.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(p.phone), html: svg("phone") + "<span>Call: " + p.phone + "</span>" }));
+      actions.appendChild(el("a", { class: "btn btn-ghost", href: dirUrl(p.lat, p.lng, "driving"), target: "_blank", rel: "noopener", html: svg("navigation") + "<span>Drive</span>" }));
+      actions.appendChild(el("a", { class: "btn btn-ghost", href: dirUrl(p.lat, p.lng, "transit"), target: "_blank", rel: "noopener", html: svg("car") + "<span>Transit</span>" }));
+      list.appendChild(el("div", { class: "near-item" }, [
+        el("div", { class: "ni-name", text: p.name }),
+        el("div", { class: "ni-dist", text: p.dist.toFixed(1) + " miles away" }),
+        p.address ? el("div", { class: "ni-addr", text: p.address }) : null,
+        actions,
+      ]));
+    });
+    flow(list);
+  }
+
+  function areaForCounty(county) {
+    county = (county || "").toLowerCase();
+    if (county.indexOf("los angeles") >= 0) return "Los Angeles County";
+    if (county.indexOf("orange") >= 0) return "Orange County";
+    if (county.indexOf("riverside") >= 0 || county.indexOf("san bernardino") >= 0) return "Inland Empire (Riverside & San Bernardino)";
+    if (county.indexOf("ventura") >= 0) return "Ventura County";
+    if (county.indexOf("kern") >= 0) return "Kern County";
+    return "";
+  }
+  function showCountyHint(county) {
+    var box = $("#countyHint"); if (!box) return; box.innerHTML = "";
+    var area = areaForCounty(county); if (!area) return;
+    var plans = DATA.plans.filter(function (p) { return p.serviceArea === area; });
+    if (!plans.length) return;
+    var names = plans.map(function (p) { return p.name.replace(/\s*\(.*?\)\s*/g, "").trim(); }).join(", ");
+    var hint = el("div", { class: "county-hint", html: svg("mapPin") + "<span>You're in <strong>" + escapeHtml(county) + "</strong>. Medi-Cal plans here: " + escapeHtml(names) + ".</span>" });
+    var btn = el("button", { class: "btn btn-ghost", type: "button", html: "<span>Choose your plan</span>" });
+    btn.addEventListener("click", function () { $("#plan-step").scrollIntoView({ block: "start" }); });
+    hint.appendChild(btn); box.appendChild(hint);
+  }
+
+  function geocode(q) {
+    setMapLabel("Looking up “" + q + "”…");
+    fetch("/api/geocode?q=" + encodeURIComponent(q), { headers: { Accept: "application/json" } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) { setMapLabel(d && d.error ? d.error : "We couldn't find that address."); return; }
+        geo.center = { lat: d.lat, lng: d.lng }; geo.label = d.display ? shortAddr(d.display) : q;
+        showCountyHint(d.county); runSearch();
+      })
+      .catch(function () { setMapLabel("Address lookup isn't available on this preview — try the deployed site, or use “Open this search in Google Maps”."); });
+  }
+
   function initNearMe() {
-    state.zip = store(true, STORE.zip) || "";
-    var zip = $("#zipInput");
-    if (zip) {
-      zip.value = state.zip;
-      function apply() { state.zip = zip.value.trim(); state.loc = ""; store(false, STORE.zip, state.zip); updateMap(); }
-      zip.addEventListener("change", apply);
-      zip.addEventListener("keydown", function (e) { if (e.key === "Enter") apply(); });
-    }
+    renderCareChips(); renderRadiusChips();
+    var addr = $("#addrInput");
+    var saved = store(true, STORE.zip) || "";
+    function doAddr() { var v = addr ? addr.value.trim() : ""; if (!v) return; store(false, STORE.zip, v); geocode(v); }
+    if (addr) { addr.value = saved; addr.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); doAddr(); } }); }
+    var sb = $("#searchBtn"); if (sb) sb.addEventListener("click", doAddr);
     var locate = $("#locateBtn");
     if (locate) locate.addEventListener("click", function () {
-      if (!navigator.geolocation) { alert("Your browser can't share location. Please type your ZIP code instead."); return; }
+      if (!navigator.geolocation) { alert("Your browser can't share location. Please type an address or ZIP instead."); return; }
       locate.innerHTML = "<span>Locating…</span>";
       navigator.geolocation.getCurrentPosition(
-        function (pos) { state.loc = pos.coords.latitude.toFixed(4) + "," + pos.coords.longitude.toFixed(4); locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; updateMap(); },
-        function () { locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; alert("We couldn't get your location. Please type your ZIP code instead."); }
+        function (pos) { geo.center = { lat: pos.coords.latitude, lng: pos.coords.longitude }; geo.label = "your location"; locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; var ch = $("#countyHint"); if (ch) ch.innerHTML = ""; runSearch(); },
+        function () { locate.innerHTML = svg("navigation") + "<span>Use my location</span>"; alert("We couldn't get your location. Please type an address or ZIP instead."); }
       );
     });
-    renderChips(); updateMap();
+    if (saved) geocode(saved); else runSearch();
   }
 
   /* ---------- hero quick chips ---------- */

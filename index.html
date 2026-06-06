@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -149,22 +150,32 @@
     <section class="section tinted" id="near-me" aria-labelledby="near-title">
       <div class="wrap">
         <div class="section-head" data-reveal><h2 id="near-title">Find care near you</h2></div>
-        <p class="section-sub" data-reveal>Type your ZIP code (or use your location), then pick what you're looking for. The map fills with nearby places.</p>
+        <p class="section-sub" data-reveal>Type an address or ZIP (or use your location), choose what you need, and we'll map the <strong>closest</strong> places and list them by distance.</p>
         <div class="map-controls">
-          <label for="zipInput" class="visually-hidden">ZIP code</label>
-          <input type="text" inputmode="numeric" id="zipInput" class="zip-input" placeholder="ZIP code" aria-label="ZIP code" />
+          <label for="addrInput" class="visually-hidden">Address or ZIP code</label>
+          <input type="text" id="addrInput" class="zip-input addr-input" placeholder="Address or ZIP (e.g., 1200 N State St, Los Angeles)" aria-label="Address or ZIP code" autocomplete="street-address" />
+          <button type="button" class="btn btn-call" id="searchBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span>Search</span>
+          </button>
           <button type="button" class="tool-btn" id="locateBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             <span>Use my location</span>
           </button>
         </div>
         <div class="chip-row" id="careChips" aria-label="Type of care"></div>
+        <div class="radius-row">
+          <span class="radius-label">Search within:</span>
+          <div class="chip-row" id="radiusChips" aria-label="Search radius"></div>
+        </div>
+        <div id="countyHint"></div>
         <p class="muted" id="mapLabel" style="margin:.2rem 0 .6rem;"></p>
         <div class="map-frame-wrap" data-reveal>
-          <iframe id="mapFrame" class="map-frame" title="Map of nearby care" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div id="map" class="map-frame" role="application" aria-label="Interactive map of nearby care"></div>
         </div>
+        <div class="near-list" id="nearList" aria-live="polite"></div>
         <a class="map-open" id="mapOpen" href="https://www.google.com/maps" target="_blank" rel="noopener">
-          Open in Google Maps
+          Open this search in Google Maps
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>
       </div>
@@ -193,14 +204,16 @@
       </div>
     </section>
 
-    <!-- LANGUAGES -->
-    <section class="section" id="languages" aria-labelledby="lang-title">
-      <div class="wrap">
-        <div class="section-head" data-reveal><h2 id="lang-title">Help in your language</h2></div>
-        <div class="info-card" data-reveal>
-          <p>You can read this whole site in another language: use the <strong>Language</strong> button at the top of the page. It translates every word on the page.</p>
+    <!-- LANGUAGES (image band) -->
+    <section class="image-band" id="languages" aria-labelledby="lang-title" style="--band-img:url('https://images.unsplash.com/photo-1575468332949-4bd46064dd66?auto=format&fit=crop&w=2000&q=72')">
+      <div class="image-band-overlay" aria-hidden="true"></div>
+      <div class="wrap image-band-inner" data-reveal>
+        <span class="eyebrow">In your language</span>
+        <h2 id="lang-title">Help in your language</h2>
+        <div class="glass-card">
+          <p>You can read this whole site in another language — use the <strong>Language</strong> button at the top of the page. It translates every word.</p>
           <p>And every Medi-Cal plan must give you a <strong>free interpreter</strong> — by phone or in person — in any language, including American Sign Language. You never have to bring your own, and a child should never have to translate for you.</p>
-          <p class="muted"><strong>How to ask:</strong> When you call any number on this page, say your language (for example, <em>"Español," "中文," "Tiếng Việt," "한국어," "Հայերեն," "Tagalog," "العربية"</em>). They will connect a free interpreter.</p>
+          <p class="muted"><strong>How to ask:</strong> when you call any number on this page, say your language (for example, <em>"Español," "中文," "Tiếng Việt," "한국어," "Հայերեն," "Tagalog," "العربية"</em>). They will connect a free interpreter.</p>
         </div>
       </div>
     </section>
@@ -262,6 +275,7 @@
 
   <div id="google_translate_element" aria-hidden="true"></div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>

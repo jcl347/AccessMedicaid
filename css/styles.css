@@ -324,6 +324,44 @@ body { top: 0 !important; }
 .goog-te-gadget { font-size: 0 !important; }
 font[style] { background: transparent !important; box-shadow: none !important; }
 
+/* ---------- Near me: address, radius, results list ---------- */
+.addr-input { width: min(380px, 100%); }
+.radius-row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin: 0 0 1rem; }
+.radius-label { font-weight: 700; color: var(--ink-2); font-size: .92rem; }
+.chip-sm { min-height: 40px; padding: .4rem .8rem; }
+.county-hint { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; background: var(--primary-050); border: 1px solid var(--line); border-left: 5px solid var(--primary); border-radius: var(--radius); padding: .8rem 1rem; margin: 0 0 1rem; font-weight: 600; }
+.county-hint svg { width: 18px; height: 18px; color: var(--primary); flex: none; }
+.near-list { display: grid; gap: .7rem; margin-top: 1rem; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+.near-item { border: 1px solid var(--line); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); background: var(--surface); padding: .8rem .9rem; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+.near-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.near-item .ni-name { font-weight: 700; }
+.near-item .ni-dist { font-size: .82rem; color: var(--primary-700); font-weight: 800; margin-top: .1rem; }
+@media (prefers-color-scheme: dark){ .near-item .ni-dist { color: var(--primary); } }
+.near-item .ni-addr { font-size: .85rem; color: var(--muted); margin-top: .15rem; }
+.near-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .55rem; }
+.near-actions .btn { min-height: 40px; padding: .4rem .75rem; font-size: .9rem; }
+.leaflet-container { font: inherit; border-radius: var(--radius); }
+.leaflet-popup-content { font: inherit; }
+.leaflet-popup-content a { font-weight: 700; }
+
+/* ---------- Live panel: number labeling ---------- */
+.live-sub { font-size: .8rem; font-weight: 700; color: var(--ink-2); margin: .55rem 0 .3rem; }
+
+/* ---------- Plan card: county badge ---------- */
+.plan-card .pc-area { font-size: .72rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--plan-color, var(--primary)); }
+
+/* ---------- Image band: glass card ---------- */
+.image-band .glass-card { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); border-radius: var(--radius); padding: 1.1rem 1.2rem; max-width: 72ch; color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); margin-top: 1rem; }
+.image-band .glass-card p { color: rgba(255,255,255,.95); }
+.image-band .glass-card .muted { color: rgba(255,255,255,.8); }
+.image-band .glass-card em { color: #fff; }
+
+/* ---------- Section polish: accent rule + subtle texture ---------- */
+.section h2::after { content: ""; display: block; width: 46px; height: 4px; border-radius: 3px; margin-top: .55rem; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); }
+.section.tinted { position: relative; overflow: hidden; }
+.section.tinted > .wrap { position: relative; z-index: 1; }
+#barriers.section.tinted::before { content: ""; position: absolute; inset: 0; background: url("https://images.unsplash.com/photo-1759843541035-ab598ed6fb7f?auto=format&fit=crop&w=2000&q=55") center/cover; opacity: .05; pointer-events: none; }
+
 /* ---------- Print ---------- */
 @media print {
   .site-header, .safety-strip, .site-nav, .fab, .header-tools, .search-row, .map-frame-wrap, .chip-row, .map-controls, .hero-cta, .hero-chips, .skip-link, .live-panel { display: none !important; }
