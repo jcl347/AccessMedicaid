@@ -96,3 +96,48 @@ Or just deploy to Vercel - the `/api/live` function and static site work out of 
 Edit the JSON in `data/`, then run `node scripts/build-data.mjs` to regenerate `js/data.js`.
 Plan grouping and brand colors live in `data/index.json`. Keep phone numbers and URLs
 confirmed against official sites, and set `verified: true` only for facts you re-checked.
+
+## Keeping it updated on Vercel
+
+The Vercel project is connected to this GitHub repo, so **every push to `main`
+auto-deploys to production**. The normal loop is just:
+
+```powershell
+git add -A
+git commit -m "your change"
+git push            # Vercel builds & deploys automatically
+```
+
+Watch the deploy go green in Vercel - Deployments. (If the project is NOT Git-connected,
+deploy manually with `npm i -g vercel` then `vercel --prod`.)
+
+**1. Change wording, design, or features** - edit the file(s), commit, push. Done.
+
+**2. Change a phone number / link / resource** - edit the JSON in `data/`, then
+**regenerate the bundle and commit it**:
+
+```powershell
+node scripts/build-data.mjs    # rewrites js/data.js from data/
+git add -A && git commit -m "update <plan> numbers" && git push
+```
+
+(The site reads `js/data.js`, so it must be rebuilt and committed - don't edit it by hand.)
+
+**3. Make returning visitors get the update right away (PWA cache).** The app installs a
+service worker, so repeat visitors are served from cache and pick up changes on their *next*
+visit. To push an update immediately, bump the cache name in `sw.js` (e.g. `amla-v2` ->
+`amla-v3`) when you ship a notable change; the old cache is cleared on next load.
+
+**4. Set environment variables** (optional) in Vercel - Settings - Environment Variables,
+then redeploy:
+- `FEEDBACK_WEBHOOK_URL` - route member feedback to a Slack/Discord/Make inbox.
+
+**5. Automatic data checks (no action needed).** Two crons keep the data honest:
+- **GitHub Action** (`.github/workflows/verify-data.yml`) runs weekly, checks every link is
+  reachable and every phone still appears on its page, and emails you if a run goes red.
+  Run it anytime from the repo's **Actions** tab - "Run workflow."
+- **Vercel Cron** (`/api/verify` in `vercel.json`) does a lightweight weekly sample; results
+  appear in Vercel - Logs. Confirm it's listed under Vercel - Settings - Cron Jobs.
+
+The crons **verify** the data; they don't rewrite it. When a check flags something, fix it
+with step 2 above.
