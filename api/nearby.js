@@ -42,6 +42,25 @@ function queryMirror(base, ql) {
   }).catch(function (e) { clearTimeout(t); throw e; });
 }
 
+/* Resolve with the FIRST mirror that returns a non-empty result. Promise.any would
+ * resolve with whichever mirror answers first - including a thin/misconfigured mirror
+ * that returns 0 elements, beating a slower mirror with real data. We only settle for
+ * empty (or reject) once every mirror has finished. */
+function firstNonEmpty(promises) {
+  return new Promise(function (resolve, reject) {
+    var remaining = promises.length, empty = null, settled = false;
+    if (!remaining) { reject(new Error("no mirrors")); return; }
+    promises.forEach(function (p) {
+      p.then(function (data) {
+        if (settled) return;
+        if (data && Array.isArray(data.elements) && data.elements.length) { settled = true; resolve(data); return; }
+        empty = empty || data;
+      }, function () { /* mirror error - ignore, count below */ })
+      .then(function () { if (!settled && --remaining === 0) { if (empty) resolve(empty); else reject(new Error("all mirrors empty or failed")); } });
+    });
+  });
+}
+
 /* Optional Google Places provider (used only if GOOGLE_MAPS_API_KEY is set in Vercel).
  * Higher-quality clinic data + phone numbers. NOTE: Google's Places terms generally
  * expect results to be shown on a Google map; enabling this is the project owner's call. */
@@ -76,6 +95,8 @@ module.exports = async function handler(req, res) {
   // googleStatus is echoed in every response so you can confirm whether the key is
   // actually being used. Add ?debug=1 to see the full Google error text on fallback.
   var debug = String(q.debug || "") === "1";
+  // debug only: list env-var NAMES (never values) so a name mismatch is visible.
+  var envKeys = debug ? Object.keys(process.env).filter(function (k) { return /google|maps|places|api.?key/i.test(k); }) : undefined;
   var gkey = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY;
   var googleStatus = gkey ? "key-present-not-used" : "no-key";
   if (gkey) {
@@ -92,7 +113,7 @@ module.exports = async function handler(req, res) {
     ");out center tags 250;";
 
   try {
-    var data = await Promise.any(MIRRORS.map(function (m) { return queryMirror(m, ql); }));
+    var data = await firstNonEmpty(MIRRORS.map(function (m) { return queryMirror(m, ql); }));
     var seen = {};
     var places = (data.elements || []).map(function (e) {
       var c = e.type === "node" ? { lat: e.lat, lon: e.lon } : (e.center || {});
@@ -112,8 +133,8 @@ module.exports = async function handler(req, res) {
       if (seen[k]) return false; seen[k] = 1; return true;
     });
     res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-    res.status(200).json({ ok: true, source: "osm", googleStatus: googleStatus, type: type, radius: radius, count: places.length, places: places });
+    res.status(200).json({ ok: true, source: "osm", googleStatus: googleStatus, envKeys: envKeys, type: type, radius: radius, count: places.length, places: places });
   } catch (e) {
-    res.status(200).json({ ok: false, source: "osm", googleStatus: googleStatus, error: "Map search is busy right now. Please try again, or use the Google Maps link." });
+    res.status(200).json({ ok: false, source: "osm", googleStatus: googleStatus, envKeys: envKeys, error: debug ? ("overpass: " + ((e && e.message) || String(e))) : "Map search is busy right now. Please try again, or use the Google Maps link." });
   }
 };
