@@ -55,7 +55,7 @@ async function googlePlaces(type, radius, lat, lng, key) {
   var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 9000);
   var r = await fetch(url, { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json", "X-Goog-Api-Key": key, "X-Goog-FieldMask": fieldMask }, body: JSON.stringify(body) });
   clearTimeout(t);
-  if (!r.ok) throw new Error("google " + r.status);
+  if (!r.ok) { var et = ""; try { et = await r.text(); } catch (_) {} throw new Error("google " + r.status + (et ? ": " + et.replace(/\s+/g, " ").slice(0, 400) : "")); }
   var j = await r.json();
   return (j.places || []).map(function (p) {
     var loc = p.location || {};
@@ -73,12 +73,17 @@ module.exports = async function handler(req, res) {
   if (!isFinite(lat) || !isFinite(lng)) { res.status(400).json({ ok: false, error: "Missing coordinates" }); return; }
 
   // Prefer Google Places when a key is configured; otherwise use OpenStreetMap/Overpass.
+  // googleStatus is echoed in every response so you can confirm whether the key is
+  // actually being used. Add ?debug=1 to see the full Google error text on fallback.
+  var debug = String(q.debug || "") === "1";
   var gkey = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY;
+  var googleStatus = gkey ? "key-present-not-used" : "no-key";
   if (gkey) {
     try {
       var gp = await googlePlaces(type, radius, lat, lng, gkey);
-      if (gp && gp.length) { res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800"); res.status(200).json({ ok: true, source: "google", type: type, radius: radius, count: gp.length, places: gp }); return; }
-    } catch (e) { /* fall back to OSM below */ }
+      if (gp && gp.length) { res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800"); res.status(200).json({ ok: true, source: "google", googleStatus: "ok", type: type, radius: radius, count: gp.length, places: gp }); return; }
+      googleStatus = "google-returned-0";
+    } catch (e) { googleStatus = debug ? ("google-error: " + ((e && e.message) || String(e))) : "google-error"; }
   }
 
   var filters = TYPE_FILTERS[type] || TYPE_FILTERS.clinic;
@@ -107,8 +112,8 @@ module.exports = async function handler(req, res) {
       if (seen[k]) return false; seen[k] = 1; return true;
     });
     res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-    res.status(200).json({ ok: true, source: "osm", type: type, radius: radius, count: places.length, places: places });
+    res.status(200).json({ ok: true, source: "osm", googleStatus: googleStatus, type: type, radius: radius, count: places.length, places: places });
   } catch (e) {
-    res.status(200).json({ ok: false, error: "Map search is busy right now. Please try again, or use the Google Maps link." });
+    res.status(200).json({ ok: false, source: "osm", googleStatus: googleStatus, error: "Map search is busy right now. Please try again, or use the Google Maps link." });
   }
 };
