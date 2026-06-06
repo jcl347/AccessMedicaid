@@ -421,6 +421,9 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 /* ---------- Start here / triage / appt prep / feedback ---------- */
 #startHereBody h3 { margin: 0 0 .4rem; }
 #startHereBody[dir="rtl"] { text-align: right; }
+.lang-intro { max-width: 62ch; margin-bottom: .9rem; }
+.image-band .glass-card h3 { color: #fff; }
+.image-band #startChips { margin-bottom: .9rem; }
 .triage-list { display: grid; gap: .6rem; }
 .triage-item { border: 1px solid var(--line); border-left: 5px solid var(--primary); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
 .triage-item.lvl-emergency, .triage-item.lvl-mh { border-left-color: var(--danger); }
