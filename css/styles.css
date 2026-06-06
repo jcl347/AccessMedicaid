@@ -373,7 +373,8 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .section h2::after { content: ""; display: block; width: 46px; height: 4px; border-radius: 3px; margin-top: .55rem; background: linear-gradient(90deg, var(--primary), var(--primary-bright)); }
 .section.tinted { position: relative; overflow: hidden; }
 .section.tinted > .wrap { position: relative; z-index: 1; }
-#barriers.section.tinted::before { content: ""; position: absolute; inset: 0; background: url("https://images.unsplash.com/photo-1759843541035-ab598ed6fb7f?auto=format&fit=crop&w=2000&q=55") center/cover; opacity: .05; pointer-events: none; }
+.section.tinted::before { content: ""; position: absolute; inset: 0; background: url("https://images.unsplash.com/photo-1758613171176-ea64579c2dcf?auto=format&fit=crop&w=2000&q=55") center/cover fixed; opacity: .05; pointer-events: none; }
+@media (max-width: 900px) { .section.tinted::before { background-attachment: scroll; } }
 
 /* ---------- Engagement toolkit ---------- */
 #toolkitBody { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
@@ -405,6 +406,27 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .si-title { font-weight: 700; margin-bottom: .35rem; }
 .fav-btn.on { background: var(--primary); color: #fff; border-color: var(--primary); }
 .fav-btn.on svg { fill: #fff; }
+
+/* ---------- Start here / triage / appt prep / feedback ---------- */
+#startHereBody h3 { margin: 0 0 .4rem; }
+#startHereBody[dir="rtl"] { text-align: right; }
+.triage-list { display: grid; gap: .6rem; }
+.triage-item { border: 1px solid var(--line); border-left: 5px solid var(--primary); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+.triage-item.lvl-emergency, .triage-item.lvl-mh { border-left-color: var(--danger); }
+.triage-item.lvl-er { border-left-color: var(--accent); }
+.triage-item > summary { cursor: pointer; list-style: none; padding: .9rem 1.1rem; min-height: var(--tap); display: flex; align-items: center; font-weight: 800; }
+.triage-item > summary::-webkit-details-marker { display: none; }
+.triage-item > summary::after { content: "+"; margin-left: auto; color: var(--primary); font-size: 1.3rem; font-weight: 700; }
+.triage-item[open] > summary::after { content: "\2013"; }
+.triage-item.lvl-emergency > summary, .triage-item.lvl-mh > summary { color: var(--danger); }
+.triage-body { padding: 0 1.1rem 1rem; }
+.tg-ex { color: var(--muted); font-size: .92rem; margin: 0 0 .4rem; }
+.tg-go { font-weight: 600; margin: 0 0 .6rem; }
+.prep-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); align-items: start; }
+.prep-list { margin: 0; padding-left: 1.1rem; } .prep-list li { margin: .35rem 0; }
+.prep-script { background: var(--primary-050); border-radius: 10px; padding: .7rem .9rem; font-style: italic; }
+.feedback-box { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1rem 0; }
+.fb-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 
 /* ---------- Print ---------- */
 @media print {

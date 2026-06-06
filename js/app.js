@@ -160,7 +160,7 @@
  card.addEventListener("click", function () {
  state.planId = p.id === "__all__" ? null : p.id;
  store(false, STORE.plan, state.planId || "");
- renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit();
+ renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit(); renderTriage();
  $("#needs-step").scrollIntoView({ block: "start" });
  });
  return card;
@@ -262,6 +262,13 @@
  if (plan.findADoctorUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.findADoctorUrl, target: "_blank", rel: "noopener", html: svg("plusCircle") + "<span>Find a doctor</span>" }));
  if (plan.memberPortalUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.memberPortalUrl, target: "_blank", rel: "noopener", html: svg("creditCard") + "<span>Member portal</span>" }));
  if (plan.memberHandbookUrl) bar.appendChild(el("a", { class: "btn btn-ghost", href: plan.memberHandbookUrl, target: "_blank", rel: "noopener", html: svg("book") + "<span>Handbook</span>" }));
+ var planLink = location.origin + location.pathname + "?plan=" + plan.id;
+ var cp = el("button", { class: "btn btn-ghost", type: "button", title: "For navigators & clinics: a link that opens straight to this plan", html: svg("external") + "<span>Copy this plan's link</span>" });
+ cp.addEventListener("click", function () {
+ if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(planLink).then(function () { var s = cp.querySelector("span"); var o = s.textContent; s.textContent = "Link copied!"; setTimeout(function () { s.textContent = o; }, 2500); }, function () { window.prompt("Copy this plan's link:", planLink); }); }
+ else { window.prompt("Copy this plan's link:", planLink); }
+ });
+ bar.appendChild(cp);
  box.appendChild(bar);
  }
 
@@ -481,6 +488,7 @@
  input.addEventListener("change", paintRenew);
  paintRenew();
  box.appendChild(rcard);
+ renderReminders(box);
 
  // ---- Get-started checklist ----
  var ck = el("div", { class: "tk-card" });
@@ -522,6 +530,143 @@
  box.appendChild(sc);
  flow(box);
  }
+
+ /* ---------- reminders / notifications ---------- */
+ function checkupIcs(ym) {
+ var y = ym.slice(0, 4), m = ym.slice(5, 7), dt = y + m + "01";
+ return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//AccessMediCalLA//EN", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
+ "UID:medical-checkup-" + ym + "@accessmedicaid", "DTSTART;VALUE=DATE:" + dt, "RRULE:FREQ=YEARLY",
+ "SUMMARY:Yearly Medi-Cal check-up (free)", "DESCRIPTION:Your yearly wellness check-up is free with Medi-Cal. Call your doctor or Member Services to schedule.",
+ "BEGIN:VALARM", "TRIGGER:-P14D", "ACTION:DISPLAY", "DESCRIPTION:Time to schedule your yearly check-up", "END:VALARM",
+ "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+ }
+ function renderReminders(box) {
+ var nb = el("div", { class: "tk-card" });
+ nb.appendChild(el("div", { class: "tk-head", html: svg("calendar") + "<span>Reminders (optional, private)</span>" }));
+ if ("Notification" in window) {
+ var permP = el("p", { class: "muted" });
+ var nbtn = el("button", { class: "btn btn-ghost", type: "button", html: svg("phone") + "<span>Turn on reminders</span>" });
+ function refreshPerm() {
+ var p = Notification.permission;
+ permP.textContent = p === "granted" ? "Reminders are on. We'll nudge you when your renewal or check-up is near (next time you open this app)." : p === "denied" ? "Reminders are blocked in your browser settings. The calendar buttons below still work." : "Get a gentle nudge when your renewal or yearly check-up is coming up.";
+ nbtn.style.display = p === "granted" ? "none" : "";
+ }
+ nbtn.addEventListener("click", function () { try { Notification.requestPermission().then(function (p) { refreshPerm(); if (p === "granted") { try { new Notification("Reminders are on", { body: "We'll remind you about renewal and check-ups.", icon: "icon.svg" }); } catch (e) {} } }); } catch (e) {} });
+ refreshPerm(); nb.appendChild(permP); nb.appendChild(nbtn);
+ }
+ var crow = el("div", { class: "renew-row" });
+ crow.appendChild(el("label", { class: "renew-label", for: "checkupMonth", text: "Yearly check-up month:" }));
+ var cin = el("input", { type: "month", id: "checkupMonth", class: "zip-input" });
+ var csaved = store(true, "amla.checkup") || ""; if (csaved) cin.value = csaved;
+ crow.appendChild(cin); nb.appendChild(crow);
+ var cout = el("div", { class: "renew-out" }); nb.appendChild(cout);
+ function paintCheck() {
+ cout.innerHTML = ""; var ym = cin.value;
+ if (!ym) { cout.appendChild(el("p", { class: "muted", text: "Set a month and we'll remind you about your free yearly check-up." })); return; }
+ store(false, "amla.checkup", ym);
+ var a = el("div", { class: "tk-actions" });
+ var blob = new Blob([checkupIcs(ym)], { type: "text/calendar" });
+ a.appendChild(el("a", { class: "btn btn-call", href: URL.createObjectURL(blob), download: "medi-cal-checkup.ics", html: svg("download") + "<span>Add check-up to calendar</span>" }));
+ cout.appendChild(a);
+ }
+ cin.addEventListener("change", paintCheck); paintCheck();
+ box.appendChild(nb);
+ }
+ function maybeNotify() {
+ if (!("Notification" in window) || Notification.permission !== "granted") return;
+ var last = parseInt(store(true, "amla.notifiedAt") || "0", 10) || 0;
+ if (Date.now() - last < 20 * 864e5) return;
+ var msgs = [];
+ var rm = store(true, "amla.renew"); if (rm) { var mu = monthsUntil(rm); if (mu !== null && mu <= 1) msgs.push("Your Medi-Cal renewal is coming up - don't lose coverage."); }
+ var cm = store(true, "amla.checkup"); if (cm) { var cu = monthsUntil(cm); if (cu !== null && cu <= 1) msgs.push("Time for your free yearly check-up."); }
+ if (msgs.length) { try { new Notification("Access Medi-Cal LA", { body: msgs.join(" "), icon: "icon.svg" }); store(false, "amla.notifiedAt", String(Date.now())); } catch (e) {} }
+ }
+
+ /* ---------- "Where should I go?" triage ---------- */
+ var TRIAGE = [
+ { t: "Life-threatening emergency", ex: "Chest pain, trouble breathing, stroke signs (face droop, arm weakness, slurred speech), severe bleeding, a seizure, or thoughts of harming yourself.", go: "Call 911 now. For a mental-health crisis, call or text 988. Do not wait.", level: "emergency", phones: [{ label: "911", num: "911" }, { label: "988", num: "988" }] },
+ { t: "Serious, but maybe not 911", ex: "A deep cut that may need stitches, a possible broken bone, a high fever that won't come down, or dehydration.", go: "Go to an emergency room, or call your free 24/7 nurse line first if you are unsure.", level: "er", nurse: true },
+ { t: "Urgent, not an emergency", ex: "Cold or flu, ear infection, sore throat, urinary tract infection, a sprain, or a minor cut.", go: "Use urgent care or a same-day visit with your doctor. A nurse can help you decide.", level: "urgent", nurse: true, near: "urgent_care" },
+ { t: "I have a question, I'm not sure", ex: "Not sure if a symptom is serious, a medication question, or what to do tonight.", go: "Call your plan's free 24/7 nurse line. They help you decide where to go.", level: "nurse", nurse: true },
+ { t: "Mental health or substance use", ex: "Feeling very depressed or anxious, in crisis, or needing help with drugs or alcohol.", go: "Call or text 988 any time. For ongoing care, call your plan's Member Services for behavioral health.", level: "mh", phones: [{ label: "988", num: "988" }], member: true },
+ { t: "Routine or ongoing care", ex: "A yearly check-up, a prescription refill, managing a condition, or a follow-up.", go: "See your primary doctor (PCP). Many visits can be done by phone or video (telehealth). Call Member Services to set it up.", level: "routine", member: true },
+ ];
+ function renderTriage() {
+ var box = $("#triageBody"); if (!box) return; box.innerHTML = "";
+ var plan = getPlan();
+ var nurse = plan && plan.nurseAdviceLine ? plan.nurseAdviceLine : "";
+ var ms = plan && plan.memberServicesPhone ? plan.memberServicesPhone : "";
+ TRIAGE.forEach(function (s) {
+ var acts = el("div", { class: "res-actions" });
+ (s.phones || []).forEach(function (p) { acts.appendChild(el("a", { class: "btn btn-call", href: telHref(p.num), html: svg("phone") + "<span>Call " + p.label + "</span>" })); });
+ if (s.nurse) { if (nurse) acts.appendChild(el("a", { class: "btn btn-call", href: telHref(nurse), html: svg("phone") + "<span>24/7 nurse line: " + nurse + "</span>" })); else acts.appendChild(el("a", { class: "btn btn-ghost", href: "#plan-step", html: svg("phone") + "<span>Pick your plan to see your nurse line</span>" })); }
+ if (s.member && ms) acts.appendChild(el("a", { class: "btn btn-ghost", href: telHref(ms), html: svg("phone") + "<span>Member Services: " + ms + "</span>" }));
+ if (s.near) acts.appendChild(el("a", { class: "btn btn-ghost", href: "#near-me", html: svg("mapPin") + "<span>Find urgent care near me</span>" }));
+ box.appendChild(el("details", { class: "triage-item lvl-" + s.level }, [
+ el("summary", {}, [el("span", { class: "tg-name", text: s.t })]),
+ el("div", { class: "triage-body" }, [el("p", { class: "tg-ex", text: "For example: " + s.ex }), el("p", { class: "tg-go", text: s.go }), acts]),
+ ]));
+ });
+ }
+
+ /* ---------- pre-translated "Start here" card ---------- */
+ var STARTLANGS = [{ c: "en", n: "English" }, { c: "es", n: "Español" }, { c: "zh", n: "中文" }, { c: "vi", n: "Tiếng Việt" }, { c: "ko", n: "한국어" }, { c: "tl", n: "Tagalog" }, { c: "hy", n: "Հայերեն" }, { c: "ar", n: "العربية" }];
+ var STARTCOPY = {
+ en: { title: "Start here", body: "You have the right to free health care with Medi-Cal, and a free interpreter in your language. In an emergency, call 911. For a mental-health crisis, call or text 988. Renew your Medi-Cal every year so you do not lose it. Pick your plan below to see your phone numbers." },
+ es: { title: "Empiece aquí", body: "Usted tiene derecho a atención médica gratuita con Medi-Cal y a un intérprete gratuito en su idioma. En una emergencia, llame al 911. Para una crisis de salud mental, llame o envíe un mensaje de texto al 988. Renueve su Medi-Cal cada año para no perderlo. Elija su plan abajo para ver sus números de teléfono." },
+ zh: { title: "从这里开始", body: "您有权通过 Medi-Cal 获得免费医疗服务，并可获得您母语的免费口译服务。遇到紧急情况，请拨打 911。如遇心理健康危机，请拨打或发短信至 988。请每年续保 Medi-Cal，以免失去保障。请在下方选择您的计划以查看电话号码。" },
+ vi: { title: "Bắt đầu ở đây", body: "Bạn có quyền được chăm sóc sức khỏe miễn phí với Medi-Cal và có thông dịch viên miễn phí bằng ngôn ngữ của bạn. Khi khẩn cấp, hãy gọi 911. Khi có khủng hoảng sức khỏe tâm thần, hãy gọi hoặc nhắn tin 988. Hãy gia hạn Medi-Cal mỗi năm để không bị mất. Chọn chương trình của bạn bên dưới để xem số điện thoại." },
+ ko: { title: "여기서 시작하세요", body: "Medi-Cal로 무료 의료 서비스와 모국어 무료 통역을 받을 권리가 있습니다. 응급 상황에는 911에 전화하세요. 정신 건강 위기에는 988로 전화하거나 문자를 보내세요. 자격을 잃지 않도록 매년 Medi-Cal을 갱신하세요. 아래에서 플랜을 선택하면 전화번호를 볼 수 있습니다." },
+ tl: { title: "Magsimula dito", body: "May karapatan ka sa libreng pangangalagang pangkalusugan sa Medi-Cal, at sa libreng interpreter sa iyong wika. Sa emerhensiya, tumawag sa 911. Para sa krisis sa kalusugang pangkaisipan, tumawag o mag-text sa 988. I-renew ang iyong Medi-Cal taun-taon upang hindi ito mawala. Piliin ang iyong plano sa ibaba upang makita ang mga numero ng telepono." },
+ hy: { title: "Սկսեք այստեղից", body: "Դուք իրավունք ունեք Medi-Cal-ի միջոցով ստանալու անվճար բժշկական օգնություն և անվճար թարգմանիչ՝ ձեր լեզվով։ Արտակարգ իրավիճակում զանգահարեք 911։ Հոգեկան առողջության ճգնաժամի դեպքում զանգահարեք կամ գրեք 988։ Ամեն տարի թարմացրեք ձեր Medi-Cal-ը, որպեսզի այն չկորցնեք։ Ընտրեք ձեր ծրագիրը ստորև՝ հեռախոսահամարները տեսնելու համար։" },
+ ar: { title: "ابدأ من هنا", body: "لديك الحق في رعاية صحية مجانية من خلال Medi-Cal، وفي مترجم فوري مجاني بلغتك. في حالة الطوارئ اتصل بالرقم 911. في أزمة الصحة النفسية اتصل أو أرسل رسالة نصية إلى 988. جدّد Medi-Cal كل عام حتى لا تفقده. اختر خطتك في الأسفل لرؤية أرقام هاتفك." },
+ };
+ function renderStartHere(lang) {
+ var chips = $("#startChips"), body = $("#startHereBody"); if (!body) return;
+ lang = lang || store(true, "amla.startlang") || "en";
+ store(false, "amla.startlang", lang);
+ if (chips && !chips.children.length) {
+ STARTLANGS.forEach(function (l) {
+ var b = el("button", { class: "chip chip-sm", type: "button", "data-l": l.c, text: l.n });
+ b.addEventListener("click", function () { renderStartHere(l.c); });
+ chips.appendChild(b);
+ });
+ }
+ if (chips) Array.prototype.forEach.call(chips.children, function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-l") === lang ? "true" : "false"); });
+ var c = STARTCOPY[lang] || STARTCOPY.en;
+ body.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+ body.innerHTML = "<h3>" + c.title + "</h3><p>" + c.body + "</p>";
+ }
+
+ /* ---------- feedback loop ---------- */
+ function fbMailto(payload) {
+ var email = (DATA.meta && DATA.meta.contactEmail) || "";
+ if (!email) return false;
+ location.href = "mailto:" + email + "?subject=" + encodeURIComponent("Access Medi-Cal LA feedback") + "&body=" + encodeURIComponent(JSON.stringify(payload, null, 2));
+ return true;
+ }
+ function sendFeedback(payload) {
+ payload.page = location.href; payload.at = new Date().toISOString();
+ try { fetch("/api/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(function () { fbMailto(payload); }); }
+ catch (e) { fbMailto(payload); }
+ }
+ function initFeedback() {
+ var box = $("#feedbackBox"); if (!box) return; box.innerHTML = "";
+ var report = el("button", { class: "btn btn-ghost", type: "button", html: svg("info") + "<span>Report a wrong number or broken link</span>" });
+ report.addEventListener("click", function () {
+ var what = window.prompt("Thank you for helping keep this accurate. What is wrong, and where? (Include the plan and number if you can.)");
+ if (what && what.trim()) { sendFeedback({ type: "report", value: what.trim(), plan: state.planId || "" }); window.alert("Thank you - your report was sent."); }
+ });
+ if (store(true, "amla.helpful")) { box.appendChild(el("span", { class: "muted", text: "Thanks for your feedback!" })); box.appendChild(report); return; }
+ var q = el("div", { class: "fb-row" }, [el("span", { text: "Was this page helpful?" })]);
+ [["Yes", "yes"], ["Not really", "no"]].forEach(function (v) {
+ var b = el("button", { class: "btn btn-ghost", type: "button", text: v[0] });
+ b.addEventListener("click", function () { sendFeedback({ type: "helpful", value: v[1] }); store(false, "amla.helpful", v[1]); q.innerHTML = "<span class='muted'>Thanks for your feedback!</span>"; });
+ q.appendChild(b);
+ });
+ box.appendChild(q); box.appendChild(report);
+ }
+ function initApptPrint() { var b = $("#apptPrintBtn"); if (b) b.addEventListener("click", function () { window.print(); }); }
 
  /* ---------- barriers (scannable; plan-aware) ---------- */
  function firstSentence(t) { var m = (t || "").match(/^(.*?[.!?])(\s|$)/); return m ? m[1] : (t || ""); }
@@ -715,8 +860,10 @@
  return location.origin + location.pathname + "#" + p.join("&");
  }
  function parseShareState() {
- var h = (location.hash || "").replace(/^#/, ""); if (!h) return false;
- var p = {}; h.split("&").forEach(function (kv) { var i = kv.indexOf("="); if (i > 0) { try { p[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1)); } catch (e) {} } });
+ // Accept both ?query (clean per-plan links to hand out) and #hash (full saved views).
+ var raw = ((location.search || "").replace(/^\?/, "") + "&" + (location.hash || "").replace(/^#/, "")).replace(/^&|&$/g, "");
+ if (!raw) return false;
+ var p = {}; raw.split("&").forEach(function (kv) { if (!kv) return; var i = kv.indexOf("="); if (i > 0) { try { p[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1)); } catch (e) {} } });
  var any = false;
  if (p.plan && DATA.plans.some(function (x) { return x.id === p.plan; })) { state.planId = p.plan; any = true; }
  if (p.cat) { state.category = p.cat; any = true; }
@@ -969,8 +1116,8 @@
  var sp = store(true, STORE.plan);
  if (sp && DATA.plans.some(function (p) { return p.id === sp; })) state.planId = sp;
  }
- renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit();
- initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); initReveal();
+ renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit(); renderTriage();
+ initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); renderStartHere(); initFeedback(); initApptPrint(); initReveal(); maybeNotify();
  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
  }
  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

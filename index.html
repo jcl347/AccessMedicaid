@@ -64,6 +64,7 @@
  <a class="nav-link" href="#plan-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Your plan</a>
  <a class="nav-link" href="#needs-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Find help</a>
  <a class="nav-link" href="#near-me"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Care near me</a>
+ <a class="nav-link" href="#where-to-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Where to go</a>
  <a class="nav-link" href="#toolkit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>My toolkit</a>
  <a class="nav-link" href="#statewide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Help lines</a>
  <a class="nav-link" href="#languages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Languages</a>
@@ -102,6 +103,15 @@
  <div class="stat"><div class="stat-num">5</div><div class="stat-label">counties &amp; service areas</div></div>
  <div class="stat"><div class="stat-num">190+</div><div class="stat-label">resources gathered</div></div>
  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">free, in any language</div></div>
+ </div>
+ </section>
+
+ <!-- START HERE (pre-translated) -->
+ <section class="section" id="start-here" aria-labelledby="start-title">
+ <div class="wrap">
+ <div class="section-head" data-reveal><h2 id="start-title">Start here, in your language</h2></div>
+ <div class="chip-row" id="startChips" aria-label="Choose a language"></div>
+ <div class="info-card" id="startHereBody" data-reveal></div>
  </div>
  </section>
 
@@ -150,12 +160,64 @@
  </div>
  </section>
 
+ <!-- WHERE TO GO (triage) -->
+ <section class="section tinted" id="where-to-go" aria-labelledby="wtg-title">
+ <div class="wrap">
+ <div class="section-head" data-reveal><h2 id="wtg-title">Not sure where to go?</h2></div>
+ <p class="section-sub" data-reveal>Pick what is happening and we will point you to the right place, and the right number to call. When in doubt, your plan's free 24/7 nurse line can help you decide.</p>
+ <div class="triage-list" id="triageBody"></div>
+ </div>
+ </section>
+
  <!-- TOOLKIT (engagement) -->
  <section class="section" id="toolkit" aria-labelledby="toolkit-title">
  <div class="wrap">
  <div class="section-head" data-reveal><h2 id="toolkit-title">Your Medi-Cal toolkit</h2></div>
  <p class="section-sub" data-reveal>Keep what matters in one place: your plan's key numbers, a yearly renewal reminder, a get-started checklist, and resources you save. It stays private on this device.</p>
  <div id="toolkitBody"></div>
+ </div>
+ </section>
+
+ <!-- APPOINTMENT PREP -->
+ <section class="section" id="appt-prep" aria-labelledby="appt-title">
+ <div class="wrap">
+ <div class="section-head" data-reveal><h2 id="appt-title">Get ready for your visit</h2></div>
+ <p class="section-sub" data-reveal>A little prep helps you get more from every appointment. Print this and bring it with you.</p>
+ <div class="prep-grid">
+ <div class="tk-card" data-reveal>
+ <div class="tk-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Questions to ask your doctor</span></div>
+ <ul class="prep-list">
+ <li>What is my main health problem, in plain words?</li>
+ <li>What are my choices for treatment? What are the benefits and risks?</li>
+ <li>Will this cost me anything? (Most Medi-Cal care is free.)</li>
+ <li>What should I do at home, and when should I call you?</li>
+ <li>Do I need any tests, referrals, or a follow-up visit?</li>
+ <li>Can I get my prescriptions for less or by mail?</li>
+ <li>Can we do the next visit by phone or video (telehealth)?</li>
+ </ul>
+ </div>
+ <div class="tk-card" data-reveal>
+ <div class="tk-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Ask for a free interpreter</span></div>
+ <p>You have the right to a free interpreter at every visit. You should never have to bring your own or use a child to translate. When you book and when you arrive, say:</p>
+ <p class="prep-script">"I need a <strong>[your language]</strong> interpreter for my appointment, please. It is my right under Medi-Cal and it is free."</p>
+ <p class="muted">Examples: Spanish - "Necesito un interprete de espanol, por favor." · 中文 - "我需要中文翻译。" · Tieng Viet - "Toi can thong dich vien tieng Viet."</p>
+ </div>
+ <div class="tk-card" data-reveal>
+ <div class="tk-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>What to bring</span></div>
+ <ul class="prep-list">
+ <li>Your member ID card and your Medi-Cal BIC card</li>
+ <li>A photo ID</li>
+ <li>A list of your medicines (or the bottles)</li>
+ <li>Your questions (above) and a pen</li>
+ <li>A list of your symptoms and when they started</li>
+ <li>Any past records or test results you have</li>
+ </ul>
+ </div>
+ </div>
+ <button id="apptPrintBtn" type="button" class="btn btn-call" style="margin-top:1rem;">
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+ <span>Print this checklist</span>
+ </button>
  </div>
  </section>
 
@@ -276,6 +338,7 @@
  <div class="section-head" data-reveal><h2 id="about-title">About this guide</h2></div>
  <p data-reveal><strong>Access Medi-Cal LA</strong> is a free navigation guide for Medi-Cal (Medicaid) members across the greater Los Angeles region. It gathers the phone numbers and links you need into one calm, simple place.</p>
  <p class="disclaimer" data-reveal>⚠️ <strong>Please double-check before you rely on a number.</strong> This guide is not the government and is not your health plan. Plans, phone numbers, and benefits can change. Always confirm important details with your plan's Member Services line or your county office. In a medical emergency, call <a href="tel:911">911</a>.</p>
+ <div class="feedback-box" id="feedbackBox" data-reveal></div>
  <p class="muted" id="lastUpdated"></p>
  <details class="sources-details">
  <summary>Where this information comes from (sources)</summary>
