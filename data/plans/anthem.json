@@ -1,194 +1,212 @@
 {
- "planId": "anthem",
- "planName": "Anthem Blue Cross (Medi-Cal)",
- "relationship": "Plan partner under L.A. Care Health Plan in Los Angeles County. In L.A. County, Medi-Cal members enroll with L.A. Care and may choose Anthem Blue Cross as their plan partner.",
- "memberServicesPhone": "1-888-285-7801",
- "memberServicesHours": "Monday through Friday, 7 a.m. to 7 p.m. (Los Angeles County line). Outside L.A. County: 1-800-407-4627.",
- "ttyPhone": "711",
- "nurseAdviceLine": "1-800-224-0336",
- "website": "https://www.anthem.com/ca/medicaid/",
- "memberPortalUrl": "https://www.anthem.com/ca/account-login/",
- "findADoctorUrl": "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
- "memberHandbookUrl": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
- "notes": "Anthem Blue Cross serves Medi-Cal members in Los Angeles County as a plan partner under L.A. Care Health Plan. Member Services for L.A. County members is 1-888-285-7801 (TTY 711), Mon-Fri 7 a.m.-7 p.m. Members outside L.A. County use 1-800-407-4627. Prescriptions are covered by the state's Medi-Cal Rx (1-800-977-2273), and most dental by the separate state Medi-Cal Dental / Denti-Cal (1-800-322-6384). The 24/7 NurseLine is 1-800-224-0336 and free rides are 1-877-931-4755. Because LA County coverage runs through L.A. Care, members with coverage questions can also call L.A. Care at 1-888-452-2273. Renew through your county (BenefitsCal.com) every 12 months. (Note: Anthem phased out some LA County programs in 2024, such as the CHDP program; confirm current coverage with L.A. Care.)",
- "resources": [
- {
- "category": "Member ID card & online account",
- "title": "Member Services (L.A. County)",
- "description": "Call this number for help with your plan, to ask questions, change your doctor, or get a new ID card. If you live in L.A. County, this is your line. Open Monday to Friday, 7 a.m. to 7 p.m.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
- "languages": "Free help in your language and free interpreters available. TTY: 711 for deaf or hard of hearing.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Member Services (outside L.A. County)",
- "description": "If you live outside Los Angeles County, use this number for plan questions and help. Open Monday to Friday, 7 a.m. to 7 p.m.",
- "phone": "1-800-407-4627",
- "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
- "languages": "Free interpreter help in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Nurse advice line (24/7)",
- "title": "24/7 NurseLine",
- "description": "Talk to a nurse any time, day or night, for free. A nurse can answer health questions and help you decide if you need to see a doctor or go to the ER.",
- "phone": "1-800-224-0336",
- "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
- "languages": "Interpreter help available. TTY: 711.",
- "verified": true
- },
- {
- "category": "Find a doctor",
- "title": "Find a Doctor",
- "description": "Use the online tool to find doctors, clinics, and specialists in the Anthem network. You can also pick or change your main doctor (PCP). Need a printed list? Call Member Services and they will mail you one.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
- "languages": "Help choosing a doctor available in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Online account and Sydney Health app",
- "description": "Create an online account or use the Sydney Health app to see and print your member ID card, change your doctor, chat with a representative, and find care. You will need your member ID number, birth date, and ZIP code to sign up.",
- "phone": "",
- "url": "https://www.anthem.com/ca/account-login/",
- "languages": "TTY: 711.",
- "verified": true
- },
- {
- "category": "Get a ride (transportation)",
- "title": "Free rides to medical visits (NEMT)",
- "description": "Anthem gives free rides to medically needed visits like the doctor, dentist, eye doctor, mental health, and the pharmacy. Call to set up a ride at least 5 business days before your visit, or as soon as you can if it is urgent. Have your member ID ready.",
- "phone": "1-877-931-4755",
- "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
- "languages": "Help available in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Transportation to non-medical (NMT)",
- "title": "Rides to non-medical care (NMT)",
- "description": "You can also get free rides to pick up prescriptions, medical supplies, and to other plan-covered care. Your doctor needs to request this for you first. Some members can also get rides to grocery stores or food banks. Call the same ride line to book.",
- "phone": "1-877-931-4755",
- "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
- "languages": "Help available in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Mental health and substance use help",
- "description": "Anthem covers mild-to-moderate mental health care like counseling and therapy. Call Member Services to find a provider or get help. For more serious mental health or drug and alcohol services, your county also provides care. In a crisis, call or text 988.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
- "languages": "Interpreter help available. TTY: 711.",
- "verified": true
- },
- {
- "category": "Pharmacy & prescriptions",
- "title": "Medi-Cal Rx (prescriptions)",
- "description": "Your prescription drugs are covered by the state's Medi-Cal Rx program, not by Anthem. Most members can keep using the same pharmacy. Call Medi-Cal Rx with questions about your medicines or to find a pharmacy.",
- "phone": "1-800-977-2273",
- "url": "https://medi-calrx.dhcs.ca.gov/home/",
- "languages": "24/7 phone help with interpreters. TTY: 711 or 1-800-977-2273.",
- "verified": true
- },
- {
- "category": "Dental",
- "title": "Medi-Cal Dental (Denti-Cal)",
- "description": "Most dental care is covered by the separate state Medi-Cal Dental program, not Anthem. Call to find a dentist or ask about covered dental care. Open Monday to Friday, 8 a.m. to 5 p.m.",
- "phone": "1-800-322-6384",
- "url": "https://dental.dhcs.ca.gov/",
- "languages": "Interpreter help available. TTY: 1-800-735-2922.",
- "verified": true
- },
- {
- "category": "Vision",
- "title": "Vision care",
- "description": "Anthem covers eye exams and, for those who qualify, glasses. Vision care is provided through Vision Service Plan (VSP). Call Member Services to find an eye doctor or learn what is covered.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
- "languages": "Interpreter help available. TTY: 711.",
- "verified": true
- },
- {
- "category": "Language & interpreter help",
- "title": "Free interpreter and language help",
- "description": "You have the right to free help in your language. You can get a phone interpreter, an in-person interpreter for your visits, sign language help, and plan papers in other languages or large print. Just ask Member Services.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
- "languages": "Interpreters in many languages at no cost. TTY: 711.",
- "verified": true
- },
- {
- "category": "Renew Medi-Cal / keep coverage",
- "title": "Renew your Medi-Cal",
- "description": "You must renew your Medi-Cal every year to keep it. Make sure your county has your current address and phone number. Watch for a renewal packet in the mail and send it back on time. You can renew or update your info online at BenefitsCal.com. In L.A. County you can also call DPSS at 1-866-613-3777.",
- "phone": "1-866-613-3777",
- "url": "https://mss.anthem.com/california-medicaid/apply/how-to-renew.html",
- "languages": "Help available in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Complaints & appeals (grievances)",
- "title": "File a complaint or appeal (grievance)",
- "description": "If you are unhappy with your care or a decision, you can file a complaint (grievance) or appeal. Call Member Services for help, file online, or mail a form. Anthem will reply within 30 days. If your problem is not fixed, you can call the state DMHC Help Center at 1-888-466-2219.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/grievances-and-appeals.html",
- "languages": "Free help filing in your language. TTY: 711 (DMHC TDD: 1-877-688-9891).",
- "verified": true
- },
- {
- "category": "Extra benefits & community supports (CalAIM)",
- "title": "Enhanced Care Management and Community Supports (CalAIM)",
- "description": "If you have many health needs, a care team can help coordinate all your care and connect you to services through Enhanced Care Management (ECM). Community Supports can help with things like housing help, healthy meals, and more. Call Member Services to see if you qualify.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/care-management.html",
- "languages": "Help available in your language. TTY: 711.",
- "verified": true
- },
- {
- "category": "Urgent & after-hours care",
- "title": "Urgent and after-hours care",
- "description": "For care you need fast but is not life-threatening, go to an urgent care center or call your doctor. Not sure what to do? Call the free 24/7 NurseLine. For a real emergency, call 911 or go to the nearest ER.",
- "phone": "1-800-224-0336",
- "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
- "languages": "Interpreter help available. TTY: 711.",
- "verified": true
- },
- {
- "category": "Member handbook & forms",
- "title": "Member Handbook and forms",
- "description": "The Member Handbook explains your benefits, your rights, and how to get care. You can read your benefits online or call Member Services to have a handbook mailed to you for free.",
- "phone": "1-888-285-7801",
- "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
- "languages": "Available in other languages and large print on request. TTY: 711.",
- "verified": true
- },
- {
- "category": "Other",
- "title": "L.A. Care Health Plan (your main plan in L.A. County)",
- "description": "In Los Angeles County, your Medi-Cal coverage runs through L.A. Care, with Anthem as your plan partner. If you cannot reach Anthem or have questions about your coverage or plan choices, you can call L.A. Care.",
- "phone": "1-888-452-2273",
- "url": "https://www.lacare.org/health-plans/medi-cal/plan-partners",
- "languages": "Free interpreter help. TTY: 711.",
- "verified": true
- }
- ],
- "sources": [
- "https://www.anthem.com/ca/medicaid/",
- "https://mss.anthem.com/california-medicaid/home.html",
- "https://mss.anthem.com/california-medicaid/contact-us.html",
- "https://mss.anthem.com/california-medicaid/care/getting-care.html",
- "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
- "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
- "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
- "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/care-management.html",
- "https://mss.anthem.com/california-medicaid/grievances-and-appeals.html",
- "https://mss.anthem.com/california-medicaid/apply/how-to-renew.html",
- "https://www.anthem.com/ca/account-login/",
- "https://dental.dhcs.ca.gov/",
- "https://medi-calrx.dhcs.ca.gov/home/",
- "https://www.lacare.org/health-plans/medi-cal/plan-partners"
- ]
+  "planId": "anthem",
+  "planName": "Anthem Blue Cross (Medi-Cal)",
+  "relationship": "Plan partner under L.A. Care Health Plan in Los Angeles County. In L.A. County, Medi-Cal members enroll with L.A. Care and may choose Anthem Blue Cross as their plan partner.",
+  "memberServicesPhone": "1-888-285-7801",
+  "memberServicesHours": "Monday through Friday, 7 a.m. to 7 p.m. (Los Angeles County line). Outside L.A. County: 1-800-407-4627.",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-800-224-0336",
+  "website": "https://www.anthem.com/ca/medicaid/",
+  "memberPortalUrl": "https://www.anthem.com/ca/account-login/",
+  "findADoctorUrl": "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
+  "memberHandbookUrl": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
+  "notes": "Anthem Blue Cross serves Medi-Cal members in Los Angeles County as a plan partner under L.A. Care Health Plan. Member Services for L.A. County members is 1-888-285-7801 (TTY 711), Mon-Fri 7 a.m.-7 p.m. Members outside L.A. County use 1-800-407-4627. Prescriptions are covered by the state's Medi-Cal Rx (1-800-977-2273), and most dental by the separate state Medi-Cal Dental / Denti-Cal (1-800-322-6384). The 24/7 NurseLine is 1-800-224-0336 and free rides are 1-877-931-4755. Because LA County coverage runs through L.A. Care, members with coverage questions can also call L.A. Care at 1-888-452-2273. Renew through your county (BenefitsCal.com) every 12 months. (Note: Anthem phased out some LA County programs in 2024, such as the CHDP program; confirm current coverage with L.A. Care.)",
+  "resources": [
+    {
+      "category": "Member ID card & online account",
+      "title": "Member Services (L.A. County)",
+      "description": "Call this number for help with your plan, to ask questions, change your doctor, or get a new ID card. If you live in L.A. County, this is your line. Open Monday to Friday, 7 a.m. to 7 p.m.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
+      "languages": "Free help in your language and free interpreters available. TTY: 711 for deaf or hard of hearing.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Member Services (outside L.A. County)",
+      "description": "If you live outside Los Angeles County, use this number for plan questions and help. Open Monday to Friday, 7 a.m. to 7 p.m.",
+      "phone": "1-800-407-4627",
+      "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
+      "languages": "Free interpreter help in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "24/7 NurseLine",
+      "description": "Talk to a nurse any time, day or night, for free. A nurse can answer health questions and help you decide if you need to see a doctor or go to the ER.",
+      "phone": "1-800-224-0336",
+      "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
+      "languages": "Interpreter help available. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Find a doctor",
+      "title": "Find a Doctor",
+      "description": "Use the online tool to find doctors, clinics, and specialists in the Anthem network. You can also pick or change your main doctor (PCP). Need a printed list? Call Member Services and they will mail you one.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
+      "languages": "Help choosing a doctor available in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Online account and Sydney Health app",
+      "description": "Create an online account or use the Sydney Health app to see and print your member ID card, change your doctor, chat with a representative, and find care. You will need your member ID number, birth date, and ZIP code to sign up.",
+      "phone": "",
+      "url": "https://www.anthem.com/ca/account-login/",
+      "languages": "TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free rides to medical visits (NEMT)",
+      "description": "Anthem gives free rides to medically needed visits like the doctor, dentist, eye doctor, mental health, and the pharmacy. Call to set up a ride at least 5 business days before your visit, or as soon as you can if it is urgent. Have your member ID ready.",
+      "phone": "1-877-931-4755",
+      "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
+      "languages": "Help available in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Rides to non-medical care (NMT)",
+      "description": "You can also get free rides to pick up prescriptions, medical supplies, and to other plan-covered care. Your doctor needs to request this for you first. Some members can also get rides to grocery stores or food banks. Call the same ride line to book.",
+      "phone": "1-877-931-4755",
+      "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
+      "languages": "Help available in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health and substance use help",
+      "description": "Anthem covers mild-to-moderate mental health care like counseling and therapy. Call Member Services to find a provider or get help. For more serious mental health or drug and alcohol services, your county also provides care. In a crisis, call or text 988.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
+      "languages": "Interpreter help available. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Medi-Cal Rx (prescriptions)",
+      "description": "Your prescription drugs are covered by the state's Medi-Cal Rx program, not by Anthem. Most members can keep using the same pharmacy. Call Medi-Cal Rx with questions about your medicines or to find a pharmacy.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/home/",
+      "languages": "24/7 phone help with interpreters. TTY: 711 or 1-800-977-2273.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Medi-Cal Dental (Denti-Cal)",
+      "description": "Most dental care is covered by the separate state Medi-Cal Dental program, not Anthem. Call to find a dentist or ask about covered dental care. Open Monday to Friday, 8 a.m. to 5 p.m.",
+      "phone": "1-800-322-6384",
+      "url": "https://dental.dhcs.ca.gov/",
+      "languages": "Interpreter help available. TTY: 1-800-735-2922.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Vision care",
+      "description": "Anthem covers eye exams and, for those who qualify, glasses. Vision care is provided through Vision Service Plan (VSP). Call Member Services to find an eye doctor or learn what is covered.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
+      "languages": "Interpreter help available. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free interpreter and language help",
+      "description": "You have the right to free help in your language. You can get a phone interpreter, an in-person interpreter for your visits, sign language help, and plan papers in other languages or large print. Just ask Member Services.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/contact-us.html",
+      "languages": "Interpreters in many languages at no cost. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew your Medi-Cal",
+      "description": "You must renew your Medi-Cal every year to keep it. Make sure your county has your current address and phone number. Watch for a renewal packet in the mail and send it back on time. You can renew or update your info online at BenefitsCal.com. In L.A. County you can also call DPSS at 1-866-613-3777.",
+      "phone": "1-866-613-3777",
+      "url": "https://mss.anthem.com/california-medicaid/apply/how-to-renew.html",
+      "languages": "Help available in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a complaint or appeal (grievance)",
+      "description": "If you are unhappy with your care or a decision, you can file a complaint (grievance) or appeal. Call Member Services for help, file online, or mail a form. Anthem will reply within 30 days. If your problem is not fixed, you can call the state DMHC Help Center at 1-888-466-2219.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/grievances-and-appeals.html",
+      "languages": "Free help filing in your language. TTY: 711 (DMHC TDD: 1-877-688-9891).",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Enhanced Care Management and Community Supports (CalAIM)",
+      "description": "If you have many health needs, a care team can help coordinate all your care and connect you to services through Enhanced Care Management (ECM). Community Supports can help with things like housing help, healthy meals, and more. Call Member Services to see if you qualify.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/care-management.html",
+      "languages": "Help available in your language. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent and after-hours care",
+      "description": "For care you need fast but is not life-threatening, go to an urgent care center or call your doctor. Not sure what to do? Call the free 24/7 NurseLine. For a real emergency, call 911 or go to the nearest ER.",
+      "phone": "1-800-224-0336",
+      "url": "https://mss.anthem.com/california-medicaid/care/getting-care.html",
+      "languages": "Interpreter help available. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook and forms",
+      "description": "The Member Handbook explains your benefits, your rights, and how to get care. You can read your benefits online or call Member Services to have a handbook mailed to you for free.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
+      "languages": "Available in other languages and large print on request. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "L.A. Care Health Plan (your main plan in L.A. County)",
+      "description": "In Los Angeles County, your Medi-Cal coverage runs through L.A. Care, with Anthem as your plan partner. If you cannot reach Anthem or have questions about your coverage or plan choices, you can call L.A. Care.",
+      "phone": "1-888-452-2273",
+      "url": "https://www.lacare.org/health-plans/medi-cal/plan-partners",
+      "languages": "Free interpreter help. TTY: 711.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "LiveHealth Online (telehealth)",
+      "description": "See a doctor by phone or video for non-emergencies like colds and rashes, at no cost. Good when your doctor's office is closed.",
+      "phone": "",
+      "url": "https://livehealthonline.com",
+      "languages": "Interpreter help available",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Community help: food, housing, jobs, and more",
+      "description": "Anthem can connect you to local programs for food, housing, work, and other needs. Call Member Services to get started.",
+      "phone": "1-888-285-7801",
+      "url": "https://mss.anthem.com/california-medicaid/get-help/community.html",
+      "languages": "Interpreter help; TTY 711",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://www.anthem.com/ca/medicaid/",
+    "https://mss.anthem.com/california-medicaid/home.html",
+    "https://mss.anthem.com/california-medicaid/contact-us.html",
+    "https://mss.anthem.com/california-medicaid/care/getting-care.html",
+    "https://mss.anthem.com/california-medicaid/care/find-a-doctor.html",
+    "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits.html",
+    "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/transportation.html",
+    "https://mss.anthem.com/california-medicaid/benefits/medi-cal-plan-benefits/care-management.html",
+    "https://mss.anthem.com/california-medicaid/grievances-and-appeals.html",
+    "https://mss.anthem.com/california-medicaid/apply/how-to-renew.html",
+    "https://www.anthem.com/ca/account-login/",
+    "https://dental.dhcs.ca.gov/",
+    "https://medi-calrx.dhcs.ca.gov/home/",
+    "https://www.lacare.org/health-plans/medi-cal/plan-partners"
+  ]
 }

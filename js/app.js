@@ -84,6 +84,25 @@
  c.classList.add("flow");
  });
  }
+ function rippleHandler(e) {
+ if (reduceMotion) return;
+ var sel = ".btn, .btn-hero, .plan-card, .need-tile, .chip, .res-card, .care-num, .near-item, .hero-chip";
+ var t = e.target && e.target.closest ? e.target.closest(sel) : null;
+ if (!t) { var s = e.target && e.target.closest ? e.target.closest(".triage-item > summary") : null; if (s) t = s; }
+ if (!t) return;
+ try {
+ var rect = t.getBoundingClientRect();
+ var d = Math.max(rect.width, rect.height);
+ var sp = document.createElement("span");
+ sp.className = "ripple";
+ sp.style.width = sp.style.height = d + "px";
+ sp.style.left = (e.clientX - rect.left - d / 2) + "px";
+ sp.style.top = (e.clientY - rect.top - d / 2) + "px";
+ if (getComputedStyle(t).position === "static") t.style.position = "relative";
+ t.appendChild(sp);
+ setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 650);
+ } catch (err) {}
+ }
  function initReveal() {
  var els = document.querySelectorAll("[data-reveal]");
  if (reduceMotion || !("IntersectionObserver" in window)) {
@@ -1165,6 +1184,7 @@
  }
  renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit(); renderTriage();
  initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); renderStartHere(); initFeedback(); initApptPrint(); initReveal(); maybeNotify();
+ if (!reduceMotion) document.addEventListener("pointerdown", rippleHandler, true);
  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
  }
  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();

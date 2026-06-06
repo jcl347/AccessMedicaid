@@ -131,6 +131,11 @@ visit. To push an update immediately, bump the cache name in `sw.js` (e.g. `amla
 **4. Set environment variables** (optional) in Vercel - Settings - Environment Variables,
 then redeploy:
 - `FEEDBACK_WEBHOOK_URL` - route member feedback to a Slack/Discord/Make inbox.
+- `GOOGLE_MAPS_API_KEY` - optional. If set, the "Find care near you" search uses
+  Google Places (higher-quality clinic data + phone numbers) instead of OpenStreetMap.
+  Enable the **Places API (New)** for the key. Note: Google's Places terms generally
+  expect results to be shown on a Google map, so enabling this is the owner's call;
+  leaving it unset keeps the resilient, key-free OpenStreetMap/Overpass path.
 
 **5. Automatic data checks (no action needed).** Two crons keep the data honest:
 - **GitHub Action** (`.github/workflows/verify-data.yml`) runs weekly, checks every link is

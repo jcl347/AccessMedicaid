@@ -1,204 +1,222 @@
 {
- "planId": "gold-coast",
- "planName": "Gold Coast Health Plan (Medi-Cal)",
- "relationship": "Gold Coast Health Plan (GCHP) is the single County Organized Health System (COHS) Medi-Cal managed care plan for Ventura County. If you have Medi-Cal and live in Ventura County, GCHP is your health plan.",
- "memberServicesPhone": "1-888-301-1228",
- "memberServicesHours": "8 a.m. to 8 p.m., seven days a week from Oct. 1 through March 31; and 8 a.m. to 8 p.m., Monday through Friday from April 1 through Sept. 30.",
- "ttyPhone": "711",
- "nurseAdviceLine": "1-877-431-1700",
- "website": "https://www.goldcoasthealthplan.org/",
- "memberPortalUrl": "https://members.goldcoasthealthplan.org/s/",
- "findADoctorUrl": "https://www.goldcoasthealthplan.org/provider-directory/",
- "memberHandbookUrl": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
- "notes": "Gold Coast Health Plan is the only Medi-Cal plan for Ventura County (a COHS plan), so members do not choose between competing plans. Member Services 1-888-301-1228 (TTY 711). Pharmacy benefits are carved out to the state Medi-Cal Rx program; dental is carved out to the separate state Medi-Cal Dental program. Behavioral/mental health is split: GCHP (through Carelon Behavioral Health) covers non-specialty/mild-to-moderate mental health, while Ventura County Behavioral Health covers specialty mental health and substance use treatment. Seasonal Member Services hours vary, so confirm when you call.",
- "resources": [
- {
- "category": "Member ID card & online account",
- "title": "Member Services - your main help line",
- "description": "Call Member Services for help with almost anything: questions about your benefits, finding or changing a doctor, getting a new ID card, or how things work. They can also connect you to a free interpreter in your language. Hours are 8 a.m. to 8 p.m. seven days a week from Oct. 1 to March 31, and 8 a.m. to 8 p.m. Monday through Friday from April 1 to Sept. 30.",
- "phone": "1-888-301-1228",
- "url": "https://www.goldcoasthealthplan.org/contact-us/",
- "languages": "Free phone interpreters available in many languages; TTY 711.",
- "verified": true
- },
- {
- "category": "Nurse advice line (24/7)",
- "title": "24-Hour Nurse Advice Line",
- "description": "Not sure if you need to see a doctor or go to the ER? A registered nurse can help you any time, day or night. Call 24 hours a day, 7 days a week to get medical advice and figure out the right kind of care.",
- "phone": "1-877-431-1700",
- "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
- "languages": "TTY 711; interpreter support available.",
- "verified": true
- },
- {
- "category": "Find a doctor",
- "title": "Find a doctor, clinic, or specialist",
- "description": "Use the online Provider Directory to look for a primary care doctor, specialist, hospital, or clinic that takes Gold Coast Health Plan. You can search by name, specialty, location, language spoken, and whether they are taking new patients. Want a paper copy mailed to you? Call Member Services.",
- "phone": "1-888-301-1228",
- "url": "https://www.goldcoasthealthplan.org/provider-directory/",
- "languages": "Directory lets you search by the language a provider speaks; call for help in your language.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Member online account (Member Portal)",
- "description": "Sign up and log in to your secure online account to see your plan details and manage your information. You get your GCHP member ID card after you pick a primary care provider (PCP). If your card is lost or you need a new one, call Member Services.",
- "phone": "1-888-301-1228",
- "url": "https://members.goldcoasthealthplan.org/s/",
- "languages": "Call Member Services (TTY 711) for help in your language.",
- "verified": true
- },
- {
- "category": "Get a ride (transportation)",
- "title": "Free rides to medical care (NEMT)",
- "description": "If you need a special vehicle like a wheelchair van or an ambulance to get to a medical visit because you cannot ride in a regular car or bus, the plan covers it at no cost. First ask your doctor to approve it in writing. Then call Ventura Transit System (VTS) to set up the ride. Questions? Call Member Services at 1-888-301-1228.",
- "phone": "805-628-7433",
- "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
- "languages": "Call Member Services (TTY 711) for interpreter help.",
- "verified": true
- },
- {
- "category": "Transportation to non-medical (NMT)",
- "title": "Free rides to non-medical health needs (NMT)",
- "description": "If you do not need a special vehicle, you can still get free rides to things like picking up prescriptions, going to medical appointments, or other approved health-related trips. You do not need a doctor's note. Call Ventura Transit System (VTS). Rides are available 24 hours a day, 7 days a week. Please book at least 48 hours ahead.",
- "phone": "1-855-628-7433",
- "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
- "languages": "California Relay Service 1-800-855-7100; call Member Services for interpreter help.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Mental health care (mild to moderate)",
- "description": "Gold Coast covers many mental health services like therapy (talk therapy), counseling, and medication help through its partner, Carelon Behavioral Health. To find a therapist or get started, call Carelon (TTY 1-800-735-2929).",
- "phone": "1-855-765-9702",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
- "languages": "TTY 1-800-735-2929; interpreter services available.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Specialty mental health & crisis help (24/7)",
- "description": "If you are in a mental health crisis or need more serious (specialty) mental health care, call the Ventura County Behavioral Health Crisis & Referral Line. Help is available 24 hours a day, 7 days a week. If you are in danger right now, call 911 or 988 (Suicide & Crisis Lifeline).",
- "phone": "1-866-998-2243",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
- "languages": "Interpreter support available; 988 also offers multilingual help.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Substance use treatment (24/7)",
- "description": "If you or a loved one needs help with alcohol or drug use, call Ventura County Behavioral Health Substance Use Treatment. Help and referrals are available 24 hours a day, 7 days a week.",
- "phone": "1-844-385-9200",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
- "languages": "Interpreter support available.",
- "verified": true
- },
- {
- "category": "Pharmacy & prescriptions",
- "title": "Prescription drugs through Medi-Cal Rx",
- "description": "Your prescription medicines are covered by the state's Medi-Cal Rx program, not directly by Gold Coast. Show your benefits ID card (BIC) at the pharmacy. For questions about a medication, what is covered, or finding a pharmacy, call Medi-Cal Rx Customer Service, available 24/7.",
- "phone": "1-800-977-2273",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
- "languages": "TTY 711; Medi-Cal Rx offers help in multiple languages.",
- "verified": true
- },
- {
- "category": "Dental",
- "title": "Dental care through Medi-Cal Dental",
- "description": "Your dental care (checkups, cleanings, x-rays, and more) comes from the separate state Medi-Cal Dental program, not from Gold Coast. To find a dentist or ask about your dental benefits, call Medi-Cal Dental (TTY 1-800-735-2922).",
- "phone": "1-800-322-6384",
- "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
- "languages": "TTY 1-800-735-2922; interpreter services available.",
- "verified": true
- },
- {
- "category": "Vision",
- "title": "Eye exams and glasses (VSP)",
- "description": "Your vision care is covered through Vision Service Plan (VSP). Benefits include routine eye exams, diabetic eye exams, and glasses or contacts. Call VSP (TTY 1-800-428-4833). Hours are Monday to Friday 5 a.m. to 8 p.m. and Saturday 6 a.m. to 5 p.m.",
- "phone": "1-800-877-7195",
- "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
- "languages": "TTY 1-800-428-4833.",
- "verified": true
- },
- {
- "category": "Language & interpreter help",
- "title": "Free interpreter and translation services",
- "description": "You have the right to a free interpreter, including sign language, and to get plan materials in your language or in large print, audio, or Braille. You never have to use a family member or friend to interpret. Call Member Services at 1-888-301-1228 (TTY 711), or call GCHP's Cultural and Linguistic Services Department, Monday to Friday 8 a.m. to 5 p.m.",
- "phone": "1-805-437-5603",
- "url": "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
- "languages": "Free oral interpreting in many languages, sign language interpreting, and written translations; TTY 711.",
- "verified": true
- },
- {
- "category": "Renew Medi-Cal / keep coverage",
- "title": "Renew your Medi-Cal to keep coverage",
- "description": "Each year you must renew your Medi-Cal so you do not lose your coverage. Make sure your address and phone number are up to date, watch your mail for a renewal packet, and send back any forms on time. For your Medi-Cal case, call the Ventura County Human Services Agency (VCHSA) (TTY 1-800-735-2922). Automated info is available 24/7; talk to a person Monday to Friday 8 a.m. to 5 p.m.",
- "phone": "1-888-472-4463",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
- "languages": "TTY 1-800-735-2922; county offers help in multiple languages.",
- "verified": true
- },
- {
- "category": "Complaints & appeals (grievances)",
- "title": "File a complaint or appeal (grievance)",
- "description": "If you are unhappy with your care or a decision the plan made, you have the right to speak up - it will not affect your care. You can file a grievance or appeal by calling Member Services at 1-888-301-1228 (TTY 711) or by mailing the Member Grievance & Appeals Form to: Gold Coast Health Plan, Attn: Member Grievance & Appeals, P.O. Box 9176, Oxnard, CA 93031. GCHP will confirm your complaint within 5 days and explain the outcome within 30 days. You can also ask for a State Hearing.",
- "phone": "1-888-301-1228",
- "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
- "languages": "TTY 711; free interpreter help to file your complaint.",
- "verified": true
- },
- {
- "category": "Extra benefits & community supports (CalAIM)",
- "title": "Enhanced Care Management & Community Supports (CalAIM)",
- "description": "If you have complex health and life needs, you may qualify for extra help. Enhanced Care Management (ECM) gives you a care team that coordinates all your care and connects you to services. Community Supports can help with things like housing support and healthy meals. These programs are free and voluntary. Call Member Services at 1-888-301-1228 (TTY 711) to see if you qualify.",
- "phone": "1-888-301-1228",
- "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
- "languages": "TTY 711; interpreter help available.",
- "verified": true
- },
- {
- "category": "Urgent & after-hours care",
- "title": "Care when your doctor's office is closed",
- "description": "If you need care that cannot wait but it is not an emergency, you have options after hours. Call the 24-Hour Nurse Advice Line at 1-877-431-1700 for advice, or go to an urgent care center that takes your plan. For a life-threatening emergency, always call 911 or go to the nearest ER.",
- "phone": "1-877-431-1700",
- "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
- "languages": "TTY 711; interpreter help available.",
- "verified": true
- },
- {
- "category": "Member handbook & forms",
- "title": "Member Handbook and forms",
- "description": "The Member Handbook (also called the Evidence of Coverage) explains your benefits, your rights, and how to use your plan. The member resources page also has helpful forms like the PCP selection form and the grievance and appeals form. You can ask for a printed handbook by calling Member Services.",
- "phone": "1-888-301-1228",
- "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
- "languages": "Handbook and materials available in other languages and formats on request; TTY 711.",
- "verified": true
- },
- {
- "category": "Other",
- "title": "Local help and resources (211 Ventura County)",
- "description": "For free, confidential help finding local services like food, housing, and community programs in Ventura County, you can call 211 any time, day or night. This is a community resource, not part of Gold Coast Health Plan, but it can connect you with many local supports.",
- "phone": "211",
- "url": "https://211ventura.org/",
- "languages": "Multilingual support available.",
- "verified": true
- }
- ],
- "sources": [
- "https://www.goldcoasthealthplan.org/",
- "https://www.goldcoasthealthplan.org/contact-us/",
- "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/",
- "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
- "https://www.goldcoasthealthplan.org/provider-directory/",
- "https://members.goldcoasthealthplan.org/s/",
- "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
- "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
- "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
- "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
- "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
- "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
- "https://www.goldcoasthealthplan.org/for-members/member-resources/",
- "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
- "https://211ventura.org/"
- ]
+  "planId": "gold-coast",
+  "planName": "Gold Coast Health Plan (Medi-Cal)",
+  "relationship": "Gold Coast Health Plan (GCHP) is the single County Organized Health System (COHS) Medi-Cal managed care plan for Ventura County. If you have Medi-Cal and live in Ventura County, GCHP is your health plan.",
+  "memberServicesPhone": "1-888-301-1228",
+  "memberServicesHours": "8 a.m. to 8 p.m., seven days a week from Oct. 1 through March 31; and 8 a.m. to 8 p.m., Monday through Friday from April 1 through Sept. 30.",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-877-431-1700",
+  "website": "https://www.goldcoasthealthplan.org/",
+  "memberPortalUrl": "https://members.goldcoasthealthplan.org/s/",
+  "findADoctorUrl": "https://www.goldcoasthealthplan.org/provider-directory/",
+  "memberHandbookUrl": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+  "notes": "Gold Coast Health Plan is the only Medi-Cal plan for Ventura County (a COHS plan), so members do not choose between competing plans. Member Services 1-888-301-1228 (TTY 711). Pharmacy benefits are carved out to the state Medi-Cal Rx program; dental is carved out to the separate state Medi-Cal Dental program. Behavioral/mental health is split: GCHP (through Carelon Behavioral Health) covers non-specialty/mild-to-moderate mental health, while Ventura County Behavioral Health covers specialty mental health and substance use treatment. Seasonal Member Services hours vary, so confirm when you call.",
+  "resources": [
+    {
+      "category": "Member ID card & online account",
+      "title": "Member Services - your main help line",
+      "description": "Call Member Services for help with almost anything: questions about your benefits, finding or changing a doctor, getting a new ID card, or how things work. They can also connect you to a free interpreter in your language. Hours are 8 a.m. to 8 p.m. seven days a week from Oct. 1 to March 31, and 8 a.m. to 8 p.m. Monday through Friday from April 1 to Sept. 30.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/contact-us/",
+      "languages": "Free phone interpreters available in many languages; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "24-Hour Nurse Advice Line",
+      "description": "Not sure if you need to see a doctor or go to the ER? A registered nurse can help you any time, day or night. Call 24 hours a day, 7 days a week to get medical advice and figure out the right kind of care.",
+      "phone": "1-877-431-1700",
+      "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+      "languages": "TTY 711; interpreter support available.",
+      "verified": true
+    },
+    {
+      "category": "Find a doctor",
+      "title": "Find a doctor, clinic, or specialist",
+      "description": "Use the online Provider Directory to look for a primary care doctor, specialist, hospital, or clinic that takes Gold Coast Health Plan. You can search by name, specialty, location, language spoken, and whether they are taking new patients. Want a paper copy mailed to you? Call Member Services.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/provider-directory/",
+      "languages": "Directory lets you search by the language a provider speaks; call for help in your language.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Member online account (Member Portal)",
+      "description": "Sign up and log in to your secure online account to see your plan details and manage your information. You get your GCHP member ID card after you pick a primary care provider (PCP). If your card is lost or you need a new one, call Member Services.",
+      "phone": "1-888-301-1228",
+      "url": "https://members.goldcoasthealthplan.org/s/",
+      "languages": "Call Member Services (TTY 711) for help in your language.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free rides to medical care (NEMT)",
+      "description": "If you need a special vehicle like a wheelchair van or an ambulance to get to a medical visit because you cannot ride in a regular car or bus, the plan covers it at no cost. First ask your doctor to approve it in writing. Then call Ventura Transit System (VTS) to set up the ride. Questions? Call Member Services at 1-888-301-1228.",
+      "phone": "805-628-7433",
+      "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+      "languages": "Call Member Services (TTY 711) for interpreter help.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Free rides to non-medical health needs (NMT)",
+      "description": "If you do not need a special vehicle, you can still get free rides to things like picking up prescriptions, going to medical appointments, or other approved health-related trips. You do not need a doctor's note. Call Ventura Transit System (VTS). Rides are available 24 hours a day, 7 days a week. Please book at least 48 hours ahead.",
+      "phone": "1-855-628-7433",
+      "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+      "languages": "California Relay Service 1-800-855-7100; call Member Services for interpreter help.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health care (mild to moderate)",
+      "description": "Gold Coast covers many mental health services like therapy (talk therapy), counseling, and medication help through its partner, Carelon Behavioral Health. To find a therapist or get started, call Carelon (TTY 1-800-735-2929).",
+      "phone": "1-855-765-9702",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+      "languages": "TTY 1-800-735-2929; interpreter services available.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Specialty mental health & crisis help (24/7)",
+      "description": "If you are in a mental health crisis or need more serious (specialty) mental health care, call the Ventura County Behavioral Health Crisis & Referral Line. Help is available 24 hours a day, 7 days a week. If you are in danger right now, call 911 or 988 (Suicide & Crisis Lifeline).",
+      "phone": "1-866-998-2243",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+      "languages": "Interpreter support available; 988 also offers multilingual help.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Substance use treatment (24/7)",
+      "description": "If you or a loved one needs help with alcohol or drug use, call Ventura County Behavioral Health Substance Use Treatment. Help and referrals are available 24 hours a day, 7 days a week.",
+      "phone": "1-844-385-9200",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+      "languages": "Interpreter support available.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Prescription drugs through Medi-Cal Rx",
+      "description": "Your prescription medicines are covered by the state's Medi-Cal Rx program, not directly by Gold Coast. Show your benefits ID card (BIC) at the pharmacy. For questions about a medication, what is covered, or finding a pharmacy, call Medi-Cal Rx Customer Service, available 24/7.",
+      "phone": "1-800-977-2273",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
+      "languages": "TTY 711; Medi-Cal Rx offers help in multiple languages.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental care through Medi-Cal Dental",
+      "description": "Your dental care (checkups, cleanings, x-rays, and more) comes from the separate state Medi-Cal Dental program, not from Gold Coast. To find a dentist or ask about your dental benefits, call Medi-Cal Dental (TTY 1-800-735-2922).",
+      "phone": "1-800-322-6384",
+      "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+      "languages": "TTY 1-800-735-2922; interpreter services available.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye exams and glasses (VSP)",
+      "description": "Your vision care is covered through Vision Service Plan (VSP). Benefits include routine eye exams, diabetic eye exams, and glasses or contacts. Call VSP (TTY 1-800-428-4833). Hours are Monday to Friday 5 a.m. to 8 p.m. and Saturday 6 a.m. to 5 p.m.",
+      "phone": "1-800-877-7195",
+      "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+      "languages": "TTY 1-800-428-4833.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free interpreter and translation services",
+      "description": "You have the right to a free interpreter, including sign language, and to get plan materials in your language or in large print, audio, or Braille. You never have to use a family member or friend to interpret. Call Member Services at 1-888-301-1228 (TTY 711), or call GCHP's Cultural and Linguistic Services Department, Monday to Friday 8 a.m. to 5 p.m.",
+      "phone": "1-805-437-5603",
+      "url": "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
+      "languages": "Free oral interpreting in many languages, sign language interpreting, and written translations; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew your Medi-Cal to keep coverage",
+      "description": "Each year you must renew your Medi-Cal so you do not lose your coverage. Make sure your address and phone number are up to date, watch your mail for a renewal packet, and send back any forms on time. For your Medi-Cal case, call the Ventura County Human Services Agency (VCHSA) (TTY 1-800-735-2922). Automated info is available 24/7; talk to a person Monday to Friday 8 a.m. to 5 p.m.",
+      "phone": "1-888-472-4463",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
+      "languages": "TTY 1-800-735-2922; county offers help in multiple languages.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a complaint or appeal (grievance)",
+      "description": "If you are unhappy with your care or a decision the plan made, you have the right to speak up - it will not affect your care. You can file a grievance or appeal by calling Member Services at 1-888-301-1228 (TTY 711) or by mailing the Member Grievance & Appeals Form to: Gold Coast Health Plan, Attn: Member Grievance & Appeals, P.O. Box 9176, Oxnard, CA 93031. GCHP will confirm your complaint within 5 days and explain the outcome within 30 days. You can also ask for a State Hearing.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+      "languages": "TTY 711; free interpreter help to file your complaint.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Enhanced Care Management & Community Supports (CalAIM)",
+      "description": "If you have complex health and life needs, you may qualify for extra help. Enhanced Care Management (ECM) gives you a care team that coordinates all your care and connects you to services. Community Supports can help with things like housing support and healthy meals. These programs are free and voluntary. Call Member Services at 1-888-301-1228 (TTY 711) to see if you qualify.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
+      "languages": "TTY 711; interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Care when your doctor's office is closed",
+      "description": "If you need care that cannot wait but it is not an emergency, you have options after hours. Call the 24-Hour Nurse Advice Line at 1-877-431-1700 for advice, or go to an urgent care center that takes your plan. For a life-threatening emergency, always call 911 or go to the nearest ER.",
+      "phone": "1-877-431-1700",
+      "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+      "languages": "TTY 711; interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook and forms",
+      "description": "The Member Handbook (also called the Evidence of Coverage) explains your benefits, your rights, and how to use your plan. The member resources page also has helpful forms like the PCP selection form and the grievance and appeals form. You can ask for a printed handbook by calling Member Services.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+      "languages": "Handbook and materials available in other languages and formats on request; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Local help and resources (211 Ventura County)",
+      "description": "For free, confidential help finding local services like food, housing, and community programs in Ventura County, you can call 211 any time, day or night. This is a community resource, not part of Gold Coast Health Plan, but it can connect you with many local supports.",
+      "phone": "211",
+      "url": "https://211ventura.org/",
+      "languages": "Multilingual support available.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Free doula support for pregnancy",
+      "description": "If you are pregnant or had a baby in the past year, you can get a doula at no cost, a trained helper who supports you before, during, and after birth. Call Member Services to learn how.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/doula-services/",
+      "languages": "Interpreter help; TTY 711",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Walk-in help at a Community Resource Center",
+      "description": "Visit a Gold Coast resource center in Oxnard, Ventura, Santa Paula, or Simi Valley for in-person help to pick a doctor, understand benefits, or renew Medi-Cal. Call first to find the nearest one.",
+      "phone": "1-888-301-1228",
+      "url": "https://www.goldcoasthealthplan.org/community/community-resources/",
+      "languages": "Interpreter help; TTY 711",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://www.goldcoasthealthplan.org/",
+    "https://www.goldcoasthealthplan.org/contact-us/",
+    "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/",
+    "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+    "https://www.goldcoasthealthplan.org/provider-directory/",
+    "https://members.goldcoasthealthplan.org/s/",
+    "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+    "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+    "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
+    "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+    "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
+    "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
+    "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+    "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
+    "https://211ventura.org/"
+  ]
 }

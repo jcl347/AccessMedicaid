@@ -1,165 +1,183 @@
 {
- "planId": "iehp",
- "planName": "Inland Empire Health Plan (IEHP) (Medi-Cal)",
- "relationship": "Local Initiative Medi-Cal managed care plan serving Riverside and San Bernardino Counties (the Inland Empire).",
- "memberServicesPhone": "1-800-440-4347",
- "memberServicesHours": "Member Services: Monday-Friday, 8 a.m. to 5 p.m. The 24-hour Nurse Advice Line and after-hours help are available 24/7.",
- "ttyPhone": "1-800-718-4347",
- "nurseAdviceLine": "1-888-244-4347",
- "website": "https://www.iehp.org/en/browse-plans/medi-cal",
- "memberPortalUrl": "https://members.iehp.org/App/Account/Login",
- "findADoctorUrl": "https://search.iehp.org",
- "memberHandbookUrl": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "notes": "Member Services main line 1-800-440-4347 (1-800-440-IEHP) was verified on the official IEHP Medi-Cal site; TTY is 1-800-718-4347 (or 711). The 24-hour Nurse Advice Line is a DIFFERENT number, 1-888-244-4347 (1-888-244-IEHP). Dental for most members is handled by the separate state Medi-Cal Dental program (1-800-322-6384), and pharmacy by the state Medi-Cal Rx program (1-800-977-2273), not IEHP. Grievance fax: (909) 890-5748.",
- "resources": [
- {
- "category": "Find a doctor",
- "title": "Find a Doctor or Clinic",
- "description": "Use IEHP's online search tool to find a doctor, clinic, hospital, pharmacy, or specialist that takes your IEHP Medi-Cal plan. You can search near your home and pick a doctor (your PCP) for your care. Need help? Call Member Services.",
- "phone": "1-800-440-4347",
- "url": "https://search.iehp.org",
- "languages": "Website and Member Services help available in English, Spanish, Chinese, Vietnamese, and other languages; free interpreters available.",
- "verified": true
- },
- {
- "category": "Get a ride (transportation)",
- "title": "Free Rides to Medical Visits (NEMT)",
- "description": "If you have no way to get to a covered medical visit, IEHP gives you free, round-trip rides. This includes rides by car, van, or even wheelchair van or ambulance if your health needs it. Call to set up a ride, ideally a few days ahead.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "languages": "Free interpreter help by phone in your language; TTY 1-800-718-4347 or 711.",
- "verified": true
- },
- {
- "category": "Transportation to non-medical (NMT)",
- "title": "Rides and Bus Passes for Health Needs (NMT)",
- "description": "IEHP also helps you get to health-related places like the pharmacy to pick up medicine or to a WIC office. You can get a bus pass, gas help, or a ride. Ask Member Services or call the ride line for a bus pass.",
- "phone": "1-855-673-3195",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "languages": "Free interpreter help available; TTY 1-800-718-4347 or 711.",
- "verified": true
- },
- {
- "category": "Nurse advice line (24/7)",
- "title": "24-Hour Nurse Advice Line",
- "description": "Not sure if you should see a doctor or go to the ER? Call any time, day or night. A nurse will listen, give you advice, and help you decide where to get care. This line is open 24 hours a day, 7 days a week.",
- "phone": "1-888-244-4347",
- "url": "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
- "languages": "Interpreter services available; TTY 711.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Mental Health and Substance Use Care",
- "description": "You can get help for stress, sadness, anxiety, or drug and alcohol use. You can see a therapist for counseling without a referral, and get medication help if needed. Call Member Services and ask for behavioral health services.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
- "languages": "Free interpreters available; TTY 1-800-718-4347.",
- "verified": true
- },
- {
- "category": "Pharmacy & prescriptions",
- "title": "Prescriptions through Medi-Cal Rx",
- "description": "Your medicines are covered by the state's Medi-Cal Rx program, not IEHP. Show your BIC (Medi-Cal) card at the pharmacy. To check if a drug is covered or find a pharmacy, call Medi-Cal Rx or visit their website. IEHP can also help.",
- "phone": "1-800-977-2273",
- "url": "https://medi-calrx.dhcs.ca.gov/home/",
- "languages": "Help available in many languages; TTY 1-800-977-2273 (press 5) or 711.",
- "verified": true
- },
- {
- "category": "Dental",
- "title": "Dental Care (Medi-Cal Dental / Denti-Cal)",
- "description": "Your dental care comes from the state's Medi-Cal Dental program, not IEHP. It covers cleanings, exams, fillings, and more. Call to find a dentist who takes Medi-Cal Dental or to ask about your benefits.",
- "phone": "1-800-322-6384",
- "url": "https://smilecalifornia.org",
- "languages": "Help and interpreters available in many languages; TTY 1-800-735-2922.",
- "verified": true
- },
- {
- "category": "Vision",
- "title": "Vision and Eye Care",
- "description": "Your IEHP Medi-Cal plan covers a routine eye exam and a pair of eyeglasses (frames and lenses). Call Member Services to find an eye doctor or learn what your vision benefit covers.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "languages": "Free interpreters available; TTY 1-800-718-4347.",
- "verified": true
- },
- {
- "category": "Language & interpreter help",
- "title": "Free Interpreter and Language Help",
- "description": "You have the right to free help in your language, including sign language. IEHP gives you a free interpreter by phone or in person at your doctor visits, 24 hours a day. Try to ask at least 5 days before your visit. You can also get written papers in your language.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
- "languages": "Oral interpretation available 24/7 in any language at no cost; TTY 1-800-718-4347 or 711.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Member ID Card and Online Account",
- "description": "Lost your IEHP card or need a new one? Call Member Services to ask for a replacement. You can also sign up for the IEHP online member portal to see your card, pick a doctor, and manage your plan.",
- "phone": "1-800-440-4347",
- "url": "https://members.iehp.org/App/Account/Login",
- "languages": "Help in many languages; TTY 1-800-718-4347.",
- "verified": true
- },
- {
- "category": "Renew Medi-Cal / keep coverage",
- "title": "Renew Your Medi-Cal Every Year",
- "description": "You must renew your Medi-Cal once a year to keep it. Watch your mail for a renewal packet and send it back on time. Renew online at BenefitsCal.com or call your county. Keep your address and phone number up to date so you don't miss notices. Riverside County: 1-877-410-8827. San Bernardino County: 1-877-410-8829.",
- "phone": "1-888-860-1296",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
- "languages": "Help available in many languages.",
- "verified": true
- },
- {
- "category": "Complaints & appeals (grievances)",
- "title": "File a Complaint or Appeal",
- "description": "If you are unhappy with your care or IEHP says no to a service you want, you can speak up. File a complaint (grievance) or appeal a decision. Call Member Services, and they will help you. You can also fax your complaint. There is no cost and it will not hurt your care.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-grievance-and-appeals",
- "languages": "Free interpreters available; TTY 1-800-718-4347. Grievance fax: (909) 890-5748.",
- "verified": true
- },
- {
- "category": "Extra benefits & community supports (CalAIM)",
- "title": "Extra Help: Care Management and Community Supports",
- "description": "If you have complex needs, IEHP can give you a care team to help manage all your care (Enhanced Care Management). You may also get extra services like help finding housing, healthy food/meals, or other support. Call to see if you qualify.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
- "languages": "Care teams can help by phone or in person; free interpreters available; TTY 1-800-718-4347.",
- "verified": true
- },
- {
- "category": "Urgent & after-hours care",
- "title": "Urgent Care and After-Hours Help",
- "description": "For a problem that needs care soon but is not life-threatening, go to an urgent care clinic or call the 24-Hour Nurse Advice Line for advice any time. For a true emergency, call 911 or go to the nearest ER.",
- "phone": "1-888-244-4347",
- "url": "https://www.iehp.org/en/learning-center/understanding-insurance/care-options/emergency-room-vs-urgent-care-clinic",
- "languages": "Interpreter help available; TTY 711.",
- "verified": true
- },
- {
- "category": "Member handbook & forms",
- "title": "Member Handbook and Forms",
- "description": "Your Member Handbook (also called the Evidence of Coverage) explains all your benefits and rights in plain language. You can read it online or call to have a copy mailed to you for free in your language.",
- "phone": "1-800-440-4347",
- "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "languages": "Available in English, Spanish, Chinese, Vietnamese, and other languages; large print and other formats on request.",
- "verified": true
- }
- ],
- "sources": [
- "https://www.iehp.org/en/browse-plans/medi-cal",
- "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
- "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
- "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
- "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
- "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
- "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
- "https://search.iehp.org",
- "https://members.iehp.org/App/Account/Login",
- "https://medi-calrx.dhcs.ca.gov/home/",
- "https://smilecalifornia.org",
- "https://dental.dhcs.ca.gov"
- ]
+  "planId": "iehp",
+  "planName": "Inland Empire Health Plan (IEHP) (Medi-Cal)",
+  "relationship": "Local Initiative Medi-Cal managed care plan serving Riverside and San Bernardino Counties (the Inland Empire).",
+  "memberServicesPhone": "1-800-440-4347",
+  "memberServicesHours": "Member Services: Monday-Friday, 8 a.m. to 5 p.m. The 24-hour Nurse Advice Line and after-hours help are available 24/7.",
+  "ttyPhone": "1-800-718-4347",
+  "nurseAdviceLine": "1-888-244-4347",
+  "website": "https://www.iehp.org/en/browse-plans/medi-cal",
+  "memberPortalUrl": "https://members.iehp.org/App/Account/Login",
+  "findADoctorUrl": "https://search.iehp.org",
+  "memberHandbookUrl": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+  "notes": "Member Services main line 1-800-440-4347 (1-800-440-IEHP) was verified on the official IEHP Medi-Cal site; TTY is 1-800-718-4347 (or 711). The 24-hour Nurse Advice Line is a DIFFERENT number, 1-888-244-4347 (1-888-244-IEHP). Dental for most members is handled by the separate state Medi-Cal Dental program (1-800-322-6384), and pharmacy by the state Medi-Cal Rx program (1-800-977-2273), not IEHP. Grievance fax: (909) 890-5748.",
+  "resources": [
+    {
+      "category": "Find a doctor",
+      "title": "Find a Doctor or Clinic",
+      "description": "Use IEHP's online search tool to find a doctor, clinic, hospital, pharmacy, or specialist that takes your IEHP Medi-Cal plan. You can search near your home and pick a doctor (your PCP) for your care. Need help? Call Member Services.",
+      "phone": "1-800-440-4347",
+      "url": "https://search.iehp.org",
+      "languages": "Website and Member Services help available in English, Spanish, Chinese, Vietnamese, and other languages; free interpreters available.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free Rides to Medical Visits (NEMT)",
+      "description": "If you have no way to get to a covered medical visit, IEHP gives you free, round-trip rides. This includes rides by car, van, or even wheelchair van or ambulance if your health needs it. Call to set up a ride, ideally a few days ahead.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+      "languages": "Free interpreter help by phone in your language; TTY 1-800-718-4347 or 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Rides and Bus Passes for Health Needs (NMT)",
+      "description": "IEHP also helps you get to health-related places like the pharmacy to pick up medicine or to a WIC office. You can get a bus pass, gas help, or a ride. Ask Member Services or call the ride line for a bus pass.",
+      "phone": "1-855-673-3195",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+      "languages": "Free interpreter help available; TTY 1-800-718-4347 or 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "24-Hour Nurse Advice Line",
+      "description": "Not sure if you should see a doctor or go to the ER? Call any time, day or night. A nurse will listen, give you advice, and help you decide where to get care. This line is open 24 hours a day, 7 days a week.",
+      "phone": "1-888-244-4347",
+      "url": "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
+      "languages": "Interpreter services available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental Health and Substance Use Care",
+      "description": "You can get help for stress, sadness, anxiety, or drug and alcohol use. You can see a therapist for counseling without a referral, and get medication help if needed. Call Member Services and ask for behavioral health services.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
+      "languages": "Free interpreters available; TTY 1-800-718-4347.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Prescriptions through Medi-Cal Rx",
+      "description": "Your medicines are covered by the state's Medi-Cal Rx program, not IEHP. Show your BIC (Medi-Cal) card at the pharmacy. To check if a drug is covered or find a pharmacy, call Medi-Cal Rx or visit their website. IEHP can also help.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/home/",
+      "languages": "Help available in many languages; TTY 1-800-977-2273 (press 5) or 711.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental Care (Medi-Cal Dental / Denti-Cal)",
+      "description": "Your dental care comes from the state's Medi-Cal Dental program, not IEHP. It covers cleanings, exams, fillings, and more. Call to find a dentist who takes Medi-Cal Dental or to ask about your benefits.",
+      "phone": "1-800-322-6384",
+      "url": "https://smilecalifornia.org",
+      "languages": "Help and interpreters available in many languages; TTY 1-800-735-2922.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Vision and Eye Care",
+      "description": "Your IEHP Medi-Cal plan covers a routine eye exam and a pair of eyeglasses (frames and lenses). Call Member Services to find an eye doctor or learn what your vision benefit covers.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+      "languages": "Free interpreters available; TTY 1-800-718-4347.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free Interpreter and Language Help",
+      "description": "You have the right to free help in your language, including sign language. IEHP gives you a free interpreter by phone or in person at your doctor visits, 24 hours a day. Try to ask at least 5 days before your visit. You can also get written papers in your language.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
+      "languages": "Oral interpretation available 24/7 in any language at no cost; TTY 1-800-718-4347 or 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Member ID Card and Online Account",
+      "description": "Lost your IEHP card or need a new one? Call Member Services to ask for a replacement. You can also sign up for the IEHP online member portal to see your card, pick a doctor, and manage your plan.",
+      "phone": "1-800-440-4347",
+      "url": "https://members.iehp.org/App/Account/Login",
+      "languages": "Help in many languages; TTY 1-800-718-4347.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew Your Medi-Cal Every Year",
+      "description": "You must renew your Medi-Cal once a year to keep it. Watch your mail for a renewal packet and send it back on time. Renew online at BenefitsCal.com or call your county. Keep your address and phone number up to date so you don't miss notices. Riverside County: 1-877-410-8827. San Bernardino County: 1-877-410-8829.",
+      "phone": "1-888-860-1296",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
+      "languages": "Help available in many languages.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a Complaint or Appeal",
+      "description": "If you are unhappy with your care or IEHP says no to a service you want, you can speak up. File a complaint (grievance) or appeal a decision. Call Member Services, and they will help you. You can also fax your complaint. There is no cost and it will not hurt your care.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-grievance-and-appeals",
+      "languages": "Free interpreters available; TTY 1-800-718-4347. Grievance fax: (909) 890-5748.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Extra Help: Care Management and Community Supports",
+      "description": "If you have complex needs, IEHP can give you a care team to help manage all your care (Enhanced Care Management). You may also get extra services like help finding housing, healthy food/meals, or other support. Call to see if you qualify.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
+      "languages": "Care teams can help by phone or in person; free interpreters available; TTY 1-800-718-4347.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent Care and After-Hours Help",
+      "description": "For a problem that needs care soon but is not life-threatening, go to an urgent care clinic or call the 24-Hour Nurse Advice Line for advice any time. For a true emergency, call 911 or go to the nearest ER.",
+      "phone": "1-888-244-4347",
+      "url": "https://www.iehp.org/en/learning-center/understanding-insurance/care-options/emergency-room-vs-urgent-care-clinic",
+      "languages": "Interpreter help available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook and Forms",
+      "description": "Your Member Handbook (also called the Evidence of Coverage) explains all your benefits and rights in plain language. You can read it online or call to have a copy mailed to you for free in your language.",
+      "phone": "1-800-440-4347",
+      "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+      "languages": "Available in English, Spanish, Chinese, Vietnamese, and other languages; large print and other formats on request.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Telehealth with MDLIVE (doctor by phone or video)",
+      "description": "See a doctor by phone or video for non-emergencies any time, at no cost. Good for colds, flu, rashes, and minor problems.",
+      "phone": "1-800-400-6354",
+      "url": "https://app.mdlive.com/landing/iehp",
+      "languages": "Interpreter help; TTY 711",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "IEHP Community Wellness Centers (free in-person help)",
+      "description": "Visit a free IEHP Community Wellness Center for in-person help, health classes, and fitness activities, open to the community.",
+      "phone": "1-866-228-4347",
+      "url": "https://www.iehp.org/en/community-resources/community-resource-center",
+      "languages": "Multilingual staff; TTY 711",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://www.iehp.org/en/browse-plans/medi-cal",
+    "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
+    "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+    "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
+    "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
+    "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
+    "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
+    "https://search.iehp.org",
+    "https://members.iehp.org/App/Account/Login",
+    "https://medi-calrx.dhcs.ca.gov/home/",
+    "https://smilecalifornia.org",
+    "https://dental.dhcs.ca.gov"
+  ]
 }

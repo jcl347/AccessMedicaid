@@ -1,175 +1,184 @@
 {
- "planId": "phc",
- "planName": "PHC California (Positive Healthcare, an AIDS Healthcare Foundation plan)",
- "relationship": "Specialty Medi-Cal managed care plan in Los Angeles County for people who have a prior AIDS diagnosis. PHC California was the first AIDS special needs plan in the country and has served members since 1995. It is operated by AIDS Healthcare Foundation.",
- "memberServicesPhone": "1-800-263-0067",
- "memberServicesHours": "Monday through Friday, 8:00 a.m. to 8:00 p.m.",
- "ttyPhone": "711",
- "nurseAdviceLine": "1-800-797-1717",
- "website": "https://positivehealthcare.net/california/phc/members/",
- "memberPortalUrl": "https://ahf.eqhs.com/",
- "findADoctorUrl": "https://positivehealthcare.net/california/phc/provider-find/",
- "memberHandbookUrl": "https://positivehealthcare.net/california/phc/members/pubs/",
- "notes": "The Member Services number 1-800-263-0067 was verified on the official PHC California site (contact page), Monday-Friday 8 a.m.-8 p.m., TTY 711. PHC California is a small specialty plan, so several benefits are accessed by calling Member Services rather than through a separate vendor line: NEMT/NMT rides are arranged by calling Member Services, and mental health assessments/referrals are coordinated through Member Services and your primary care provider. Dental is NOT covered by PHC; it is handled by the separate state Medi-Cal Dental program. Outpatient prescription drugs are covered through Medi-Cal Rx, though PHC has its own pharmacy customer service line for plan questions. Specialty (more intensive) mental health and inpatient psychiatric care, plus substance use treatment, run through Los Angeles County programs with a PHC referral.",
- "resources": [
- {
- "category": "Find a doctor",
- "title": "Find a doctor, clinic, or pharmacy",
- "description": "Use PHC California's online directory to search for doctors, specialists, clinics, hospitals, and pharmacies that take your plan. You can also call Member Services and they will help you find a provider close to you. If a specialist near you is not available, PHC must help you get an appointment and can arrange a ride.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/provider-find/",
- "languages": "Phone help with interpreters in your language at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Get a ride (transportation)",
- "title": "Free rides to medical care (NEMT)",
- "description": "PHC California gives you free non-emergency medical transportation (NEMT) to and from plan-approved medical visits when you have no other way to get there. There are no limits. To set up a ride, call Member Services. Try to call a few days before your appointment so they can plan it for you.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/medical/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Transportation to non-medical (NMT)",
- "title": "Rides to pick up medicine and other care (NMT)",
- "description": "Non-medical transportation (NMT) gives you a free ride to get to covered Medi-Cal services, such as picking up prescriptions or going to medical appointments, when you have no other way to get there. Call Member Services to ask for an NMT ride and to learn what rides you qualify for.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/medical/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Nurse advice line (24/7)",
- "title": "Talk to a nurse anytime, day or night",
- "description": "Not sure if you should see a doctor or go to the ER? Call the Nurse Advice Hotline any time, day or night, 7 days a week. A nurse can answer health questions and help you decide what to do next.",
- "phone": "1-800-797-1717",
- "url": "https://positivehealthcare.net/california/phc/members/contact/",
- "languages": "TTY 711; interpreter help available.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Mental health and substance use help",
- "description": "You can get an initial mental health check-up from any in-network mental health provider with no referral and no prior approval. For more intensive (specialty) mental health care or inpatient psychiatric care, PHC helps refer you to the Los Angeles County Department of Mental Health. For substance use (drug or alcohol) treatment, you can get help through the LA County Substance Abuse Prevention and Control program. Call Member Services and they will help you get started.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/services/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Pharmacy & prescriptions",
- "title": "Getting your prescriptions",
- "description": "Most outpatient prescription drugs are covered through Medi-Cal Rx, a state program. Take your prescription and your Medi-Cal BIC card to a pharmacy that works with Medi-Cal Rx, or have your provider send it in. For questions about your covered drugs you can call Medi-Cal Rx, or call PHC's own pharmacy customer service line for plan questions (open 24 hours a day, 7 days a week).",
- "phone": "1-888-436-5018",
- "url": "https://positivehealthcare.net/california/phc/members/prescriptions/",
- "languages": "TTY 711; Medi-Cal Rx line offers TTY and language help.",
- "verified": true
- },
- {
- "category": "Dental",
- "title": "Dental care (separate Medi-Cal Dental program)",
- "description": "Dental care is not covered by PHC California. Your dental benefits come from the state's Medi-Cal Dental program (also called Denti-Cal or Smile California). Use it to find a dentist and learn what is covered. Call the Medi-Cal Dental line for help finding a dentist or with questions.",
- "phone": "1-800-322-6384",
- "url": "https://smilecalifornia.org/",
- "languages": "Phone help and interpreters available; TTY 711.",
- "verified": true
- },
- {
- "category": "Vision",
- "title": "Eye exams and glasses",
- "description": "PHC California covers routine eye exams and prescriptions for eyeglasses or corrective lenses, with no limit on exams. Eyeglasses are covered once every 24 months. You can see an in-network vision provider without a referral from your primary doctor.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/services/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Language & interpreter help",
- "title": "Free help in your language",
- "description": "You have the right to free interpreter help in your language, including sign language, for your health care and plan paperwork. You never have to use a family member or friend to translate. Key plan forms, like the complaint form, are also available in Spanish. Call Member Services to ask for an interpreter.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/contact/",
- "languages": "Free spoken-language and sign-language interpreters; written materials in Spanish; TTY 711.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Your member ID card and online account",
- "description": "Use the PHC California member portal to manage your account online. If your member ID card is lost, stolen, or damaged, call Member Services to ask for a new one. Do not let anyone else use your PHC member/pharmacy card or your Medi-Cal BIC card.",
- "phone": "1-800-263-0067",
- "url": "https://ahf.eqhs.com/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Renew Medi-Cal / keep coverage",
- "title": "Keep your Medi-Cal active",
- "description": "To keep your Medi-Cal, you must keep your information up to date every year. Some people are renewed automatically; if not, the county will mail you a letter asking for information, so answer it right away. Report changes like a new address, phone number, or income to LA County DPSS. You can also renew or update online.",
- "phone": "1-866-613-3777",
- "url": "https://benefitscal.com/",
- "languages": "DPSS TTY 1-800-660-4026; interpreter help available.",
- "verified": true
- },
- {
- "category": "Complaints & appeals (grievances)",
- "title": "File a complaint or appeal",
- "description": "If you are unhappy with your care or a decision about your benefits, you can file a complaint (grievance) or an appeal. You can call Member Services, fill out the form online, mail or fax a paper form, or email it. PHC must answer a standard grievance within 30 days, or within 72 hours if it is urgent. You can also ask the state for a State Hearing or Independent Medical Review, or call the Medi-Cal Managed Care Ombudsman at 1-888-452-8609.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
- "languages": "Complaint form available in Spanish; interpreter help available; TTY 711.",
- "verified": true
- },
- {
- "category": "Extra benefits & community supports (CalAIM)",
- "title": "Extra support: care management and community supports",
- "description": "If you have complex needs, Enhanced Care Management (ECM) gives you one lead care manager who helps coordinate all your medical, mental health, dental, and social services at no cost. Community Supports can include help with housing (deposits, navigation, tenancy support), home changes like ramps and grab bars, healthy meals, personal care, and medical respite. Call Member Services to ask if you qualify.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
- "languages": "Interpreter help by phone at no cost; TTY 711.",
- "verified": true
- },
- {
- "category": "Urgent & after-hours care",
- "title": "Urgent care and emergencies",
- "description": "For a life-threatening emergency, call 911 or go to the nearest ER right away. For urgent but not life-threatening problems, you can use urgent care, including when you are outside Los Angeles County. If you are unsure what to do, call the 24/7 Nurse Advice Hotline for guidance any time.",
- "phone": "1-800-797-1717",
- "url": "https://positivehealthcare.net/california/phc/members/medical/",
- "languages": "TTY 711; interpreter help available.",
- "verified": true
- },
- {
- "category": "Member handbook & forms",
- "title": "Member Handbook and forms",
- "description": "The Member Handbook (Combined Evidence of Coverage) explains your benefits, rights, and how to use your plan. You can find it along with other forms, like the complaint form, the over-the-counter order form, and the provider directory, on the publications and forms page.",
- "phone": "1-800-263-0067",
- "url": "https://positivehealthcare.net/california/phc/members/pubs/",
- "languages": "Some forms available in Spanish; call for materials in other formats; TTY 711.",
- "verified": true
- },
- {
- "category": "Other",
- "title": "HIV care and case management",
- "description": "PHC California is a special plan built for people with a prior AIDS diagnosis, so HIV care is the heart of what it does. The Case Management Department helps coordinate your HIV and other care, connect you to specialists, and support your treatment. Call them directly for help managing your care.",
- "phone": "1-800-474-1434",
- "url": "https://positivehealthcare.net/california/phc/members/contact/",
- "languages": "Case Management open Mon-Fri 8:30 a.m.-5:30 p.m.; interpreter help; TTY 711.",
- "verified": true
- }
- ],
- "sources": [
- "https://positivehealthcare.net/california/phc/members/",
- "https://positivehealthcare.net/california/phc/members/contact/",
- "https://positivehealthcare.net/california/phc/members/medical/",
- "https://positivehealthcare.net/california/phc/members/services/",
- "https://positivehealthcare.net/california/phc/members/prescriptions/",
- "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
- "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
- "https://positivehealthcare.net/california/phc/members/pubs/",
- "https://positivehealthcare.net/california/phc/provider-find/",
- "https://ahf.eqhs.com/",
- "https://medi-calrx.dhcs.ca.gov/home/",
- "https://smilecalifornia.org/",
- "https://benefitscal.com/"
- ]
+  "planId": "phc",
+  "planName": "PHC California (Positive Healthcare, an AIDS Healthcare Foundation plan)",
+  "relationship": "Specialty Medi-Cal managed care plan in Los Angeles County for people who have a prior AIDS diagnosis. PHC California was the first AIDS special needs plan in the country and has served members since 1995. It is operated by AIDS Healthcare Foundation.",
+  "memberServicesPhone": "1-800-263-0067",
+  "memberServicesHours": "Monday through Friday, 8:00 a.m. to 8:00 p.m.",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-800-797-1717",
+  "website": "https://positivehealthcare.net/california/phc/members/",
+  "memberPortalUrl": "https://ahf.eqhs.com/",
+  "findADoctorUrl": "https://positivehealthcare.net/california/phc/provider-find/",
+  "memberHandbookUrl": "https://positivehealthcare.net/california/phc/members/pubs/",
+  "notes": "The Member Services number 1-800-263-0067 was verified on the official PHC California site (contact page), Monday-Friday 8 a.m.-8 p.m., TTY 711. PHC California is a small specialty plan, so several benefits are accessed by calling Member Services rather than through a separate vendor line: NEMT/NMT rides are arranged by calling Member Services, and mental health assessments/referrals are coordinated through Member Services and your primary care provider. Dental is NOT covered by PHC; it is handled by the separate state Medi-Cal Dental program. Outpatient prescription drugs are covered through Medi-Cal Rx, though PHC has its own pharmacy customer service line for plan questions. Specialty (more intensive) mental health and inpatient psychiatric care, plus substance use treatment, run through Los Angeles County programs with a PHC referral.",
+  "resources": [
+    {
+      "category": "Find a doctor",
+      "title": "Find a doctor, clinic, or pharmacy",
+      "description": "Use PHC California's online directory to search for doctors, specialists, clinics, hospitals, and pharmacies that take your plan. You can also call Member Services and they will help you find a provider close to you. If a specialist near you is not available, PHC must help you get an appointment and can arrange a ride.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/provider-find/",
+      "languages": "Phone help with interpreters in your language at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free rides to medical care (NEMT)",
+      "description": "PHC California gives you free non-emergency medical transportation (NEMT) to and from plan-approved medical visits when you have no other way to get there. There are no limits. To set up a ride, call Member Services. Try to call a few days before your appointment so they can plan it for you.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/medical/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Rides to pick up medicine and other care (NMT)",
+      "description": "Non-medical transportation (NMT) gives you a free ride to get to covered Medi-Cal services, such as picking up prescriptions or going to medical appointments, when you have no other way to get there. Call Member Services to ask for an NMT ride and to learn what rides you qualify for.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/medical/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "Talk to a nurse anytime, day or night",
+      "description": "Not sure if you should see a doctor or go to the ER? Call the Nurse Advice Hotline any time, day or night, 7 days a week. A nurse can answer health questions and help you decide what to do next.",
+      "phone": "1-800-797-1717",
+      "url": "https://positivehealthcare.net/california/phc/members/contact/",
+      "languages": "TTY 711; interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health and substance use help",
+      "description": "You can get an initial mental health check-up from any in-network mental health provider with no referral and no prior approval. For more intensive (specialty) mental health care or inpatient psychiatric care, PHC helps refer you to the Los Angeles County Department of Mental Health. For substance use (drug or alcohol) treatment, you can get help through the LA County Substance Abuse Prevention and Control program. Call Member Services and they will help you get started.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/services/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Getting your prescriptions",
+      "description": "Most outpatient prescription drugs are covered through Medi-Cal Rx, a state program. Take your prescription and your Medi-Cal BIC card to a pharmacy that works with Medi-Cal Rx, or have your provider send it in. For questions about your covered drugs you can call Medi-Cal Rx, or call PHC's own pharmacy customer service line for plan questions (open 24 hours a day, 7 days a week).",
+      "phone": "1-888-436-5018",
+      "url": "https://positivehealthcare.net/california/phc/members/prescriptions/",
+      "languages": "TTY 711; Medi-Cal Rx line offers TTY and language help.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental care (separate Medi-Cal Dental program)",
+      "description": "Dental care is not covered by PHC California. Your dental benefits come from the state's Medi-Cal Dental program (also called Denti-Cal or Smile California). Use it to find a dentist and learn what is covered. Call the Medi-Cal Dental line for help finding a dentist or with questions.",
+      "phone": "1-800-322-6384",
+      "url": "https://smilecalifornia.org/",
+      "languages": "Phone help and interpreters available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye exams and glasses",
+      "description": "PHC California covers routine eye exams and prescriptions for eyeglasses or corrective lenses, with no limit on exams. Eyeglasses are covered once every 24 months. You can see an in-network vision provider without a referral from your primary doctor.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/services/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free help in your language",
+      "description": "You have the right to free interpreter help in your language, including sign language, for your health care and plan paperwork. You never have to use a family member or friend to translate. Key plan forms, like the complaint form, are also available in Spanish. Call Member Services to ask for an interpreter.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/contact/",
+      "languages": "Free spoken-language and sign-language interpreters; written materials in Spanish; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Your member ID card and online account",
+      "description": "Use the PHC California member portal to manage your account online. If your member ID card is lost, stolen, or damaged, call Member Services to ask for a new one. Do not let anyone else use your PHC member/pharmacy card or your Medi-Cal BIC card.",
+      "phone": "1-800-263-0067",
+      "url": "https://ahf.eqhs.com/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Keep your Medi-Cal active",
+      "description": "To keep your Medi-Cal, you must keep your information up to date every year. Some people are renewed automatically; if not, the county will mail you a letter asking for information, so answer it right away. Report changes like a new address, phone number, or income to LA County DPSS. You can also renew or update online.",
+      "phone": "1-866-613-3777",
+      "url": "https://benefitscal.com/",
+      "languages": "DPSS TTY 1-800-660-4026; interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a complaint or appeal",
+      "description": "If you are unhappy with your care or a decision about your benefits, you can file a complaint (grievance) or an appeal. You can call Member Services, fill out the form online, mail or fax a paper form, or email it. PHC must answer a standard grievance within 30 days, or within 72 hours if it is urgent. You can also ask the state for a State Hearing or Independent Medical Review, or call the Medi-Cal Managed Care Ombudsman at 1-888-452-8609.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
+      "languages": "Complaint form available in Spanish; interpreter help available; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Extra support: care management and community supports",
+      "description": "If you have complex needs, Enhanced Care Management (ECM) gives you one lead care manager who helps coordinate all your medical, mental health, dental, and social services at no cost. Community Supports can include help with housing (deposits, navigation, tenancy support), home changes like ramps and grab bars, healthy meals, personal care, and medical respite. Call Member Services to ask if you qualify.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
+      "languages": "Interpreter help by phone at no cost; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent care and emergencies",
+      "description": "For a life-threatening emergency, call 911 or go to the nearest ER right away. For urgent but not life-threatening problems, you can use urgent care, including when you are outside Los Angeles County. If you are unsure what to do, call the 24/7 Nurse Advice Hotline for guidance any time.",
+      "phone": "1-800-797-1717",
+      "url": "https://positivehealthcare.net/california/phc/members/medical/",
+      "languages": "TTY 711; interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook and forms",
+      "description": "The Member Handbook (Combined Evidence of Coverage) explains your benefits, rights, and how to use your plan. You can find it along with other forms, like the complaint form, the over-the-counter order form, and the provider directory, on the publications and forms page.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/pubs/",
+      "languages": "Some forms available in Spanish; call for materials in other formats; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "HIV care and case management",
+      "description": "PHC California is a special plan built for people with a prior AIDS diagnosis, so HIV care is the heart of what it does. The Case Management Department helps coordinate your HIV and other care, connect you to specialists, and support your treatment. Call them directly for help managing your care.",
+      "phone": "1-800-474-1434",
+      "url": "https://positivehealthcare.net/california/phc/members/contact/",
+      "languages": "Case Management open Mon-Fri 8:30 a.m.-5:30 p.m.; interpreter help; TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Free over-the-counter (OTC) items",
+      "description": "PHC members can get free over-the-counter items like pain relievers, vitamins, and first-aid supplies. Call Member Services to learn how to order.",
+      "phone": "1-800-263-0067",
+      "url": "https://positivehealthcare.net/california/phc/members/otc/",
+      "languages": "Interpreter help; TTY 711",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://positivehealthcare.net/california/phc/members/",
+    "https://positivehealthcare.net/california/phc/members/contact/",
+    "https://positivehealthcare.net/california/phc/members/medical/",
+    "https://positivehealthcare.net/california/phc/members/services/",
+    "https://positivehealthcare.net/california/phc/members/prescriptions/",
+    "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
+    "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
+    "https://positivehealthcare.net/california/phc/members/pubs/",
+    "https://positivehealthcare.net/california/phc/provider-find/",
+    "https://ahf.eqhs.com/",
+    "https://medi-calrx.dhcs.ca.gov/home/",
+    "https://smilecalifornia.org/",
+    "https://benefitscal.com/"
+  ]
 }

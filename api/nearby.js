@@ -42,6 +42,27 @@ function queryMirror(base, ql) {
   }).catch(function (e) { clearTimeout(t); throw e; });
 }
 
+/* Optional Google Places provider (used only if GOOGLE_MAPS_API_KEY is set in Vercel).
+ * Higher-quality clinic data + phone numbers. NOTE: Google's Places terms generally
+ * expect results to be shown on a Google map; enabling this is the project owner's call. */
+var GOOGLE_TYPE = { pharmacy: ["pharmacy"], hospital: ["hospital"], dentist: ["dentist"], doctor: ["doctor"] };
+var GOOGLE_TEXT = { clinic: "community health clinic", urgent_care: "urgent care clinic", mental_health: "mental health clinic" };
+async function googlePlaces(type, radius, lat, lng, key) {
+  var fieldMask = "places.displayName,places.location,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri";
+  var url, body, circle = { center: { latitude: lat, longitude: lng }, radius: Math.min(radius, 50000) };
+  if (GOOGLE_TYPE[type]) { url = "https://places.googleapis.com/v1/places:searchNearby"; body = { includedTypes: GOOGLE_TYPE[type], maxResultCount: 20, locationRestriction: { circle: circle } }; }
+  else { url = "https://places.googleapis.com/v1/places:searchText"; body = { textQuery: GOOGLE_TEXT[type] || "medical clinic", maxResultCount: 20, locationBias: { circle: circle } }; }
+  var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 9000);
+  var r = await fetch(url, { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json", "X-Goog-Api-Key": key, "X-Goog-FieldMask": fieldMask }, body: JSON.stringify(body) });
+  clearTimeout(t);
+  if (!r.ok) throw new Error("google " + r.status);
+  var j = await r.json();
+  return (j.places || []).map(function (p) {
+    var loc = p.location || {};
+    return { name: (p.displayName && p.displayName.text) || "(Unnamed location)", lat: loc.latitude, lng: loc.longitude, phone: p.nationalPhoneNumber || "", address: p.formattedAddress || "", website: p.websiteUri || "" };
+  }).filter(function (x) { return isFinite(x.lat) && isFinite(x.lng); });
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   var q = req.query || {};
@@ -50,6 +71,15 @@ module.exports = async function handler(req, res) {
   var radius = parseInt(q.radius || "8047", 10) || 8047;
   radius = Math.min(Math.max(radius, 500), 24140); // 0.3 - 15 mi
   if (!isFinite(lat) || !isFinite(lng)) { res.status(400).json({ ok: false, error: "Missing coordinates" }); return; }
+
+  // Prefer Google Places when a key is configured; otherwise use OpenStreetMap/Overpass.
+  var gkey = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY;
+  if (gkey) {
+    try {
+      var gp = await googlePlaces(type, radius, lat, lng, gkey);
+      if (gp && gp.length) { res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800"); res.status(200).json({ ok: true, source: "google", type: type, radius: radius, count: gp.length, places: gp }); return; }
+    } catch (e) { /* fall back to OSM below */ }
+  }
 
   var filters = TYPE_FILTERS[type] || TYPE_FILTERS.clinic;
   var ql = "[out:json][timeout:25];(" +

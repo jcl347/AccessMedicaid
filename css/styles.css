@@ -407,6 +407,13 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .fav-btn.on { background: var(--primary); color: #fff; border-color: var(--primary); }
 .fav-btn.on svg { fill: #fff; }
 
+/* ---------- Card press + click ripple ---------- */
+.plan-card, .need-tile, .chip, .res-card, .care-num, .near-item, .triage-item > summary, .btn, .btn-hero, .hero-chip { position: relative; overflow: hidden; }
+.plan-card:active, .need-tile:active, .chip:active, .res-card:active, .care-num:active, .near-item:active, .btn:active, .btn-hero:active, .hero-chip:active { transform: translateY(0) scale(.985); }
+.ripple { position: absolute; border-radius: 50%; transform: scale(0); background: currentColor; opacity: .18; pointer-events: none; animation: rippleAnim .6s var(--ease); z-index: 0; }
+@keyframes rippleAnim { to { transform: scale(2.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ripple { display: none !important; } }
+
 /* default size for any generated icon not otherwise sized (prevents giant SVGs) */
 .ic { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; }
 .live-meta .ic { width: 15px; height: 15px; }

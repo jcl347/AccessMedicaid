@@ -1,177 +1,222 @@
 {
- "planId": "blue-shield-promise",
- "planName": "Blue Shield of California Promise Health Plan (Medi-Cal)",
- "relationship": "Plan partner under L.A. Care Health Plan. In Los Angeles County, Medi-Cal members can choose Blue Shield Promise as their health plan through L.A. Care.",
- "memberServicesPhone": "1-800-605-2556",
- "memberServicesHours": "Monday through Friday, 8 a.m. to 6 p.m. PT (Los Angeles County)",
- "ttyPhone": "711",
- "nurseAdviceLine": "1-800-609-4166",
- "website": "https://www.blueshieldca.com/en/bsp/medi-cal-members",
- "memberPortalUrl": "https://promise.medikeeper.com/accounts/v8/40857/login",
- "findADoctorUrl": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
- "memberHandbookUrl": "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
- "notes": "Serves Los Angeles County (and San Diego County) Medi-Cal members. In LA County, Blue Shield Promise operates as a plan partner under L.A. Care Health Plan. LA County Member Services 1-800-605-2556 (TTY 711), Mon-Fri 8am-6pm PT. The 24/7 Nurse Advice Line 1-800-609-4166 was independently confirmed (Blue Shield Promise Nurse Advice Line page). Pharmacy is carved out to the state's Medi-Cal Rx (1-800-977-2273, 24/7). Medi-Cal Dental is the separate state Denti-Cal program (1-800-322-6384). To renew/keep coverage in LA County, members work with LA County DPSS (1-866-613-3777) and BenefitsCal.com. Behavioral health: Blue Shield Promise covers mild-to-moderate mental health; the LA County Dept. of Mental Health (1-800-854-7771, 24/7) covers specialty/serious mental health and substance use is 1-844-804-7500.",
- "resources": [
- {
- "category": "Find a doctor",
- "title": "Find a doctor, clinic, or specialist",
- "description": "Use the online Find a Provider tool to search for doctors, clinics, hospitals, and specialists who take your Blue Shield Promise Medi-Cal plan in Los Angeles County. If you need help, call Member Services and they can help you find a provider or change your doctor.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
- "languages": "Provider directories are available in English, Spanish, Arabic, Armenian, Chinese, Farsi, Tagalog, Khmer, Vietnamese, Korean, and Russian. Free interpreter help by phone.",
- "verified": true
- },
- {
- "category": "Get a ride (transportation)",
- "title": "Free rides to medical care (NEMT)",
- "description": "If you have a medical condition that needs a special vehicle (like a wheelchair van or ambulance), Blue Shield Promise can arrange Non-Emergency Medical Transportation at no cost. This needs to be ordered by your provider. Call to set up a ride, at least one business day before your visit.",
- "phone": "1-877-433-2178",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
- "languages": "TTY 711. Interpreter help available.",
- "verified": true
- },
- {
- "category": "Nurse advice line (24/7)",
- "title": "Talk to a nurse anytime, day or night",
- "description": "Not sure if you should see a doctor or go to the ER? Call the Nurse Advice Line any time, 24 hours a day, 7 days a week. A nurse can answer health questions and help you decide what to do. You can also find this number on your member ID card.",
- "phone": "1-800-609-4166",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
- "languages": "English and Spanish-speaking nurses; interpreters available for other languages at no cost. TTY 711.",
- "verified": true
- },
- {
- "category": "Mental health & substance use",
- "title": "Mental health and substance use help",
- "description": "Blue Shield Promise covers mild-to-moderate mental health care. Call the behavioral health line for help finding counseling or treatment. For serious mental health needs, the LA County Dept. of Mental Health (1-800-854-7771) is open 24/7. For substance use help in LA County, call 1-844-804-7500. In a crisis, call or text 988 anytime.",
- "phone": "1-855-765-9701",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/behavioral-health-services",
- "languages": "TTY 711. Free interpreter services.",
- "verified": true
- },
- {
- "category": "Pharmacy & prescriptions",
- "title": "Get your prescriptions (Medi-Cal Rx)",
- "description": "Most of your prescription drugs are covered by the state's Medi-Cal Rx program, not the health plan. Show your Medi-Cal Benefits ID Card (BIC) at the pharmacy. Call Medi-Cal Rx with questions any time, 24/7. Some drugs given in a doctor's office are still covered by Blue Shield Promise.",
- "phone": "1-800-977-2273",
- "url": "https://medi-calrx.dhcs.ca.gov/home/",
- "languages": "TTY 711. Available 24 hours a day, 7 days a week.",
- "verified": true
- },
- {
- "category": "Dental",
- "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
- "description": "Your dental care is covered by the state's Medi-Cal Dental program (also called Denti-Cal), not by your Blue Shield Promise health plan. Call Medi-Cal Dental to find a dentist or ask about covered services.",
- "phone": "1-800-322-6384",
- "url": "https://dental.dhcs.ca.gov/",
- "languages": "TTY 711. Mon-Fri 8 a.m. to 5 p.m. PT.",
- "verified": true
- },
- {
- "category": "Vision",
- "title": "Eye exams and glasses",
- "description": "Your Medi-Cal plan covers a routine eye exam and a pair of eyeglasses, usually once every 24 months. Vision care may be provided through VSP (Vision Service Plan) or your medical group. Call Member Services to find a vision provider or learn what is covered.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits",
- "languages": "TTY 711. Free interpreter services.",
- "verified": true
- },
- {
- "category": "Language & interpreter help",
- "title": "Free help in your language",
- "description": "You have the right to free interpreter services. Get help by phone in English, Spanish, Cantonese, Mandarin, Armenian, Russian, Vietnamese, Khmer, and many other languages. You can also ask for written materials in your language or in large print. Just call Member Services.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
- "languages": "Free interpreters in all languages, including ASL (advance notice needed for in-person and ASL interpreting). TTY 711.",
- "verified": true
- },
- {
- "category": "Member ID card & online account",
- "title": "Your ID card and online account",
- "description": "Log in to your online member account to see your benefits, find your ID card, and manage your plan. If you lost your card or need a new one, call Member Services and a new card will be mailed in about 7 to 10 business days.",
- "phone": "1-800-605-2556",
- "url": "https://promise.medikeeper.com/accounts/v8/40857/login",
- "languages": "TTY 711. Free interpreter help.",
- "verified": true
- },
- {
- "category": "Renew Medi-Cal / keep coverage",
- "title": "Keep your Medi-Cal coverage",
- "description": "You must renew your Medi-Cal every year to keep your coverage. Make sure your address and phone number are up to date so you do not miss your renewal packet. In Los Angeles County, renew online at BenefitsCal.com or call the LA County Dept. of Public Social Services. Blue Shield Promise can also help you understand the steps.",
- "phone": "1-866-613-3777",
- "url": "https://benefitscal.com/",
- "languages": "TTY 711. Help available in multiple languages.",
- "verified": true
- },
- {
- "category": "Complaints & appeals (grievances)",
- "title": "File a complaint or appeal",
- "description": "If you are unhappy with your care or the plan, you can file a complaint (grievance) at any time. If the plan denies a service you think you need, you can ask for an appeal within 60 days of the denial notice. You can do this by phone, mail, in person, or online. The plan answers most grievances within 30 days.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program/appeals-and-grievance-process",
- "languages": "TTY 711. Free interpreter services.",
- "verified": true
- },
- {
- "category": "Extra benefits & community supports (CalAIM)",
- "title": "Extra support: Enhanced Care Management & Community Supports",
- "description": "If you have complex health or social needs, you may qualify for Enhanced Care Management (ECM) - a care team that helps coordinate all your care. You may also get Community Supports like help with housing or healthy meals. Ask your doctor or call Member Services to see if you qualify. You can also email ECM@blueshieldca.com.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/enhanced-care-management",
- "languages": "TTY 711. Free interpreter help.",
- "verified": true
- },
- {
- "category": "Urgent & after-hours care",
- "title": "Urgent care and emergencies",
- "description": "For a life-threatening emergency, call 911 or go to the nearest ER - you do not need approval. For urgent but not life-threatening problems after hours, call the Nurse Advice Line for guidance or visit an urgent care center in your plan. Use Find a Provider to locate urgent care near you.",
- "phone": "1-800-609-4166",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
- "languages": "TTY 711. Nurse line has English/Spanish nurses and interpreters for other languages.",
- "verified": true
- },
- {
- "category": "Member handbook & forms",
- "title": "Member Handbook (Evidence of Coverage)",
- "description": "The Member Handbook explains all your benefits, your rights, and how to get care. Read it online or call Member Services to get a printed copy mailed to you for free.",
- "phone": "1-800-605-2556",
- "url": "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
- "languages": "Available in multiple languages and large print on request. TTY 711.",
- "verified": true
- },
- {
- "category": "Transportation to non-medical (NMT)",
- "title": "Free rides for health needs (NMT)",
- "description": "Non-Medical Transportation gives you free rides to doctor visits, the pharmacy to pick up prescriptions, and to get medical supplies. You do not need a doctor's order. Rides can be by car, taxi, bus pass, or you can be paid back for mileage if a friend or family member drives. Call at least one business day ahead.",
- "phone": "1-877-433-2178",
- "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
- "languages": "TTY 711. Available 24 hours a day, 7 days a week.",
- "verified": true
- },
- {
- "category": "Other",
- "title": "Community Resource Center (in-person help)",
- "description": "Blue Shield Promise and L.A. Care run free Community Resource Centers across Los Angeles where you can get in-person help with your plan, health classes, and connections to local services - open to the community at no cost.",
- "phone": "1-877-287-6290",
- "url": "https://www.communityresourcecenterla.org/services/health-plan-member-services",
- "languages": "Multilingual staff; free interpreter help.",
- "verified": false
- }
- ],
- "sources": [
- "https://www.blueshieldca.com/en/bsp",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/behavioral-health-services",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/enhanced-care-management",
- "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program/appeals-and-grievance-process",
- "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
- "https://promise.medikeeper.com/accounts/v8/40857/login",
- "https://medi-calrx.dhcs.ca.gov/home/",
- "https://dental.dhcs.ca.gov/",
- "https://benefitscal.com/",
- "https://www.communityresourcecenterla.org/services/health-plan-member-services"
- ]
+  "planId": "blue-shield-promise",
+  "planName": "Blue Shield of California Promise Health Plan (Medi-Cal)",
+  "relationship": "Plan partner under L.A. Care Health Plan. In Los Angeles County, Medi-Cal members can choose Blue Shield Promise as their health plan through L.A. Care.",
+  "memberServicesPhone": "1-800-605-2556",
+  "memberServicesHours": "Monday through Friday, 8 a.m. to 6 p.m. PT (Los Angeles County)",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-800-609-4166",
+  "website": "https://www.blueshieldca.com/en/bsp/medi-cal-members",
+  "memberPortalUrl": "https://promise.medikeeper.com/accounts/v8/40857/login",
+  "findADoctorUrl": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
+  "memberHandbookUrl": "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
+  "notes": "Serves Los Angeles County (and San Diego County) Medi-Cal members. In LA County, Blue Shield Promise operates as a plan partner under L.A. Care Health Plan. LA County Member Services 1-800-605-2556 (TTY 711), Mon-Fri 8am-6pm PT. The 24/7 Nurse Advice Line 1-800-609-4166 was independently confirmed (Blue Shield Promise Nurse Advice Line page). Pharmacy is carved out to the state's Medi-Cal Rx (1-800-977-2273, 24/7). Medi-Cal Dental is the separate state Denti-Cal program (1-800-322-6384). To renew/keep coverage in LA County, members work with LA County DPSS (1-866-613-3777) and BenefitsCal.com. Behavioral health: Blue Shield Promise covers mild-to-moderate mental health; the LA County Dept. of Mental Health (1-800-854-7771, 24/7) covers specialty/serious mental health and substance use is 1-844-804-7500.",
+  "resources": [
+    {
+      "category": "Find a doctor",
+      "title": "Find a doctor, clinic, or specialist",
+      "description": "Use the online Find a Provider tool to search for doctors, clinics, hospitals, and specialists who take your Blue Shield Promise Medi-Cal plan in Los Angeles County. If you need help, call Member Services and they can help you find a provider or change your doctor.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
+      "languages": "Provider directories are available in English, Spanish, Arabic, Armenian, Chinese, Farsi, Tagalog, Khmer, Vietnamese, Korean, and Russian. Free interpreter help by phone.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free rides to medical care (NEMT)",
+      "description": "If you have a medical condition that needs a special vehicle (like a wheelchair van or ambulance), Blue Shield Promise can arrange Non-Emergency Medical Transportation at no cost. This needs to be ordered by your provider. Call to set up a ride, at least one business day before your visit.",
+      "phone": "1-877-433-2178",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
+      "languages": "TTY 711. Interpreter help available.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "Talk to a nurse anytime, day or night",
+      "description": "Not sure if you should see a doctor or go to the ER? Call the Nurse Advice Line any time, 24 hours a day, 7 days a week. A nurse can answer health questions and help you decide what to do. You can also find this number on your member ID card.",
+      "phone": "1-800-609-4166",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
+      "languages": "English and Spanish-speaking nurses; interpreters available for other languages at no cost. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental health and substance use help",
+      "description": "Blue Shield Promise covers mild-to-moderate mental health care. Call the behavioral health line for help finding counseling or treatment. For serious mental health needs, the LA County Dept. of Mental Health (1-800-854-7771) is open 24/7. For substance use help in LA County, call 1-844-804-7500. In a crisis, call or text 988 anytime.",
+      "phone": "1-855-765-9701",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/behavioral-health-services",
+      "languages": "TTY 711. Free interpreter services.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Get your prescriptions (Medi-Cal Rx)",
+      "description": "Most of your prescription drugs are covered by the state's Medi-Cal Rx program, not the health plan. Show your Medi-Cal Benefits ID Card (BIC) at the pharmacy. Call Medi-Cal Rx with questions any time, 24/7. Some drugs given in a doctor's office are still covered by Blue Shield Promise.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/home/",
+      "languages": "TTY 711. Available 24 hours a day, 7 days a week.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental care (Medi-Cal Dental / Denti-Cal)",
+      "description": "Your dental care is covered by the state's Medi-Cal Dental program (also called Denti-Cal), not by your Blue Shield Promise health plan. Call Medi-Cal Dental to find a dentist or ask about covered services.",
+      "phone": "1-800-322-6384",
+      "url": "https://dental.dhcs.ca.gov/",
+      "languages": "TTY 711. Mon-Fri 8 a.m. to 5 p.m. PT.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye exams and glasses",
+      "description": "Your Medi-Cal plan covers a routine eye exam and a pair of eyeglasses, usually once every 24 months. Vision care may be provided through VSP (Vision Service Plan) or your medical group. Call Member Services to find a vision provider or learn what is covered.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits",
+      "languages": "TTY 711. Free interpreter services.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free help in your language",
+      "description": "You have the right to free interpreter services. Get help by phone in English, Spanish, Cantonese, Mandarin, Armenian, Russian, Vietnamese, Khmer, and many other languages. You can also ask for written materials in your language or in large print. Just call Member Services.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
+      "languages": "Free interpreters in all languages, including ASL (advance notice needed for in-person and ASL interpreting). TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Your ID card and online account",
+      "description": "Log in to your online member account to see your benefits, find your ID card, and manage your plan. If you lost your card or need a new one, call Member Services and a new card will be mailed in about 7 to 10 business days.",
+      "phone": "1-800-605-2556",
+      "url": "https://promise.medikeeper.com/accounts/v8/40857/login",
+      "languages": "TTY 711. Free interpreter help.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Keep your Medi-Cal coverage",
+      "description": "You must renew your Medi-Cal every year to keep your coverage. Make sure your address and phone number are up to date so you do not miss your renewal packet. In Los Angeles County, renew online at BenefitsCal.com or call the LA County Dept. of Public Social Services. Blue Shield Promise can also help you understand the steps.",
+      "phone": "1-866-613-3777",
+      "url": "https://benefitscal.com/",
+      "languages": "TTY 711. Help available in multiple languages.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a complaint or appeal",
+      "description": "If you are unhappy with your care or the plan, you can file a complaint (grievance) at any time. If the plan denies a service you think you need, you can ask for an appeal within 60 days of the denial notice. You can do this by phone, mail, in person, or online. The plan answers most grievances within 30 days.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program/appeals-and-grievance-process",
+      "languages": "TTY 711. Free interpreter services.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Extra support: Enhanced Care Management & Community Supports",
+      "description": "If you have complex health or social needs, you may qualify for Enhanced Care Management (ECM) - a care team that helps coordinate all your care. You may also get Community Supports like help with housing or healthy meals. Ask your doctor or call Member Services to see if you qualify. You can also email ECM@blueshieldca.com.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/enhanced-care-management",
+      "languages": "TTY 711. Free interpreter help.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent care and emergencies",
+      "description": "For a life-threatening emergency, call 911 or go to the nearest ER - you do not need approval. For urgent but not life-threatening problems after hours, call the Nurse Advice Line for guidance or visit an urgent care center in your plan. Use Find a Provider to locate urgent care near you.",
+      "phone": "1-800-609-4166",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
+      "languages": "TTY 711. Nurse line has English/Spanish nurses and interpreters for other languages.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook (Evidence of Coverage)",
+      "description": "The Member Handbook explains all your benefits, your rights, and how to get care. Read it online or call Member Services to get a printed copy mailed to you for free.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
+      "languages": "Available in multiple languages and large print on request. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Free rides for health needs (NMT)",
+      "description": "Non-Medical Transportation gives you free rides to doctor visits, the pharmacy to pick up prescriptions, and to get medical supplies. You do not need a doctor's order. Rides can be by car, taxi, bus pass, or you can be paid back for mileage if a friend or family member drives. Call at least one business day ahead.",
+      "phone": "1-877-433-2178",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
+      "languages": "TTY 711. Available 24 hours a day, 7 days a week.",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Community Resource Center (in-person help)",
+      "description": "Blue Shield Promise and L.A. Care run free Community Resource Centers across Los Angeles where you can get in-person help with your plan, health classes, and connections to local services - open to the community at no cost.",
+      "phone": "1-877-287-6290",
+      "url": "https://www.communityresourcecenterla.org/services/health-plan-member-services",
+      "languages": "Multilingual staff; free interpreter help.",
+      "verified": false
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Teladoc (doctor by phone or video, 24/7)",
+      "description": "Talk to a doctor any time, day or night, for non-emergencies like colds, flu, and rashes, at no cost.",
+      "phone": "1-800-835-2362",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/teladoc",
+      "languages": "Interpreter help available; TTY 711",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Community Health Worker",
+      "description": "A trained Community Health Worker can help you understand your care, connect to local services, and reach your health goals, at no cost. Ask Member Services.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/community-health-worker",
+      "languages": "TTY 711; free interpreters",
+      "verified": true
+    },
+    {
+      "category": "Find a doctor",
+      "title": "Care at home for ongoing conditions (ConcertoCare)",
+      "description": "If you have ongoing health needs, ConcertoCare can bring a care team to you at home, in person or by video, at no cost. Ask Member Services if you qualify.",
+      "phone": "1-800-605-2556",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/concerto-care",
+      "languages": "TTY 711; free interpreters",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Find local help with food, housing, and bills",
+      "description": "Search a free online directory to find local help with food, housing, rent, utilities, and more near you.",
+      "phone": "",
+      "url": "https://blueshieldpromise.findhelp.com/",
+      "languages": "Available online in multiple languages",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Free health classes (in person or online)",
+      "description": "Join free classes on healthy eating, managing diabetes, stress, and more, in person or online.",
+      "phone": "1-562-613-5118",
+      "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/health-wellness/health-education-classes",
+      "languages": "Multilingual; TTY 711",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://www.blueshieldca.com/en/bsp",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/find-provider",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/nurse-advice-line",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/transportation-information",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/behavioral-health-services",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/enhanced-care-management",
+    "https://www.blueshieldca.com/en/bsp/medi-cal-members/your-medi-cal-program/appeals-and-grievance-process",
+    "https://www.blueshieldca.com/content/dam/bsca/en/promise/docs/2024/2024-LA-Medi-Cal-EOC-EN.pdf",
+    "https://promise.medikeeper.com/accounts/v8/40857/login",
+    "https://medi-calrx.dhcs.ca.gov/home/",
+    "https://dental.dhcs.ca.gov/",
+    "https://benefitscal.com/",
+    "https://www.communityresourcecenterla.org/services/health-plan-member-services"
+  ]
 }

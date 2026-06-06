@@ -193,6 +193,24 @@ window.AM_DATA = {
           "url": "https://www.lacare.org/members/handbook",
           "languages": "Available in 11 languages and other formats (large print, audio, Braille). TTY: 711.",
           "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Teladoc virtual urgent care (telehealth)",
+          "description": "See a doctor by phone or video for non-emergencies any time, at no cost. Good for colds, rashes, and minor problems when your doctor's office is closed. No referral needed.",
+          "phone": "1-469-643-2161",
+          "url": "https://member.teladoc.com/lacare",
+          "languages": "Available 24/7; interpreter help available",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Community Resource Centers (free in-person help)",
+          "description": "L.A. Care runs free centers across L.A. County where you can get in-person help signing up or renewing Medi-Cal, take free fitness and health classes, and get health screenings. Open to everyone.",
+          "phone": "1-877-287-6290",
+          "url": "https://www.communityresourcecenterla.org/",
+          "languages": "Multilingual staff; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -366,6 +384,24 @@ window.AM_DATA = {
           "url": "https://www.healthnet.com/content/dam/centene/healthnet/pdfs/member/ca/medi-cal/hn-medi-cal-member-handbook-2025.pdf",
           "languages": "Available in multiple languages, large print, and braille; TTY 711",
           "verified": false
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Teladoc telehealth (24/7)",
+          "description": "Talk to a doctor by phone or video any time for minor problems like colds, flu, and rashes, at no cost. Good when your doctor's office is closed.",
+          "phone": "1-800-835-2362",
+          "url": "https://www.healthnet.com/content/healthnet/en_us/members/same-day-care.html",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Where's My Ride? (ride is late or missing)",
+          "description": "If your booked ride with ModivCare is late or did not come, call this line for help. Have your member ID number ready.",
+          "phone": "1-855-253-6863",
+          "url": "https://providerlibrary.healthnetcalifornia.com/contacts/health-net-transportation.html",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -737,6 +773,33 @@ window.AM_DATA = {
           "url": "https://healthy.kaiserpermanente.org/content/dam/kporg/final/documents/health-plan-documents/eoc/ca/medicaid/evidence-of-coverage-medi-cal.pdf",
           "languages": "Available in multiple languages; free printed copy on request. TTY 711.",
           "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "24/7 virtual care (phone or video visit)",
+          "description": "Get care by phone or video any time, with no appointment, for many non-emergency problems. A good first step when you are not sure where to go.",
+          "phone": "1-833-574-2273",
+          "url": "https://healthy.kaiserpermanente.org/southern-california/get-care",
+          "languages": "Free interpreter help; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Behavioral health access line",
+          "description": "Having trouble getting a mental health appointment? Call this line for help getting connected to care.",
+          "phone": "1-800-390-3503",
+          "url": "https://healthy.kaiserpermanente.org/southern-california/health-wellness/mental-health/services",
+          "languages": "Free interpreter help; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Kaiser Permanente app (digital ID card)",
+          "description": "Use the free Kaiser Permanente app to see your digital member ID card, email your doctor, refill prescriptions, and start a video visit from your phone.",
+          "phone": "1-855-839-7613",
+          "url": "https://healthy.kaiserpermanente.org/pages/mobile-app",
+          "languages": "Interpreter help via Member Services; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -916,6 +979,51 @@ window.AM_DATA = {
           "url": "https://www.communityresourcecenterla.org/services/health-plan-member-services",
           "languages": "Multilingual staff; free interpreter help.",
           "verified": false
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Teladoc (doctor by phone or video, 24/7)",
+          "description": "Talk to a doctor any time, day or night, for non-emergencies like colds, flu, and rashes, at no cost.",
+          "phone": "1-800-835-2362",
+          "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/teladoc",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Community Health Worker",
+          "description": "A trained Community Health Worker can help you understand your care, connect to local services, and reach your health goals, at no cost. Ask Member Services.",
+          "phone": "1-800-605-2556",
+          "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/community-health-worker",
+          "languages": "TTY 711; free interpreters",
+          "verified": true
+        },
+        {
+          "category": "Find a doctor",
+          "title": "Care at home for ongoing conditions (ConcertoCare)",
+          "description": "If you have ongoing health needs, ConcertoCare can bring a care team to you at home, in person or by video, at no cost. Ask Member Services if you qualify.",
+          "phone": "1-800-605-2556",
+          "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/benefits/concerto-care",
+          "languages": "TTY 711; free interpreters",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Find local help with food, housing, and bills",
+          "description": "Search a free online directory to find local help with food, housing, rent, utilities, and more near you.",
+          "phone": "",
+          "url": "https://blueshieldpromise.findhelp.com/",
+          "languages": "Available online in multiple languages",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Free health classes (in person or online)",
+          "description": "Join free classes on healthy eating, managing diabetes, stress, and more, in person or online.",
+          "phone": "1-562-613-5118",
+          "url": "https://www.blueshieldca.com/en/bsp/medi-cal-members/health-wellness/health-education-classes",
+          "languages": "Multilingual; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -1115,6 +1223,24 @@ window.AM_DATA = {
           "url": "https://www.lacare.org/health-plans/medi-cal/plan-partners",
           "languages": "Free interpreter help. TTY: 711.",
           "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "LiveHealth Online (telehealth)",
+          "description": "See a doctor by phone or video for non-emergencies like colds and rashes, at no cost. Good when your doctor's office is closed.",
+          "phone": "",
+          "url": "https://livehealthonline.com",
+          "languages": "Interpreter help available",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Community help: food, housing, jobs, and more",
+          "description": "Anthem can connect you to local programs for food, housing, work, and other needs. Call Member Services to get started.",
+          "phone": "1-888-285-7801",
+          "url": "https://mss.anthem.com/california-medicaid/get-help/community.html",
+          "languages": "Interpreter help; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -1295,6 +1421,15 @@ window.AM_DATA = {
           "url": "https://positivehealthcare.net/california/phc/members/contact/",
           "languages": "Case Management open Mon-Fri 8:30 a.m.-5:30 p.m.; interpreter help; TTY 711.",
           "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Free over-the-counter (OTC) items",
+          "description": "PHC members can get free over-the-counter items like pain relievers, vitamins, and first-aid supplies. Call Member Services to learn how to order.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/otc/",
+          "languages": "Interpreter help; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -1474,6 +1609,33 @@ window.AM_DATA = {
           "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
           "languages": "988 offers Spanish and other languages, plus TTY/ASL options. OC Links TTY 711.",
           "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Therapy or psychiatry by video (telehealth)",
+          "description": "Get mental health care by video from home. Call to set up a virtual visit with a therapist or psychiatrist.",
+          "phone": "1-844-585-9210",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+          "languages": "Free interpreters; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Find a doctor",
+          "title": "Keep your current doctor (Continuity of Care)",
+          "description": "New to CalOptima Health? You may be able to keep seeing your current doctor for a while during the switch. Call to ask about Continuity of Care.",
+          "phone": "1-855-877-3885",
+          "url": "https://www.caloptima.org/en/find-a-provider",
+          "languages": "Free interpreters; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Free health classes and coaching",
+          "description": "Join free health education classes and one-on-one coaching on topics like diabetes, healthy eating, and quitting smoking.",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/health-and-wellness",
+          "languages": "Free interpreters; TTY 711",
+          "verified": true
         }
       ],
       "sources": [
@@ -1642,6 +1804,24 @@ window.AM_DATA = {
           "phone": "1-800-440-4347",
           "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
           "languages": "Available in English, Spanish, Chinese, Vietnamese, and other languages; large print and other formats on request.",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Telehealth with MDLIVE (doctor by phone or video)",
+          "description": "See a doctor by phone or video for non-emergencies any time, at no cost. Good for colds, flu, rashes, and minor problems.",
+          "phone": "1-800-400-6354",
+          "url": "https://app.mdlive.com/landing/iehp",
+          "languages": "Interpreter help; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "IEHP Community Wellness Centers (free in-person help)",
+          "description": "Visit a free IEHP Community Wellness Center for in-person help, health classes, and fitness activities, open to the community.",
+          "phone": "1-866-228-4347",
+          "url": "https://www.iehp.org/en/community-resources/community-resource-center",
+          "languages": "Multilingual staff; TTY 711",
           "verified": true
         }
       ],
@@ -1847,6 +2027,24 @@ window.AM_DATA = {
           "phone": "211",
           "url": "https://211ventura.org/",
           "languages": "Multilingual support available.",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Free doula support for pregnancy",
+          "description": "If you are pregnant or had a baby in the past year, you can get a doula at no cost, a trained helper who supports you before, during, and after birth. Call Member Services to learn how.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/doula-services/",
+          "languages": "Interpreter help; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Walk-in help at a Community Resource Center",
+          "description": "Visit a Gold Coast resource center in Oxnard, Ventura, Santa Paula, or Simi Valley for in-person help to pick a doctor, understand benefits, or renew Medi-Cal. Call first to find the nearest one.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/community/community-resources/",
+          "languages": "Interpreter help; TTY 711",
           "verified": true
         }
       ],
