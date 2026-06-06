@@ -961,7 +961,8 @@
  L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .92 }).addTo(geo.layer)
  .bindPopup("<strong>" + escapeHtml(p.name) + "</strong><br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>');
  });
- setMapLabel(places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". All are on the map; nearest listed first:") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time."));
+ var src = geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.";
+ setMapLabel((places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". All are on the map; nearest listed first.") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
  renderNearList(places.slice(0, 20));
  }
  function acquire() {
@@ -969,8 +970,8 @@
  // rate-limited Vercel's IP), fall back to querying Overpass directly from the
  // browser (a residential IP, which Overpass serves reliably).
  return fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { if (d && d.ok && Array.isArray(d.places) && d.places.length) return d.places; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); })
- .catch(function () { return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); });
+ .then(function (d) { if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "osm"; return d.places; } geo.lastSource = "osm"; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); })
+ .catch(function () { geo.lastSource = "osm"; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); });
  }
  function attempt(n) {
  acquire().then(function (places) { if (token !== geo.t) return; process(places); }).catch(function () { retryOrFail(n); });

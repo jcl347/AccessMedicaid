@@ -107,7 +107,7 @@ module.exports = async function handler(req, res) {
       if (seen[k]) return false; seen[k] = 1; return true;
     });
     res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-    res.status(200).json({ ok: true, type: type, radius: radius, count: places.length, places: places });
+    res.status(200).json({ ok: true, source: "osm", type: type, radius: radius, count: places.length, places: places });
   } catch (e) {
     res.status(200).json({ ok: false, error: "Map search is busy right now. Please try again, or use the Google Maps link." });
   }
