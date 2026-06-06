@@ -1,12 +1,42 @@
 {
-  "county": "Los Angeles County",
-  "description": "Medi-Cal managed care plans available to members in Los Angeles County, plus statewide resources and access barriers. JSON is the source of truth; run scripts/build-data.mjs to regenerate the site bundle.",
-  "planOrder": [
-    "la-care",
-    "health-net",
-    "molina",
-    "kaiser",
-    "blue-shield-promise",
-    "anthem"
+  "region": "Greater Los Angeles, California",
+  "description": "Medi-Cal managed care plans across the greater LA region, plus statewide resources and access barriers. JSON is the source of truth; run scripts/build-data.mjs to regenerate the site bundle. Plans are grouped by service area; each carries a brand-accent color used in the UI.",
+  "groups": [
+    {
+      "area": "Los Angeles County",
+      "plans": [
+        { "id": "la-care", "color": "#1f6fb2" },
+        { "id": "health-net", "color": "#9c2a3f" },
+        { "id": "molina", "color": "#00857c" },
+        { "id": "kaiser", "color": "#0a72b5" },
+        { "id": "blue-shield-promise", "color": "#1e4598" },
+        { "id": "anthem", "color": "#2a3f8f" },
+        { "id": "phc", "color": "#7b4ea3" }
+      ]
+    },
+    {
+      "area": "Orange County",
+      "plans": [
+        { "id": "caloptima", "color": "#e0762b" }
+      ]
+    },
+    {
+      "area": "Inland Empire (Riverside & San Bernardino)",
+      "plans": [
+        { "id": "iehp", "color": "#5a9a3c" }
+      ]
+    },
+    {
+      "area": "Ventura County",
+      "plans": [
+        { "id": "gold-coast", "color": "#c2902f" }
+      ]
+    },
+    {
+      "area": "Kern County",
+      "plans": [
+        { "id": "kern", "color": "#2e7d54" }
+      ]
+    }
   ]
 }

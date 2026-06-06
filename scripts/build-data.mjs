@@ -14,15 +14,24 @@ const index = read("index.json");
 const barriersDoc = read("barriers.json");
 const stateDoc = read("state-resources.json");
 
-const plans = index.planOrder.map((id) => {
-  const p = read("plans", id + ".json");
+// Flatten the grouped manifest into an ordered plan list, attaching the
+// service area (county) and brand-accent color to each plan.
+const planRefs = index.groups.flatMap((g) =>
+  g.plans.map((pl) => ({ id: pl.id, color: pl.color, serviceArea: g.area }))
+);
+
+const plans = planRefs.map((ref) => {
+  const p = read("plans", ref.id + ".json");
   // The site reads `id`/`name`; the database uses `planId`/`planName`. Provide both.
-  return Object.assign({ id: p.planId, name: p.planName }, p);
+  return Object.assign({ id: p.planId, name: p.planName, serviceArea: ref.serviceArea, brandColor: ref.color }, p);
 });
 
+const serviceAreas = index.groups.map((g) => g.area);
+
 const bundle = {
-  meta: { lastUpdated: meta.lastUpdated, county: meta.county, h1Note: meta.h1Note || "" },
+  meta: { lastUpdated: meta.lastUpdated, region: index.region, county: meta.county, h1Note: meta.h1Note || "" },
   categories: meta.categories,
+  serviceAreas,
   plans,
   barriers: barriersDoc.barriers,
   stateResources: stateDoc.resources,

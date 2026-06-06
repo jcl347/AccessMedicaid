@@ -2,6 +2,7 @@
 window.AM_DATA = {
   "meta": {
     "lastUpdated": "2026-06-04",
+    "region": "Greater Los Angeles, California",
     "county": "Los Angeles County",
     "h1Note": ""
   },
@@ -23,10 +24,19 @@ window.AM_DATA = {
     "Transportation to non-medical (NMT)",
     "Other"
   ],
+  "serviceAreas": [
+    "Los Angeles County",
+    "Orange County",
+    "Inland Empire (Riverside & San Bernardino)",
+    "Ventura County",
+    "Kern County"
+  ],
   "plans": [
     {
       "id": "la-care",
       "name": "L.A. Care Health Plan (Medi-Cal)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#1f6fb2",
       "planId": "la-care",
       "planName": "L.A. Care Health Plan (Medi-Cal)",
       "relationship": "Primary plan a Medi-Cal member can choose in Los Angeles County. L.A. Care is the local public health plan (the largest publicly operated health plan in the U.S.).",
@@ -207,6 +217,8 @@ window.AM_DATA = {
     {
       "id": "health-net",
       "name": "Health Net Community Solutions (Medi-Cal)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#9c2a3f",
       "planId": "health-net",
       "planName": "Health Net Community Solutions (Medi-Cal)",
       "relationship": "Primary plan a member can choose in Los Angeles County.",
@@ -376,6 +388,8 @@ window.AM_DATA = {
     {
       "id": "molina",
       "name": "Molina Healthcare of California (Medi-Cal)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#00857c",
       "planId": "molina",
       "planName": "Molina Healthcare of California (Medi-Cal)",
       "relationship": "Subcontractor plan; receiving transferred Health Net members in Los Angeles County.",
@@ -556,6 +570,8 @@ window.AM_DATA = {
     {
       "id": "kaiser",
       "name": "Kaiser Permanente Medi-Cal (KP Cal, LLC)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#0a72b5",
       "planId": "kaiser",
       "planName": "Kaiser Permanente Medi-Cal (KP Cal, LLC)",
       "relationship": "Direct plan for eligible/continuity Medi-Cal members in Los Angeles County (Kaiser Foundation Health Plan / KP Cal, LLC).",
@@ -742,6 +758,8 @@ window.AM_DATA = {
     {
       "id": "blue-shield-promise",
       "name": "Blue Shield of California Promise Health Plan (Medi-Cal)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#1e4598",
       "planId": "blue-shield-promise",
       "planName": "Blue Shield of California Promise Health Plan (Medi-Cal)",
       "relationship": "Plan partner under L.A. Care Health Plan. In Los Angeles County, Medi-Cal members can choose Blue Shield Promise as their health plan through L.A. Care.",
@@ -921,6 +939,8 @@ window.AM_DATA = {
     {
       "id": "anthem",
       "name": "Anthem Blue Cross (Medi-Cal)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#2a3f8f",
       "planId": "anthem",
       "planName": "Anthem Blue Cross (Medi-Cal)",
       "relationship": "Plan partner under L.A. Care Health Plan in Los Angeles County. In L.A. County, Medi-Cal members enroll with L.A. Care and may choose Anthem Blue Cross as their plan partner.",
@@ -1112,6 +1132,921 @@ window.AM_DATA = {
         "https://dental.dhcs.ca.gov/",
         "https://medi-calrx.dhcs.ca.gov/home/",
         "https://www.lacare.org/health-plans/medi-cal/plan-partners"
+      ]
+    },
+    {
+      "id": "phc",
+      "name": "PHC California (Positive Healthcare, an AIDS Healthcare Foundation plan)",
+      "serviceArea": "Los Angeles County",
+      "brandColor": "#7b4ea3",
+      "planId": "phc",
+      "planName": "PHC California (Positive Healthcare, an AIDS Healthcare Foundation plan)",
+      "relationship": "Specialty Medi-Cal managed care plan in Los Angeles County for people who have a prior AIDS diagnosis. PHC California was the first AIDS special needs plan in the country and has served members since 1995. It is operated by AIDS Healthcare Foundation.",
+      "memberServicesPhone": "1-800-263-0067",
+      "memberServicesHours": "Monday through Friday, 8:00 a.m. to 8:00 p.m.",
+      "ttyPhone": "711",
+      "nurseAdviceLine": "1-800-797-1717",
+      "website": "https://positivehealthcare.net/california/phc/members/",
+      "memberPortalUrl": "https://ahf.eqhs.com/",
+      "findADoctorUrl": "https://positivehealthcare.net/california/phc/provider-find/",
+      "memberHandbookUrl": "https://positivehealthcare.net/california/phc/members/pubs/",
+      "notes": "The Member Services number 1-800-263-0067 was verified on the official PHC California site (contact page), Monday-Friday 8 a.m.-8 p.m., TTY 711. PHC California is a small specialty plan, so several benefits are accessed by calling Member Services rather than through a separate vendor line: NEMT/NMT rides are arranged by calling Member Services, and mental health assessments/referrals are coordinated through Member Services and your primary care provider. Dental is NOT covered by PHC; it is handled by the separate state Medi-Cal Dental program. Outpatient prescription drugs are covered through Medi-Cal Rx, though PHC has its own pharmacy customer service line for plan questions. Specialty (more intensive) mental health and inpatient psychiatric care, plus substance use treatment, run through Los Angeles County programs with a PHC referral.",
+      "resources": [
+        {
+          "category": "Find a doctor",
+          "title": "Find a doctor, clinic, or pharmacy",
+          "description": "Use PHC California's online directory to search for doctors, specialists, clinics, hospitals, and pharmacies that take your plan. You can also call Member Services and they will help you find a provider close to you. If a specialist near you is not available, PHC must help you get an appointment and can arrange a ride.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/provider-find/",
+          "languages": "Phone help with interpreters in your language at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Get a ride (transportation)",
+          "title": "Free rides to medical care (NEMT)",
+          "description": "PHC California gives you free non-emergency medical transportation (NEMT) to and from plan-approved medical visits when you have no other way to get there. There are no limits. To set up a ride, call Member Services. Try to call a few days before your appointment so they can plan it for you.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/medical/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Rides to pick up medicine and other care (NMT)",
+          "description": "Non-medical transportation (NMT) gives you a free ride to get to covered Medi-Cal services, such as picking up prescriptions or going to medical appointments, when you have no other way to get there. Call Member Services to ask for an NMT ride and to learn what rides you qualify for.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/medical/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Nurse advice line (24/7)",
+          "title": "Talk to a nurse anytime, day or night",
+          "description": "Not sure if you should see a doctor or go to the ER? Call the Nurse Advice Hotline any time, day or night, 7 days a week. A nurse can answer health questions and help you decide what to do next.",
+          "phone": "1-800-797-1717",
+          "url": "https://positivehealthcare.net/california/phc/members/contact/",
+          "languages": "TTY 711; interpreter help available.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Mental health and substance use help",
+          "description": "You can get an initial mental health check-up from any in-network mental health provider with no referral and no prior approval. For more intensive (specialty) mental health care or inpatient psychiatric care, PHC helps refer you to the Los Angeles County Department of Mental Health. For substance use (drug or alcohol) treatment, you can get help through the LA County Substance Abuse Prevention and Control program. Call Member Services and they will help you get started.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/services/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Pharmacy & prescriptions",
+          "title": "Getting your prescriptions",
+          "description": "Most outpatient prescription drugs are covered through Medi-Cal Rx, a state program. Take your prescription and your Medi-Cal BIC card to a pharmacy that works with Medi-Cal Rx, or have your provider send it in. For questions about your covered drugs you can call Medi-Cal Rx, or call PHC's own pharmacy customer service line for plan questions (open 24 hours a day, 7 days a week).",
+          "phone": "1-888-436-5018",
+          "url": "https://positivehealthcare.net/california/phc/members/prescriptions/",
+          "languages": "TTY 711; Medi-Cal Rx line offers TTY and language help.",
+          "verified": true
+        },
+        {
+          "category": "Dental",
+          "title": "Dental care (separate Medi-Cal Dental program)",
+          "description": "Dental care is not covered by PHC California. Your dental benefits come from the state's Medi-Cal Dental program (also called Denti-Cal or Smile California). Use it to find a dentist and learn what is covered. Call the Medi-Cal Dental line for help finding a dentist or with questions.",
+          "phone": "1-800-322-6384",
+          "url": "https://smilecalifornia.org/",
+          "languages": "Phone help and interpreters available; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Vision",
+          "title": "Eye exams and glasses",
+          "description": "PHC California covers routine eye exams and prescriptions for eyeglasses or corrective lenses, with no limit on exams. Eyeglasses are covered once every 24 months. You can see an in-network vision provider without a referral from your primary doctor.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/services/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Language & interpreter help",
+          "title": "Free help in your language",
+          "description": "You have the right to free interpreter help in your language, including sign language, for your health care and plan paperwork. You never have to use a family member or friend to translate. Key plan forms, like the complaint form, are also available in Spanish. Call Member Services to ask for an interpreter.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/contact/",
+          "languages": "Free spoken-language and sign-language interpreters; written materials in Spanish; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Your member ID card and online account",
+          "description": "Use the PHC California member portal to manage your account online. If your member ID card is lost, stolen, or damaged, call Member Services to ask for a new one. Do not let anyone else use your PHC member/pharmacy card or your Medi-Cal BIC card.",
+          "phone": "1-800-263-0067",
+          "url": "https://ahf.eqhs.com/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Renew Medi-Cal / keep coverage",
+          "title": "Keep your Medi-Cal active",
+          "description": "To keep your Medi-Cal, you must keep your information up to date every year. Some people are renewed automatically; if not, the county will mail you a letter asking for information, so answer it right away. Report changes like a new address, phone number, or income to LA County DPSS. You can also renew or update online.",
+          "phone": "1-866-613-3777",
+          "url": "https://benefitscal.com/",
+          "languages": "DPSS TTY 1-800-660-4026; interpreter help available.",
+          "verified": true
+        },
+        {
+          "category": "Complaints & appeals (grievances)",
+          "title": "File a complaint or appeal",
+          "description": "If you are unhappy with your care or a decision about your benefits, you can file a complaint (grievance) or an appeal. You can call Member Services, fill out the form online, mail or fax a paper form, or email it. PHC must answer a standard grievance within 30 days, or within 72 hours if it is urgent. You can also ask the state for a State Hearing or Independent Medical Review, or call the Medi-Cal Managed Care Ombudsman at 1-888-452-8609.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
+          "languages": "Complaint form available in Spanish; interpreter help available; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Extra support: care management and community supports",
+          "description": "If you have complex needs, Enhanced Care Management (ECM) gives you one lead care manager who helps coordinate all your medical, mental health, dental, and social services at no cost. Community Supports can include help with housing (deposits, navigation, tenancy support), home changes like ramps and grab bars, healthy meals, personal care, and medical respite. Call Member Services to ask if you qualify.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
+          "languages": "Interpreter help by phone at no cost; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Urgent care and emergencies",
+          "description": "For a life-threatening emergency, call 911 or go to the nearest ER right away. For urgent but not life-threatening problems, you can use urgent care, including when you are outside Los Angeles County. If you are unsure what to do, call the 24/7 Nurse Advice Hotline for guidance any time.",
+          "phone": "1-800-797-1717",
+          "url": "https://positivehealthcare.net/california/phc/members/medical/",
+          "languages": "TTY 711; interpreter help available.",
+          "verified": true
+        },
+        {
+          "category": "Member handbook & forms",
+          "title": "Member Handbook and forms",
+          "description": "The Member Handbook (Combined Evidence of Coverage) explains your benefits, rights, and how to use your plan. You can find it along with other forms, like the complaint form, the over-the-counter order form, and the provider directory, on the publications and forms page.",
+          "phone": "1-800-263-0067",
+          "url": "https://positivehealthcare.net/california/phc/members/pubs/",
+          "languages": "Some forms available in Spanish; call for materials in other formats; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "HIV care and case management",
+          "description": "PHC California is a special plan built for people with a prior AIDS diagnosis, so HIV care is the heart of what it does. The Case Management Department helps coordinate your HIV and other care, connect you to specialists, and support your treatment. Call them directly for help managing your care.",
+          "phone": "1-800-474-1434",
+          "url": "https://positivehealthcare.net/california/phc/members/contact/",
+          "languages": "Case Management open Mon-Fri 8:30 a.m.-5:30 p.m.; interpreter help; TTY 711.",
+          "verified": true
+        }
+      ],
+      "sources": [
+        "https://positivehealthcare.net/california/phc/members/",
+        "https://positivehealthcare.net/california/phc/members/contact/",
+        "https://positivehealthcare.net/california/phc/members/medical/",
+        "https://positivehealthcare.net/california/phc/members/services/",
+        "https://positivehealthcare.net/california/phc/members/prescriptions/",
+        "https://positivehealthcare.net/california/phc/members/services/ecm-community-supports/",
+        "https://positivehealthcare.net/california/phc/members/complaints/grievance/",
+        "https://positivehealthcare.net/california/phc/members/pubs/",
+        "https://positivehealthcare.net/california/phc/provider-find/",
+        "https://ahf.eqhs.com/",
+        "https://medi-calrx.dhcs.ca.gov/home/",
+        "https://smilecalifornia.org/",
+        "https://benefitscal.com/"
+      ]
+    },
+    {
+      "id": "caloptima",
+      "name": "CalOptima Health (Medi-Cal)",
+      "serviceArea": "Orange County",
+      "brandColor": "#e0762b",
+      "planId": "caloptima",
+      "planName": "CalOptima Health (Medi-Cal)",
+      "relationship": "CalOptima Health is the single County Organized Health System (COHS) Medi-Cal plan for Orange County. If you have Medi-Cal and live in Orange County, CalOptima Health is your health plan. It works with a network of doctor groups (health networks) to provide your care.",
+      "memberServicesPhone": "1-888-587-8088",
+      "memberServicesHours": "Monday through Friday, 8 a.m. to 5:30 p.m. (closed on some holidays)",
+      "ttyPhone": "711",
+      "nurseAdviceLine": "1-844-447-8441",
+      "website": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+      "memberPortalUrl": "https://member.caloptima.org/",
+      "findADoctorUrl": "https://www.caloptima.org/en/find-a-provider",
+      "memberHandbookUrl": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+      "notes": "Member Services 1-888-587-8088 was verified on the official CalOptima Health site. The back of your member ID card lists the current number to call. The 24/7 Nurse Advice Line is 1-844-447-8441 (TTY 1-844-514-3774). Behavioral health: CalOptima's own behavioral health line is 1-855-877-3885 (24/7) for mental health; substance use treatment is largely handled by the separate Orange County Drug Medi-Cal system (Access Line 1-800-723-8641, 24/7). Dental and the Medi-Cal Rx pharmacy benefit are run by the State of California, not by CalOptima. Transportation (both NEMT medical rides and NMT non-medical rides) is booked at 1-833-648-7528.",
+      "resources": [
+        {
+          "category": "Find a doctor",
+          "title": "Find a Doctor or Provider",
+          "description": "Use the online Find a Provider tool to search for a primary care doctor, specialist, hospital, or other provider in your CalOptima Health network. You can search by name, location, language spoken, and more. If you need help choosing or changing your doctor, call Member Services and they can help you.",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/find-a-provider",
+          "languages": "Free help in many languages; you can search providers by the language they speak. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Get a ride (transportation)",
+          "title": "Free Rides to Medical Visits (NEMT)",
+          "description": "If you have a medical or physical condition that means you cannot use a car, bus, or taxi, CalOptima Health can give you a free ride to your covered care by wheelchair van, litter van, or ambulance. This is called Non-Emergency Medical Transportation. Call to book, and try to call a few business days before your visit. This is not for emergencies; for emergencies call 911.",
+          "phone": "1-833-648-7528",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+          "languages": "Phone menu lets you choose your language preference. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Nurse advice line (24/7)",
+          "title": "24/7 Nurse Advice Line",
+          "description": "Not sure if you should see a doctor, go to urgent care, or go to the ER? Call the Nurse Advice Line any time, day or night. A trained nurse will listen to your symptoms and help you decide what to do. It is free and open 24 hours a day, 7 days a week.",
+          "phone": "1-844-447-8441",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+          "languages": "Interpreter services available. TTY 1-844-514-3774.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Mental Health and Substance Use Help",
+          "description": "If you feel sad, anxious, stressed, or need help with drugs or alcohol, you can get care. For mental health, call CalOptima Health's behavioral health line, open 24/7. For drug or alcohol treatment, you may also be connected to the Orange County Drug Medi-Cal access line, also open 24/7. In a crisis, call or text 988 for the Suicide and Crisis Lifeline, or call OC Links at 1-855-625-4657.",
+          "phone": "1-855-877-3885",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+          "languages": "Free interpreter help available. TTY 711. Substance use access line: 1-800-723-8641.",
+          "verified": true
+        },
+        {
+          "category": "Pharmacy & prescriptions",
+          "title": "Prescription Drugs (Medi-Cal Rx)",
+          "description": "Your prescription medicines are covered through Medi-Cal Rx, run by the State of California (not CalOptima Health). Take your prescription to a pharmacy that accepts Medi-Cal Rx. If you have questions about your medicine or which pharmacies you can use, call the Medi-Cal Rx help line, open 24 hours a day, 7 days a week.",
+          "phone": "1-800-977-2273",
+          "url": "https://medi-calrx.dhcs.ca.gov/home/",
+          "languages": "Free interpreter help available. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Dental",
+          "title": "Dental Care (Medi-Cal Dental)",
+          "description": "Your dental care is covered through the state Medi-Cal Dental program, not through CalOptima Health. Medi-Cal Dental covers things like checkups, cleanings, fillings, and more. Call the number below to find a dentist or ask about your dental benefits.",
+          "phone": "1-800-322-6384",
+          "url": "https://dental.dhcs.ca.gov/",
+          "languages": "Free interpreter help available. TTY 1-800-735-2922 or 711.",
+          "verified": true
+        },
+        {
+          "category": "Vision",
+          "title": "Eye and Vision Care",
+          "description": "CalOptima Health covers routine eye exams and, when needed, glasses. Your vision care is provided through VSP (Vision Service Plan). Call to find an eye doctor or learn what your vision benefits cover.",
+          "phone": "1-800-438-4560",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+          "languages": "Free interpreter help available. TTY 1-800-735-2922.",
+          "verified": true
+        },
+        {
+          "category": "Language & interpreter help",
+          "title": "Free Language and Interpreter Help",
+          "description": "You have the right to get help in your language at no cost. CalOptima Health has staff who speak many languages and can arrange a free interpreter for your doctor visits and phone calls. You can also ask for written materials in your language or in large print. Just ask Member Services.",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+          "languages": "Free interpreters in many languages, including sign language. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Member ID Card and Online Account",
+          "description": "Create or log in to your CalOptima Health Member Portal to see your health plan info, check your doctor, and more. If you lost your member ID card or never got one, call Member Services and they will send you a new one. Always carry your CalOptima Health ID card and your state Medi-Cal Benefits ID card.",
+          "phone": "1-888-587-8088",
+          "url": "https://member.caloptima.org/",
+          "languages": "Free help in many languages. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Renew Medi-Cal / keep coverage",
+          "title": "Renew Your Medi-Cal Each Year",
+          "description": "You must renew your Medi-Cal once a year to keep your health coverage. For many people this happens automatically. If your county sends you a renewal packet, fill it out and send it back before the deadline so you do not lose your benefits. The fastest way to renew is online at BenefitsCal.com. Make sure your address and phone number are up to date so you get your renewal notices.",
+          "phone": "1-800-281-9799",
+          "url": "https://www.benefitscal.com",
+          "languages": "Free help in many languages. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Complaints & appeals (grievances)",
+          "title": "File a Complaint or Appeal",
+          "description": "If you are unhappy with your care, your doctor, or a decision about your services, you can file a complaint (grievance) or an appeal. There is no cost and it will not affect your care. Call Member Services first, or file online. If you already filed an appeal and still disagree, you can ask the state for a State Hearing within 120 days (call 1-800-952-5253).",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/your-rights",
+          "languages": "Free help in many languages. TTY 711. State Hearing TDD/TTY 1-800-952-8349.",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Extra Help: Care Management and Community Supports (CalAIM)",
+          "description": "Through CalAIM, you may qualify for extra help at no cost. Enhanced Care Management gives you one care manager who helps coordinate all your health and life needs if you have complex needs. Community Supports can include things like help finding housing, medically tailored meals, recuperative care after a hospital stay, home changes for safety, and more. Ask your doctor or call Member Services to see if you qualify.",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services/calaim",
+          "languages": "Free help in many languages. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Urgent Care and After-Hours Help",
+          "description": "If you need care that cannot wait but is not life-threatening, you can go to an urgent care center in your network or call your doctor's office, which has someone on call after hours. Not sure what to do? Call the free 24/7 Nurse Advice Line. For a life-threatening emergency, always call 911 or go to the nearest emergency room.",
+          "phone": "1-844-447-8441",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+          "languages": "Interpreter services available. TTY 1-844-514-3774. Emergencies: call 911.",
+          "verified": true
+        },
+        {
+          "category": "Member handbook & forms",
+          "title": "Member Handbook and Forms",
+          "description": "Your Member Handbook explains your benefits, your rights, and how to get care. You can read or download it from the CalOptima Health Medi-Cal pages, or call Member Services to ask for a printed copy mailed to you for free. Referral forms and other member forms are also available online.",
+          "phone": "1-888-587-8088",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+          "languages": "Available in other languages and large print on request. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Rides to Pick Up Medicine and Non-Medical Trips (NMT)",
+          "description": "CalOptima Health can give you free Non-Medical Transportation to and from your covered care, like rides to the doctor, dentist, mental health or substance use visits, and to pick up prescriptions and medical supplies. This is for members who do not need a medical vehicle. Call the transportation line to book, and try to call a few business days ahead.",
+          "phone": "1-833-648-7528",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+          "languages": "Phone menu lets you choose your language. TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Crisis and Around-the-Clock Support",
+          "description": "If you or someone you know is in emotional crisis or thinking about suicide, call or text 988 any time to reach the Suicide and Crisis Lifeline. In Orange County, you can also call OC Links at 1-855-625-4657 to get connected to mental health and substance use services. For any life-threatening emergency, call 911.",
+          "phone": "988",
+          "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+          "languages": "988 offers Spanish and other languages, plus TTY/ASL options. OC Links TTY 711.",
+          "verified": true
+        }
+      ],
+      "sources": [
+        "https://www.caloptima.org/en/ForMembers/Medi-Cal",
+        "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+        "https://www.caloptima.org/en/contact-us",
+        "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+        "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services/calaim",
+        "https://www.caloptima.org/en/health-insurance-plans/medi-cal/your-rights",
+        "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+        "https://www.caloptima.org/en/find-a-provider",
+        "https://member.caloptima.org/",
+        "https://www.benefitscal.com",
+        "https://medi-calrx.dhcs.ca.gov/home/",
+        "https://dental.dhcs.ca.gov/"
+      ]
+    },
+    {
+      "id": "iehp",
+      "name": "Inland Empire Health Plan (IEHP) (Medi-Cal)",
+      "serviceArea": "Inland Empire (Riverside & San Bernardino)",
+      "brandColor": "#5a9a3c",
+      "planId": "iehp",
+      "planName": "Inland Empire Health Plan (IEHP) (Medi-Cal)",
+      "relationship": "Local Initiative Medi-Cal managed care plan serving Riverside and San Bernardino Counties (the Inland Empire).",
+      "memberServicesPhone": "1-800-440-4347",
+      "memberServicesHours": "Member Services: Monday-Friday, 8 a.m. to 5 p.m. The 24-hour Nurse Advice Line and after-hours help are available 24/7.",
+      "ttyPhone": "1-800-718-4347",
+      "nurseAdviceLine": "1-888-244-4347",
+      "website": "https://www.iehp.org/en/browse-plans/medi-cal",
+      "memberPortalUrl": "https://members.iehp.org/App/Account/Login",
+      "findADoctorUrl": "https://search.iehp.org",
+      "memberHandbookUrl": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+      "notes": "Member Services main line 1-800-440-4347 (1-800-440-IEHP) was verified on the official IEHP Medi-Cal site; TTY is 1-800-718-4347 (or 711). The 24-hour Nurse Advice Line is a DIFFERENT number, 1-888-244-4347 (1-888-244-IEHP). Dental for most members is handled by the separate state Medi-Cal Dental program (1-800-322-6384), and pharmacy by the state Medi-Cal Rx program (1-800-977-2273), not IEHP. Grievance fax: (909) 890-5748.",
+      "resources": [
+        {
+          "category": "Find a doctor",
+          "title": "Find a Doctor or Clinic",
+          "description": "Use IEHP's online search tool to find a doctor, clinic, hospital, pharmacy, or specialist that takes your IEHP Medi-Cal plan. You can search near your home and pick a doctor (your PCP) for your care. Need help? Call Member Services.",
+          "phone": "1-800-440-4347",
+          "url": "https://search.iehp.org",
+          "languages": "Website and Member Services help available in English, Spanish, Chinese, Vietnamese, and other languages; free interpreters available.",
+          "verified": true
+        },
+        {
+          "category": "Get a ride (transportation)",
+          "title": "Free Rides to Medical Visits (NEMT)",
+          "description": "If you have no way to get to a covered medical visit, IEHP gives you free, round-trip rides. This includes rides by car, van, or even wheelchair van or ambulance if your health needs it. Call to set up a ride, ideally a few days ahead.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+          "languages": "Free interpreter help by phone in your language; TTY 1-800-718-4347 or 711.",
+          "verified": true
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Rides and Bus Passes for Health Needs (NMT)",
+          "description": "IEHP also helps you get to health-related places like the pharmacy to pick up medicine or to a WIC office. You can get a bus pass, gas help, or a ride. Ask Member Services or call the ride line for a bus pass.",
+          "phone": "1-855-673-3195",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+          "languages": "Free interpreter help available; TTY 1-800-718-4347 or 711.",
+          "verified": true
+        },
+        {
+          "category": "Nurse advice line (24/7)",
+          "title": "24-Hour Nurse Advice Line",
+          "description": "Not sure if you should see a doctor or go to the ER? Call any time, day or night. A nurse will listen, give you advice, and help you decide where to get care. This line is open 24 hours a day, 7 days a week.",
+          "phone": "1-888-244-4347",
+          "url": "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
+          "languages": "Interpreter services available; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Mental Health and Substance Use Care",
+          "description": "You can get help for stress, sadness, anxiety, or drug and alcohol use. You can see a therapist for counseling without a referral, and get medication help if needed. Call Member Services and ask for behavioral health services.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
+          "languages": "Free interpreters available; TTY 1-800-718-4347.",
+          "verified": true
+        },
+        {
+          "category": "Pharmacy & prescriptions",
+          "title": "Prescriptions through Medi-Cal Rx",
+          "description": "Your medicines are covered by the state's Medi-Cal Rx program, not IEHP. Show your BIC (Medi-Cal) card at the pharmacy. To check if a drug is covered or find a pharmacy, call Medi-Cal Rx or visit their website. IEHP can also help.",
+          "phone": "1-800-977-2273",
+          "url": "https://medi-calrx.dhcs.ca.gov/home/",
+          "languages": "Help available in many languages; TTY 1-800-977-2273 (press 5) or 711.",
+          "verified": true
+        },
+        {
+          "category": "Dental",
+          "title": "Dental Care (Medi-Cal Dental / Denti-Cal)",
+          "description": "Your dental care comes from the state's Medi-Cal Dental program, not IEHP. It covers cleanings, exams, fillings, and more. Call to find a dentist who takes Medi-Cal Dental or to ask about your benefits.",
+          "phone": "1-800-322-6384",
+          "url": "https://smilecalifornia.org",
+          "languages": "Help and interpreters available in many languages; TTY 1-800-735-2922.",
+          "verified": true
+        },
+        {
+          "category": "Vision",
+          "title": "Vision and Eye Care",
+          "description": "Your IEHP Medi-Cal plan covers a routine eye exam and a pair of eyeglasses (frames and lenses). Call Member Services to find an eye doctor or learn what your vision benefit covers.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+          "languages": "Free interpreters available; TTY 1-800-718-4347.",
+          "verified": true
+        },
+        {
+          "category": "Language & interpreter help",
+          "title": "Free Interpreter and Language Help",
+          "description": "You have the right to free help in your language, including sign language. IEHP gives you a free interpreter by phone or in person at your doctor visits, 24 hours a day. Try to ask at least 5 days before your visit. You can also get written papers in your language.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
+          "languages": "Oral interpretation available 24/7 in any language at no cost; TTY 1-800-718-4347 or 711.",
+          "verified": true
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Member ID Card and Online Account",
+          "description": "Lost your IEHP card or need a new one? Call Member Services to ask for a replacement. You can also sign up for the IEHP online member portal to see your card, pick a doctor, and manage your plan.",
+          "phone": "1-800-440-4347",
+          "url": "https://members.iehp.org/App/Account/Login",
+          "languages": "Help in many languages; TTY 1-800-718-4347.",
+          "verified": true
+        },
+        {
+          "category": "Renew Medi-Cal / keep coverage",
+          "title": "Renew Your Medi-Cal Every Year",
+          "description": "You must renew your Medi-Cal once a year to keep it. Watch your mail for a renewal packet and send it back on time. Renew online at BenefitsCal.com or call your county. Keep your address and phone number up to date so you don't miss notices. Riverside County: 1-877-410-8827. San Bernardino County: 1-877-410-8829.",
+          "phone": "1-888-860-1296",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
+          "languages": "Help available in many languages.",
+          "verified": true
+        },
+        {
+          "category": "Complaints & appeals (grievances)",
+          "title": "File a Complaint or Appeal",
+          "description": "If you are unhappy with your care or IEHP says no to a service you want, you can speak up. File a complaint (grievance) or appeal a decision. Call Member Services, and they will help you. You can also fax your complaint. There is no cost and it will not hurt your care.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-grievance-and-appeals",
+          "languages": "Free interpreters available; TTY 1-800-718-4347. Grievance fax: (909) 890-5748.",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Extra Help: Care Management and Community Supports",
+          "description": "If you have complex needs, IEHP can give you a care team to help manage all your care (Enhanced Care Management). You may also get extra services like help finding housing, healthy food/meals, or other support. Call to see if you qualify.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
+          "languages": "Care teams can help by phone or in person; free interpreters available; TTY 1-800-718-4347.",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Urgent Care and After-Hours Help",
+          "description": "For a problem that needs care soon but is not life-threatening, go to an urgent care clinic or call the 24-Hour Nurse Advice Line for advice any time. For a true emergency, call 911 or go to the nearest ER.",
+          "phone": "1-888-244-4347",
+          "url": "https://www.iehp.org/en/learning-center/understanding-insurance/care-options/emergency-room-vs-urgent-care-clinic",
+          "languages": "Interpreter help available; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Member handbook & forms",
+          "title": "Member Handbook and Forms",
+          "description": "Your Member Handbook (also called the Evidence of Coverage) explains all your benefits and rights in plain language. You can read it online or call to have a copy mailed to you for free in your language.",
+          "phone": "1-800-440-4347",
+          "url": "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+          "languages": "Available in English, Spanish, Chinese, Vietnamese, and other languages; large print and other formats on request.",
+          "verified": true
+        }
+      ],
+      "sources": [
+        "https://www.iehp.org/en/browse-plans/medi-cal",
+        "https://www.iehp.org/en/care-options/24-hour-nurse-advice-line",
+        "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-benefits-and-services",
+        "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-renewal",
+        "https://www.iehp.org/en/browse-plans/medi-cal/medi-cal-rights-and-responsibilities",
+        "https://www.iehp.org/en/learning-center/mental-health-and-wellness",
+        "https://www.iehp.org/en/learning-center/understanding-insurance/additional-iehp-services/enhanced-care-management",
+        "https://search.iehp.org",
+        "https://members.iehp.org/App/Account/Login",
+        "https://medi-calrx.dhcs.ca.gov/home/",
+        "https://smilecalifornia.org",
+        "https://dental.dhcs.ca.gov"
+      ]
+    },
+    {
+      "id": "gold-coast",
+      "name": "Gold Coast Health Plan (Medi-Cal)",
+      "serviceArea": "Ventura County",
+      "brandColor": "#c2902f",
+      "planId": "gold-coast",
+      "planName": "Gold Coast Health Plan (Medi-Cal)",
+      "relationship": "Gold Coast Health Plan (GCHP) is the single County Organized Health System (COHS) Medi-Cal managed care plan for Ventura County. If you have Medi-Cal and live in Ventura County, GCHP is your health plan.",
+      "memberServicesPhone": "1-888-301-1228",
+      "memberServicesHours": "8 a.m. to 8 p.m., seven days a week from Oct. 1 through March 31; and 8 a.m. to 8 p.m., Monday through Friday from April 1 through Sept. 30.",
+      "ttyPhone": "711",
+      "nurseAdviceLine": "1-877-431-1700",
+      "website": "https://www.goldcoasthealthplan.org/",
+      "memberPortalUrl": "https://members.goldcoasthealthplan.org/s/",
+      "findADoctorUrl": "https://www.goldcoasthealthplan.org/provider-directory/",
+      "memberHandbookUrl": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+      "notes": "Gold Coast Health Plan is the only Medi-Cal plan for Ventura County (a COHS plan), so members do not choose between competing plans. Member Services 1-888-301-1228 (TTY 711). Pharmacy benefits are carved out to the state Medi-Cal Rx program; dental is carved out to the separate state Medi-Cal Dental program. Behavioral/mental health is split: GCHP (through Carelon Behavioral Health) covers non-specialty/mild-to-moderate mental health, while Ventura County Behavioral Health covers specialty mental health and substance use treatment. Seasonal Member Services hours vary, so confirm when you call.",
+      "resources": [
+        {
+          "category": "Member ID card & online account",
+          "title": "Member Services - your main help line",
+          "description": "Call Member Services for help with almost anything: questions about your benefits, finding or changing a doctor, getting a new ID card, or how things work. They can also connect you to a free interpreter in your language. Hours are 8 a.m. to 8 p.m. seven days a week from Oct. 1 to March 31, and 8 a.m. to 8 p.m. Monday through Friday from April 1 to Sept. 30.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/contact-us/",
+          "languages": "Free phone interpreters available in many languages; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Nurse advice line (24/7)",
+          "title": "24-Hour Nurse Advice Line",
+          "description": "Not sure if you need to see a doctor or go to the ER? A registered nurse can help you any time, day or night. Call 24 hours a day, 7 days a week to get medical advice and figure out the right kind of care.",
+          "phone": "1-877-431-1700",
+          "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+          "languages": "TTY 711; interpreter support available.",
+          "verified": true
+        },
+        {
+          "category": "Find a doctor",
+          "title": "Find a doctor, clinic, or specialist",
+          "description": "Use the online Provider Directory to look for a primary care doctor, specialist, hospital, or clinic that takes Gold Coast Health Plan. You can search by name, specialty, location, language spoken, and whether they are taking new patients. Want a paper copy mailed to you? Call Member Services.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/provider-directory/",
+          "languages": "Directory lets you search by the language a provider speaks; call for help in your language.",
+          "verified": true
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Member online account (Member Portal)",
+          "description": "Sign up and log in to your secure online account to see your plan details and manage your information. You get your GCHP member ID card after you pick a primary care provider (PCP). If your card is lost or you need a new one, call Member Services.",
+          "phone": "1-888-301-1228",
+          "url": "https://members.goldcoasthealthplan.org/s/",
+          "languages": "Call Member Services (TTY 711) for help in your language.",
+          "verified": true
+        },
+        {
+          "category": "Get a ride (transportation)",
+          "title": "Free rides to medical care (NEMT)",
+          "description": "If you need a special vehicle like a wheelchair van or an ambulance to get to a medical visit because you cannot ride in a regular car or bus, the plan covers it at no cost. First ask your doctor to approve it in writing. Then call Ventura Transit System (VTS) to set up the ride. Questions? Call Member Services at 1-888-301-1228.",
+          "phone": "805-628-7433",
+          "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+          "languages": "Call Member Services (TTY 711) for interpreter help.",
+          "verified": true
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Free rides to non-medical health needs (NMT)",
+          "description": "If you do not need a special vehicle, you can still get free rides to things like picking up prescriptions, going to medical appointments, or other approved health-related trips. You do not need a doctor's note. Call Ventura Transit System (VTS). Rides are available 24 hours a day, 7 days a week. Please book at least 48 hours ahead.",
+          "phone": "1-855-628-7433",
+          "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+          "languages": "California Relay Service 1-800-855-7100; call Member Services for interpreter help.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Mental health care (mild to moderate)",
+          "description": "Gold Coast covers many mental health services like therapy (talk therapy), counseling, and medication help through its partner, Carelon Behavioral Health. To find a therapist or get started, call Carelon (TTY 1-800-735-2929).",
+          "phone": "1-855-765-9702",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+          "languages": "TTY 1-800-735-2929; interpreter services available.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Specialty mental health & crisis help (24/7)",
+          "description": "If you are in a mental health crisis or need more serious (specialty) mental health care, call the Ventura County Behavioral Health Crisis & Referral Line. Help is available 24 hours a day, 7 days a week. If you are in danger right now, call 911 or 988 (Suicide & Crisis Lifeline).",
+          "phone": "1-866-998-2243",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+          "languages": "Interpreter support available; 988 also offers multilingual help.",
+          "verified": true
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Substance use treatment (24/7)",
+          "description": "If you or a loved one needs help with alcohol or drug use, call Ventura County Behavioral Health Substance Use Treatment. Help and referrals are available 24 hours a day, 7 days a week.",
+          "phone": "1-844-385-9200",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+          "languages": "Interpreter support available.",
+          "verified": true
+        },
+        {
+          "category": "Pharmacy & prescriptions",
+          "title": "Prescription drugs through Medi-Cal Rx",
+          "description": "Your prescription medicines are covered by the state's Medi-Cal Rx program, not directly by Gold Coast. Show your benefits ID card (BIC) at the pharmacy. For questions about a medication, what is covered, or finding a pharmacy, call Medi-Cal Rx Customer Service, available 24/7.",
+          "phone": "1-800-977-2273",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
+          "languages": "TTY 711; Medi-Cal Rx offers help in multiple languages.",
+          "verified": true
+        },
+        {
+          "category": "Dental",
+          "title": "Dental care through Medi-Cal Dental",
+          "description": "Your dental care (checkups, cleanings, x-rays, and more) comes from the separate state Medi-Cal Dental program, not from Gold Coast. To find a dentist or ask about your dental benefits, call Medi-Cal Dental (TTY 1-800-735-2922).",
+          "phone": "1-800-322-6384",
+          "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+          "languages": "TTY 1-800-735-2922; interpreter services available.",
+          "verified": true
+        },
+        {
+          "category": "Vision",
+          "title": "Eye exams and glasses (VSP)",
+          "description": "Your vision care is covered through Vision Service Plan (VSP). Benefits include routine eye exams, diabetic eye exams, and glasses or contacts. Call VSP (TTY 1-800-428-4833). Hours are Monday to Friday 5 a.m. to 8 p.m. and Saturday 6 a.m. to 5 p.m.",
+          "phone": "1-800-877-7195",
+          "url": "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+          "languages": "TTY 1-800-428-4833.",
+          "verified": true
+        },
+        {
+          "category": "Language & interpreter help",
+          "title": "Free interpreter and translation services",
+          "description": "You have the right to a free interpreter, including sign language, and to get plan materials in your language or in large print, audio, or Braille. You never have to use a family member or friend to interpret. Call Member Services at 1-888-301-1228 (TTY 711), or call GCHP's Cultural and Linguistic Services Department, Monday to Friday 8 a.m. to 5 p.m.",
+          "phone": "1-805-437-5603",
+          "url": "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
+          "languages": "Free oral interpreting in many languages, sign language interpreting, and written translations; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Renew Medi-Cal / keep coverage",
+          "title": "Renew your Medi-Cal to keep coverage",
+          "description": "Each year you must renew your Medi-Cal so you do not lose your coverage. Make sure your address and phone number are up to date, watch your mail for a renewal packet, and send back any forms on time. For your Medi-Cal case, call the Ventura County Human Services Agency (VCHSA) (TTY 1-800-735-2922). Automated info is available 24/7; talk to a person Monday to Friday 8 a.m. to 5 p.m.",
+          "phone": "1-888-472-4463",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
+          "languages": "TTY 1-800-735-2922; county offers help in multiple languages.",
+          "verified": true
+        },
+        {
+          "category": "Complaints & appeals (grievances)",
+          "title": "File a complaint or appeal (grievance)",
+          "description": "If you are unhappy with your care or a decision the plan made, you have the right to speak up - it will not affect your care. You can file a grievance or appeal by calling Member Services at 1-888-301-1228 (TTY 711) or by mailing the Member Grievance & Appeals Form to: Gold Coast Health Plan, Attn: Member Grievance & Appeals, P.O. Box 9176, Oxnard, CA 93031. GCHP will confirm your complaint within 5 days and explain the outcome within 30 days. You can also ask for a State Hearing.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+          "languages": "TTY 711; free interpreter help to file your complaint.",
+          "verified": true
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Enhanced Care Management & Community Supports (CalAIM)",
+          "description": "If you have complex health and life needs, you may qualify for extra help. Enhanced Care Management (ECM) gives you a care team that coordinates all your care and connects you to services. Community Supports can help with things like housing support and healthy meals. These programs are free and voluntary. Call Member Services at 1-888-301-1228 (TTY 711) to see if you qualify.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
+          "languages": "TTY 711; interpreter help available.",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Care when your doctor's office is closed",
+          "description": "If you need care that cannot wait but it is not an emergency, you have options after hours. Call the 24-Hour Nurse Advice Line at 1-877-431-1700 for advice, or go to an urgent care center that takes your plan. For a life-threatening emergency, always call 911 or go to the nearest ER.",
+          "phone": "1-877-431-1700",
+          "url": "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+          "languages": "TTY 711; interpreter help available.",
+          "verified": true
+        },
+        {
+          "category": "Member handbook & forms",
+          "title": "Member Handbook and forms",
+          "description": "The Member Handbook (also called the Evidence of Coverage) explains your benefits, your rights, and how to use your plan. The member resources page also has helpful forms like the PCP selection form and the grievance and appeals form. You can ask for a printed handbook by calling Member Services.",
+          "phone": "1-888-301-1228",
+          "url": "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+          "languages": "Handbook and materials available in other languages and formats on request; TTY 711.",
+          "verified": true
+        },
+        {
+          "category": "Other",
+          "title": "Local help and resources (211 Ventura County)",
+          "description": "For free, confidential help finding local services like food, housing, and community programs in Ventura County, you can call 211 any time, day or night. This is a community resource, not part of Gold Coast Health Plan, but it can connect you with many local supports.",
+          "phone": "211",
+          "url": "https://211ventura.org/",
+          "languages": "Multilingual support available.",
+          "verified": true
+        }
+      ],
+      "sources": [
+        "https://www.goldcoasthealthplan.org/",
+        "https://www.goldcoasthealthplan.org/contact-us/",
+        "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/",
+        "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/after-hours-care/",
+        "https://www.goldcoasthealthplan.org/provider-directory/",
+        "https://members.goldcoasthealthplan.org/s/",
+        "https://www.goldcoasthealthplan.org/for-members/health-and-wellness-services/transportation-benefits/",
+        "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/mental-health-services/",
+        "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/pharmacy-services/",
+        "https://www.goldcoasthealthplan.org/for-members/get-the-care-you-need/",
+        "https://www.goldcoasthealthplan.org/about-us/nondiscrimination-notice/",
+        "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/medi-cal-renewals/",
+        "https://www.goldcoasthealthplan.org/for-members/member-resources/",
+        "https://www.goldcoasthealthplan.org/for-members/welcome-members-medi-cal/health-and-wellness-services/enhanced-care-management-ecm/",
+        "https://211ventura.org/"
+      ]
+    },
+    {
+      "id": "kern",
+      "name": "Kern Family Health Care (Kern Health Systems)",
+      "serviceArea": "Kern County",
+      "brandColor": "#2e7d54",
+      "planId": "kern",
+      "planName": "Kern Family Health Care (Kern Health Systems)",
+      "relationship": "Local Initiative Medi-Cal managed care plan for Kern County, operated by Kern Health Systems (KHS).",
+      "memberServicesPhone": "1-800-391-2000",
+      "memberServicesHours": "Monday-Friday, 8:00 a.m. to 5:00 p.m. (local Bakersfield line: 661-632-1590).",
+      "ttyPhone": "711",
+      "nurseAdviceLine": "1-800-391-2000",
+      "website": "https://www.kernfamilyhealthcare.com/medi-cal/",
+      "memberPortalUrl": "https://member.kernfamilyhealthcare.com/v3app/a/",
+      "findADoctorUrl": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+      "memberHandbookUrl": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+      "notes": "Kern Family Health Care is the public/Local Initiative Medi-Cal plan for Kern County, operated by Kern Health Systems (KHS). Member Services 1-800-391-2000 was verified on official KFHC pages; TTY is 711. The same number doubles as the 24/7 Advice Nurse Line and the urgent/after-hours line, with menu options (Transportation is option 3). Dental and pharmacy benefits are carved out: routine dental is handled by the state Medi-Cal Dental program, and outpatient prescriptions by Medi-Cal Rx, not KFHC. The live site returned HTTP 403 to direct fetching, so several details were confirmed via official KFHC search excerpts and are marked 'please confirm' where they could not be independently opened this run.",
+      "resources": [
+        {
+          "category": "Find a doctor",
+          "title": "Find a doctor, hospital, or clinic",
+          "description": "Need a doctor, clinic, or hospital that takes your plan? Use the online Find a Doctor tool to search by name, specialty, language, or location. You can also pick or change your main doctor (PCP) when you log in to the Member Portal. If you need help, call Member Services.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+          "languages": "Free interpreters in 200+ languages through Member Services; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Nurse advice line (24/7)",
+          "title": "24-hour Advice Nurse Line",
+          "description": "Have a health question and can't reach your doctor? A nurse can help you any time, day or night, 24 hours a day, 7 days a week. They can tell you how to care for yourself at home and whether you should see a doctor. Have your KFHC ID number ready when you call.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Urgent & after-hours care",
+          "title": "Urgent and after-hours care",
+          "description": "For a real emergency, call 911 or go to the nearest ER. For urgent problems that are not life-threatening, call your doctor's office first. If they are closed, you can call the 24-hour Advice Nurse Line any time for help and advice.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": true
+        },
+        {
+          "category": "Get a ride (transportation)",
+          "title": "Free rides to medical care (NEMT)",
+          "description": "If your health or a disability means you need a special ride (like a wheelchair van) to get to a covered medical visit, KFHC can arrange it at no cost to you. Your doctor fills out a short form (a Physician Certification Statement) to set it up. Call the Transportation Department to book. Try to call at least 5 business days before your visit.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Transportation to non-medical (NMT)",
+          "title": "Rides to non-medical Medi-Cal services (NMT)",
+          "description": "If you have no way to get to a Medi-Cal service or to pick up your medicine, KFHC can help with non-medical transportation. This can include a bus pass, a rideshare trip, or paying you back for mileage. When you call, just explain why you can't get there. Once approved, it is on file for 12 months. Call the Transportation Department (option 3).",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Mental health & substance use",
+          "title": "Mental health and substance use help",
+          "description": "KFHC covers care for mild-to-moderate mental health needs, like feeling very sad, worried, or stressed. You usually do not need pre-approval to see a plan provider. For a mental health crisis, call the Kern County crisis line at 988 or 1-800-991-5272 any time. For drug or alcohol help, call the 24-hour Substance Use Disorder Access Line at 1-866-266-4898.",
+          "phone": "1-800-991-5272",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
+          "languages": "Interpreter help available; crisis line TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Pharmacy & prescriptions",
+          "title": "Your prescription drug benefit (Medi-Cal Rx)",
+          "description": "Your prescription medicines are covered through Medi-Cal Rx, the state's pharmacy program (not directly by KFHC). Show your BIC or Medi-Cal ID card at the pharmacy. For questions about covered drugs or to find a pharmacy that takes Medi-Cal Rx, call them 24/7 or use the online pharmacy locator.",
+          "phone": "1-800-977-2273",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
+          "languages": "Customer Service 24/7; TTY 711 (Mon-Fri 8am-5pm)",
+          "verified": false
+        },
+        {
+          "category": "Dental",
+          "title": "Dental care (Medi-Cal Dental)",
+          "description": "Your dental care comes through Medi-Cal Dental, the state's dental program (not directly through KFHC). It covers things like checkups, cleanings, fillings, and more. Call Medi-Cal Dental to learn about covered services or to find a dentist who takes Medi-Cal. They are open Monday-Friday, 8am-5pm.",
+          "phone": "1-800-322-6384",
+          "url": "https://dental.dhcs.ca.gov/",
+          "languages": "TTY 1-800-735-2922",
+          "verified": false
+        },
+        {
+          "category": "Vision",
+          "title": "Vision care (eye exams and glasses)",
+          "description": "KFHC covers vision care through Vision Service Plan (VSP). You can get a routine eye exam to check your eye health and your prescription. Eyeglasses are covered for members under 21 and for nursing-home residents (state Medi-Cal rules). To find an eye doctor, search VSP and choose the 'Medicaid' network, or call Member Services for help.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Language & interpreter help",
+          "title": "Free interpreter and translation help",
+          "description": "You have the right to get help in your language at no cost. Over-the-phone interpreters speak more than 200 languages. You can also ask for a free interpreter at your doctor visits, and you can get plan letters and the handbook in other languages, large print, braille, or audio. Just call Member Services before your visit.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
+          "languages": "Over-the-phone interpreters in 200+ languages; TDD/TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Member ID card & online account",
+          "title": "Member ID card and online account (Member Portal / LiNK app)",
+          "description": "Your KFHC member ID card should arrive in the mail within about two weeks of starting coverage. Bring it to every visit and pharmacy pickup. Lost your card? Request a new one online or by calling Member Services. You can also sign up for the Member Portal (or the free LiNK app) to view your main doctor, change your info, and see your prescription approvals.",
+          "phone": "1-800-391-2000",
+          "url": "https://member.kernfamilyhealthcare.com/v3app/a/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Renew Medi-Cal / keep coverage",
+          "title": "Keep your Medi-Cal coverage (renew every year)",
+          "description": "You must renew your Medi-Cal every year so you don't lose your coverage. Watch your mail for a renewal packet from the Kern County Department of Human Services and send back anything they ask for on time. If you miss the deadline, you have 90 days after it to still finish your renewal. Make sure your address and phone number are up to date.",
+          "phone": "1-877-410-8812",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Complaints & appeals (grievances)",
+          "title": "File a complaint or appeal (grievance)",
+          "description": "If you are unhappy with your care, a provider, or a plan decision, you have the right to speak up, and it will not affect your care. You can file a grievance online, by phone, or by mailing a form. If the plan denies a service, you can appeal to ask them to review it. KFHC answers most grievances within 30 days. Mail forms to: Grievance Coordinator, KFHC, 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
+          "languages": "Forms in English and Spanish; interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Extra benefits & community supports (CalAIM)",
+          "title": "Extra help: Enhanced Care Management & Community Supports (CalAIM)",
+          "description": "If you have complex health needs, KFHC offers Enhanced Care Management (ECM) at no cost. A care team helps you coordinate your doctors, mental health, and other needs, all in one place. Community Supports can help with things like finding housing, getting healthy food, or having a safe place to recover after a hospital stay. Call Member Services to ask if you qualify.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
+          "languages": "Interpreter help available; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Member handbook & forms",
+          "title": "Member Handbook and forms",
+          "description": "The Member Handbook (also called the Evidence of Coverage) explains all your benefits, your rights, and how to get care. You can read it online, or ask for a free printed copy in English or Spanish, or in large print, braille, or audio. Read it soon after you join so you know what is covered.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+          "languages": "Available in English and Spanish; large print, braille, and audio on request; TTY 711",
+          "verified": false
+        },
+        {
+          "category": "Other",
+          "title": "Contact Kern Family Health Care",
+          "description": "For any question about your Medi-Cal plan, Member Services can help Monday-Friday, 8am-5pm. The local Bakersfield number is 661-632-1590, or call toll-free at 1-800-391-2000 from outside Bakersfield. The office is at 2900 Buck Owens Blvd., Bakersfield, CA 93308.",
+          "phone": "1-800-391-2000",
+          "url": "https://www.kernfamilyhealthcare.com/contact-us/",
+          "languages": "Interpreter help in 200+ languages; TTY 711",
+          "verified": true
+        }
+      ],
+      "sources": [
+        "https://www.kernfamilyhealthcare.com/medi-cal/",
+        "https://www.kernfamilyhealthcare.com/contact-us/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/find-a-doctor-hospital-or-clinic/",
+        "https://member.kernfamilyhealthcare.com/v3app/a/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/urgent-after-hours-care/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/transportation-benefits/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/behavioral-health/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/pharmacy-benefits/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/grievance-form/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/enhanced-care-management/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/keeping-medi-cal-coverage/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/interpreter-and-translation-services/",
+        "https://www.kernfamilyhealthcare.com/medi-cal/member-resources/member-handbook/",
+        "https://dental.dhcs.ca.gov/",
+        "https://www.kcdhs.org/services/apply-for-benefits/medi-cal"
       ]
     }
   ],

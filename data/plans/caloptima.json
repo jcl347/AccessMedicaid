@@ -1,0 +1,174 @@
+{
+  "planId": "caloptima",
+  "planName": "CalOptima Health (Medi-Cal)",
+  "relationship": "CalOptima Health is the single County Organized Health System (COHS) Medi-Cal plan for Orange County. If you have Medi-Cal and live in Orange County, CalOptima Health is your health plan. It works with a network of doctor groups (health networks) to provide your care.",
+  "memberServicesPhone": "1-888-587-8088",
+  "memberServicesHours": "Monday through Friday, 8 a.m. to 5:30 p.m. (closed on some holidays)",
+  "ttyPhone": "711",
+  "nurseAdviceLine": "1-844-447-8441",
+  "website": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+  "memberPortalUrl": "https://member.caloptima.org/",
+  "findADoctorUrl": "https://www.caloptima.org/en/find-a-provider",
+  "memberHandbookUrl": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+  "notes": "Member Services 1-888-587-8088 was verified on the official CalOptima Health site. The back of your member ID card lists the current number to call. The 24/7 Nurse Advice Line is 1-844-447-8441 (TTY 1-844-514-3774). Behavioral health: CalOptima's own behavioral health line is 1-855-877-3885 (24/7) for mental health; substance use treatment is largely handled by the separate Orange County Drug Medi-Cal system (Access Line 1-800-723-8641, 24/7). Dental and the Medi-Cal Rx pharmacy benefit are run by the State of California, not by CalOptima. Transportation (both NEMT medical rides and NMT non-medical rides) is booked at 1-833-648-7528.",
+  "resources": [
+    {
+      "category": "Find a doctor",
+      "title": "Find a Doctor or Provider",
+      "description": "Use the online Find a Provider tool to search for a primary care doctor, specialist, hospital, or other provider in your CalOptima Health network. You can search by name, location, language spoken, and more. If you need help choosing or changing your doctor, call Member Services and they can help you.",
+      "phone": "1-888-587-8088",
+      "url": "https://www.caloptima.org/en/find-a-provider",
+      "languages": "Free help in many languages; you can search providers by the language they speak. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Get a ride (transportation)",
+      "title": "Free Rides to Medical Visits (NEMT)",
+      "description": "If you have a medical or physical condition that means you cannot use a car, bus, or taxi, CalOptima Health can give you a free ride to your covered care by wheelchair van, litter van, or ambulance. This is called Non-Emergency Medical Transportation. Call to book, and try to call a few business days before your visit. This is not for emergencies; for emergencies call 911.",
+      "phone": "1-833-648-7528",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+      "languages": "Phone menu lets you choose your language preference. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Nurse advice line (24/7)",
+      "title": "24/7 Nurse Advice Line",
+      "description": "Not sure if you should see a doctor, go to urgent care, or go to the ER? Call the Nurse Advice Line any time, day or night. A trained nurse will listen to your symptoms and help you decide what to do. It is free and open 24 hours a day, 7 days a week.",
+      "phone": "1-844-447-8441",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+      "languages": "Interpreter services available. TTY 1-844-514-3774.",
+      "verified": true
+    },
+    {
+      "category": "Mental health & substance use",
+      "title": "Mental Health and Substance Use Help",
+      "description": "If you feel sad, anxious, stressed, or need help with drugs or alcohol, you can get care. For mental health, call CalOptima Health's behavioral health line, open 24/7. For drug or alcohol treatment, you may also be connected to the Orange County Drug Medi-Cal access line, also open 24/7. In a crisis, call or text 988 for the Suicide and Crisis Lifeline, or call OC Links at 1-855-625-4657.",
+      "phone": "1-855-877-3885",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+      "languages": "Free interpreter help available. TTY 711. Substance use access line: 1-800-723-8641.",
+      "verified": true
+    },
+    {
+      "category": "Pharmacy & prescriptions",
+      "title": "Prescription Drugs (Medi-Cal Rx)",
+      "description": "Your prescription medicines are covered through Medi-Cal Rx, run by the State of California (not CalOptima Health). Take your prescription to a pharmacy that accepts Medi-Cal Rx. If you have questions about your medicine or which pharmacies you can use, call the Medi-Cal Rx help line, open 24 hours a day, 7 days a week.",
+      "phone": "1-800-977-2273",
+      "url": "https://medi-calrx.dhcs.ca.gov/home/",
+      "languages": "Free interpreter help available. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Dental",
+      "title": "Dental Care (Medi-Cal Dental)",
+      "description": "Your dental care is covered through the state Medi-Cal Dental program, not through CalOptima Health. Medi-Cal Dental covers things like checkups, cleanings, fillings, and more. Call the number below to find a dentist or ask about your dental benefits.",
+      "phone": "1-800-322-6384",
+      "url": "https://dental.dhcs.ca.gov/",
+      "languages": "Free interpreter help available. TTY 1-800-735-2922 or 711.",
+      "verified": true
+    },
+    {
+      "category": "Vision",
+      "title": "Eye and Vision Care",
+      "description": "CalOptima Health covers routine eye exams and, when needed, glasses. Your vision care is provided through VSP (Vision Service Plan). Call to find an eye doctor or learn what your vision benefits cover.",
+      "phone": "1-800-438-4560",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+      "languages": "Free interpreter help available. TTY 1-800-735-2922.",
+      "verified": true
+    },
+    {
+      "category": "Language & interpreter help",
+      "title": "Free Language and Interpreter Help",
+      "description": "You have the right to get help in your language at no cost. CalOptima Health has staff who speak many languages and can arrange a free interpreter for your doctor visits and phone calls. You can also ask for written materials in your language or in large print. Just ask Member Services.",
+      "phone": "1-888-587-8088",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+      "languages": "Free interpreters in many languages, including sign language. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Member ID card & online account",
+      "title": "Member ID Card and Online Account",
+      "description": "Create or log in to your CalOptima Health Member Portal to see your health plan info, check your doctor, and more. If you lost your member ID card or never got one, call Member Services and they will send you a new one. Always carry your CalOptima Health ID card and your state Medi-Cal Benefits ID card.",
+      "phone": "1-888-587-8088",
+      "url": "https://member.caloptima.org/",
+      "languages": "Free help in many languages. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Renew Medi-Cal / keep coverage",
+      "title": "Renew Your Medi-Cal Each Year",
+      "description": "You must renew your Medi-Cal once a year to keep your health coverage. For many people this happens automatically. If your county sends you a renewal packet, fill it out and send it back before the deadline so you do not lose your benefits. The fastest way to renew is online at BenefitsCal.com. Make sure your address and phone number are up to date so you get your renewal notices.",
+      "phone": "1-800-281-9799",
+      "url": "https://www.benefitscal.com",
+      "languages": "Free help in many languages. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Complaints & appeals (grievances)",
+      "title": "File a Complaint or Appeal",
+      "description": "If you are unhappy with your care, your doctor, or a decision about your services, you can file a complaint (grievance) or an appeal. There is no cost and it will not affect your care. Call Member Services first, or file online. If you already filed an appeal and still disagree, you can ask the state for a State Hearing within 120 days (call 1-800-952-5253).",
+      "phone": "1-888-587-8088",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/your-rights",
+      "languages": "Free help in many languages. TTY 711. State Hearing TDD/TTY 1-800-952-8349.",
+      "verified": true
+    },
+    {
+      "category": "Extra benefits & community supports (CalAIM)",
+      "title": "Extra Help: Care Management and Community Supports (CalAIM)",
+      "description": "Through CalAIM, you may qualify for extra help at no cost. Enhanced Care Management gives you one care manager who helps coordinate all your health and life needs if you have complex needs. Community Supports can include things like help finding housing, medically tailored meals, recuperative care after a hospital stay, home changes for safety, and more. Ask your doctor or call Member Services to see if you qualify.",
+      "phone": "1-888-587-8088",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services/calaim",
+      "languages": "Free help in many languages. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Urgent & after-hours care",
+      "title": "Urgent Care and After-Hours Help",
+      "description": "If you need care that cannot wait but is not life-threatening, you can go to an urgent care center in your network or call your doctor's office, which has someone on call after hours. Not sure what to do? Call the free 24/7 Nurse Advice Line. For a life-threatening emergency, always call 911 or go to the nearest emergency room.",
+      "phone": "1-844-447-8441",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+      "languages": "Interpreter services available. TTY 1-844-514-3774. Emergencies: call 911.",
+      "verified": true
+    },
+    {
+      "category": "Member handbook & forms",
+      "title": "Member Handbook and Forms",
+      "description": "Your Member Handbook explains your benefits, your rights, and how to get care. You can read or download it from the CalOptima Health Medi-Cal pages, or call Member Services to ask for a printed copy mailed to you for free. Referral forms and other member forms are also available online.",
+      "phone": "1-888-587-8088",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+      "languages": "Available in other languages and large print on request. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Transportation to non-medical (NMT)",
+      "title": "Rides to Pick Up Medicine and Non-Medical Trips (NMT)",
+      "description": "CalOptima Health can give you free Non-Medical Transportation to and from your covered care, like rides to the doctor, dentist, mental health or substance use visits, and to pick up prescriptions and medical supplies. This is for members who do not need a medical vehicle. Call the transportation line to book, and try to call a few business days ahead.",
+      "phone": "1-833-648-7528",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+      "languages": "Phone menu lets you choose your language. TTY 711.",
+      "verified": true
+    },
+    {
+      "category": "Other",
+      "title": "Crisis and Around-the-Clock Support",
+      "description": "If you or someone you know is in emotional crisis or thinking about suicide, call or text 988 any time to reach the Suicide and Crisis Lifeline. In Orange County, you can also call OC Links at 1-855-625-4657 to get connected to mental health and substance use services. For any life-threatening emergency, call 911.",
+      "phone": "988",
+      "url": "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+      "languages": "988 offers Spanish and other languages, plus TTY/ASL options. OC Links TTY 711.",
+      "verified": true
+    }
+  ],
+  "sources": [
+    "https://www.caloptima.org/en/ForMembers/Medi-Cal",
+    "https://www.caloptima.org/en/health-insurance-plans/medi-cal",
+    "https://www.caloptima.org/en/contact-us",
+    "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services",
+    "https://www.caloptima.org/en/health-insurance-plans/medi-cal/benefits-and-services/calaim",
+    "https://www.caloptima.org/en/health-insurance-plans/medi-cal/your-rights",
+    "https://www.caloptima.org/en/health-insurance-plans/medi-cal/behavioral-health-services",
+    "https://www.caloptima.org/en/find-a-provider",
+    "https://member.caloptima.org/",
+    "https://www.benefitscal.com",
+    "https://medi-calrx.dhcs.ca.gov/home/",
+    "https://dental.dhcs.ca.gov/"
+  ]
+}
