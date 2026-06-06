@@ -125,9 +125,109 @@
  "url": "https://www.dhcs.ca.gov/services/medi-cal/Pages/Transportation.aspx",
  "languages": "",
  "verified": true
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "In-Home Supportive Services (IHSS)",
+ "description": "Free in-home care (help with bathing, dressing, meals, and chores) so older adults and people with disabilities can stay safely at home. Apply through your county IHSS office. To report abuse or neglect, call Adult Protective Services, 24/7.",
+ "phone": "1-833-401-0832",
+ "url": "https://www.cdss.ca.gov/in-home-supportive-services",
+ "languages": "Application available in 10+ languages; county offices provide free interpreters",
+ "verified": true
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "Community-Based Adult Services (CBAS)",
+ "description": "Day centers with nursing, therapy, meals, and activities for older adults and adults with disabilities, to help you avoid a nursing home. Ask your Medi-Cal health plan's Member Services to see if you qualify and to set it up.",
+ "phone": "",
+ "url": "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+ "languages": "Arranged through your Medi-Cal plan; interpreters provided",
+ "verified": true
+ },
+ {
+ "category": "Find a doctor",
+ "title": "California Children's Services (CCS)",
+ "description": "Covers specialty care and case management for children under 21 with certain serious health conditions (like heart disease, cancer, cerebral palsy, or a serious injury). Call to check if your child qualifies.",
+ "phone": "1-800-863-4155",
+ "url": "https://www.dhcs.ca.gov/services/ccs/Pages/default.aspx",
+ "languages": "TTY 1-800-735-2929; county offices provide interpreters",
+ "verified": true
+ },
+ {
+ "category": "Other",
+ "title": "WIC (food & support for pregnancy and young kids)",
+ "description": "Free healthy food, breastfeeding support, and nutrition help for people who are pregnant or just had a baby, and for babies and children under 5. Call to check if you qualify and find a local office.",
+ "phone": "1-800-852-5770",
+ "url": "https://myfamily.wic.ca.gov/Home/ContactUs",
+ "languages": "Many languages available",
+ "verified": true
+ },
+ {
+ "category": "Extra benefits & community supports (CalAIM)",
+ "title": "Regional Centers (developmental disabilities)",
+ "description": "Local centers that coordinate services for people with autism, intellectual disability, cerebral palsy, or epilepsy, and their families, including Early Start for babies and toddlers. Use the lookup to find your center, or call the Early Start BabyLine at 1-800-515-2229.",
+ "phone": "1-833-421-0061",
+ "url": "https://www.dds.ca.gov/rc/lookup-rcs-by-county/",
+ "languages": "Regional centers provide interpreters; TTY 711",
+ "verified": true
+ },
+ {
+ "category": "Other",
+ "title": "CalFresh (food benefits / EBT)",
+ "description": "Monthly money on an EBT card to help buy groceries. Many Medi-Cal members also qualify. Apply online at BenefitsCal.com or call the info line.",
+ "phone": "1-877-847-3663",
+ "url": "https://www.cdss.ca.gov/calfresh",
+ "languages": "English and Spanish; county offices provide interpreters",
+ "verified": true
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "Neighborhood Legal Services of LA County (free legal aid)",
+ "description": "Free legal help in Los Angeles County, including a Health Consumer Center for Medi-Cal problems, denials, and appeals. No cost.",
+ "phone": "1-800-896-3202",
+ "url": "https://nlsla.org/",
+ "languages": "Interpreters available; serves LA County in many languages",
+ "verified": true
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "DMHC Help Center (state regulator)",
+ "description": "If your plan denies or delays care, the state Department of Managed Health Care can help, including an Independent Medical Review, after you finish your plan's grievance process. Free.",
+ "phone": "1-888-466-2219",
+ "url": "https://www.dmhc.ca.gov/FileaComplaint.aspx",
+ "languages": "Help in all languages; TDD 1-877-688-9891",
+ "verified": true
+ },
+ {
+ "category": "Complaints & appeals (grievances)",
+ "title": "State Fair Hearing (appeal a Medi-Cal decision)",
+ "description": "If Medi-Cal denies, reduces, or stops your benefits, you can ask the state for a fair hearing. Have your name, BIC number, and the decision you are appealing ready.",
+ "phone": "1-800-743-8525",
+ "url": "https://www.cdss.ca.gov/hearing-requests",
+ "languages": "TTY 1-800-952-8349; free interpreters at hearings",
+ "verified": true
+ },
+ {
+ "category": "Mental health & substance use",
+ "title": "National Domestic Violence Hotline",
+ "description": "Free, confidential support 24/7 if you feel unsafe at home: safety planning and referrals. Call, or text START to 88788.",
+ "phone": "1-800-799-7233",
+ "url": "https://www.thehotline.org/",
+ "languages": "English and Spanish, plus 200+ languages by interpreter; 24/7",
+ "verified": true
  }
  ],
  "sources": [
+ "https://www.cdss.ca.gov/in-home-supportive-services",
+ "https://www.dhcs.ca.gov/services/community-based-adult-services/",
+ "https://www.dhcs.ca.gov/services/ccs/Pages/default.aspx",
+ "https://myfamily.wic.ca.gov/Home/ContactUs",
+ "https://www.dds.ca.gov/rc/lookup-rcs-by-county/",
+ "https://www.cdss.ca.gov/calfresh",
+ "https://nlsla.org/",
+ "https://www.dmhc.ca.gov/FileaComplaint.aspx",
+ "https://www.cdss.ca.gov/hearing-requests",
+ "https://www.thehotline.org/",
  "https://smilecalifornia.org/contact-us/",
  "https://dental.dhcs.ca.gov/Contact_Us/Medi-Cal_Dental_Member_Contact_Information/MediCalDentalMemberContactInformation",
  "https://www.dhcs.ca.gov/individuals/medi-cal-rx-customer-service-center/",

@@ -49,7 +49,7 @@
  "Member handbook & forms": "book", "Transportation to non-medical (NMT)": "bag", "Other": "info",
  };
  function svg(name, cls) {
- return '<svg class="' + (cls || "") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[name] || P.info) + "</svg>";
+ return '<svg class="' + (cls || "ic") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[name] || P.info) + "</svg>";
  }
  function catIcon(cat, cls) { return svg(CAT_ICON[cat] || "info", cls); }
 
@@ -330,9 +330,20 @@
  renderLive(panel, { host: primary.host, title: primary.title, snippet: primary.snippet, phones: phones, url: primary.url, fetchedAt: primary.fetchedAt, sources: oks.length }, category);
  }).catch(function () { if (token === state._mineToken) panel.innerHTML = ""; });
  }
+ function phoneLabelFromPlan(plan, ph) {
+ if (!plan) return "";
+ var d10 = (ph || "").replace(/\D/g, "").slice(-10); if (!d10) return "";
+ var found = "";
+ planResources(plan).forEach(function (r) { if (found) return; if ((r.phone || "").replace(/\D/g, "").slice(-10) === d10) found = phonePurpose(r) || r.title; });
+ return found;
+ }
  function renderLive(panel, d, category) {
  var phones = el("div", { class: "live-phones" });
- (d.phones || []).slice(0, 6).forEach(function (ph) { phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + ph + "</span>" })); });
+ var lplan = getPlan();
+ (d.phones || []).slice(0, 6).forEach(function (ph) {
+ var lab = phoneLabelFromPlan(lplan, ph);
+ phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + (lab ? lab + ": " + ph : ph) + "</span>" }));
+ });
  var when = "just now";
  try { var diff = (Date.now() - new Date(d.fetchedAt).getTime()) / 1000; when = diff < 90 ? "just now" : Math.round(diff / 60) + " min ago"; } catch (e) {}
  panel.innerHTML = "";
@@ -340,7 +351,7 @@
  el("div", { class: "live-head", html: '<span class="live-badge"><span class="dot"></span> LIVE</span> <span>Latest for ' + shortLabel(category) + "</span>" }),
  d.title ? el("div", { class: "live-body", text: d.title }) : null,
  d.snippet ? el("div", { class: "live-body muted", text: d.snippet }) : null,
- (d.phones && d.phones.length) ? el("div", {}, [el("div", { class: "live-sub", text: "Phone numbers found on the official page(s) (tap to call; open a page to see what each is for):" }), phones]) : null,
+ (d.phones && d.phones.length) ? el("div", {}, [el("div", { class: "live-sub", text: "Numbers on the official page (we label the ones we recognize; others are listed as found - open the page to confirm what each is for):" }), phones]) : null,
  el("div", { class: "live-meta", html: svg("compass") + "<span>Pulled live from <strong>" + d.host + "</strong>" + (d.sources > 1 ? " plus " + (d.sources - 1) + " more official page" + (d.sources - 1 > 1 ? "s" : "") : "") + " · " + when + "</span>" }, [
  el("a", { class: "btn btn-ghost", href: d.url, target: "_blank", rel: "noopener", html: "<span>View page</span>" + svg("external") }),
  ]),
@@ -921,13 +932,9 @@
  var nurl = "/api/nearby?lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius;
  function fail() { if (token !== geo.t) return; setMapLabel("The map search is busy right now. Tap your need again to retry, or use the Google Maps link below."); if (list) list.innerHTML = '<div class="empty-note">Couldn\'t reach the map service. Please retry in a moment, or use "Open this search in Google Maps" below.</div>'; }
  function retryOrFail(n) { if (token !== geo.t) return; if (n < 2) { setTimeout(function () { attempt(n + 1); }, 900); } else { fail(); } }
- function attempt(n) {
- fetch(nurl, { headers: { Accept: "application/json" } })
- .then(function (r) { return r.json(); })
- .then(function (d) {
+ function process(rawPlaces) {
  if (token !== geo.t) return;
- if (!d || !d.ok) { retryOrFail(n); return; }
- var places = (d.places || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; });
+ var places = (rawPlaces || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; });
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
@@ -937,10 +944,50 @@
  });
  setMapLabel(places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". All are on the map; nearest listed first:") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time."));
  renderNearList(places.slice(0, 20));
- })
- .catch(function () { retryOrFail(n); });
+ }
+ function acquire() {
+ // Try our cached serverless proxy first; if it has no usable hits (e.g. Overpass
+ // rate-limited Vercel's IP), fall back to querying Overpass directly from the
+ // browser (a residential IP, which Overpass serves reliably).
+ return fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
+ .then(function (d) { if (d && d.ok && Array.isArray(d.places) && d.places.length) return d.places; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); })
+ .catch(function () { return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); });
+ }
+ function attempt(n) {
+ acquire().then(function (places) { if (token !== geo.t) return; process(places); }).catch(function () { retryOrFail(n); });
  }
  attempt(0);
+ }
+ var OVERPASS_MIRRORS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.osm.ch/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
+ var CLIENT_FILTERS = {
+ pharmacy: ['node["amenity"="pharmacy"]', 'way["amenity"="pharmacy"]'],
+ hospital: ['node["amenity"="hospital"]', 'way["amenity"="hospital"]'],
+ urgent_care: ['node["healthcare"="urgent_care"]', 'way["healthcare"="urgent_care"]', 'node["amenity"="clinic"]', 'way["amenity"="clinic"]', 'node["healthcare"="clinic"]', 'way["healthcare"="clinic"]', 'node["amenity"="hospital"]', 'way["amenity"="hospital"]'],
+ clinic: ['node["amenity"="clinic"]', 'way["amenity"="clinic"]', 'node["healthcare"="clinic"]', 'way["healthcare"="clinic"]', 'node["healthcare"="centre"]', 'way["healthcare"="centre"]', 'node["healthcare"="community_health_centre"]', 'way["healthcare"="community_health_centre"]', 'node["amenity"="doctors"]', 'way["amenity"="doctors"]'],
+ doctor: ['node["amenity"="doctors"]', 'way["amenity"="doctors"]', 'node["healthcare"="doctor"]', 'way["healthcare"="doctor"]'],
+ dentist: ['node["amenity"="dentist"]', 'way["amenity"="dentist"]', 'node["healthcare"="dentist"]', 'way["healthcare"="dentist"]'],
+ mental_health: ['node["healthcare"="psychotherapist"]', 'way["healthcare"="psychotherapist"]', 'node["healthcare"="counselling"]', 'way["healthcare"="counselling"]', 'node["healthcare:speciality"~"psych|mental|behav|counsel|addict",i]', 'way["healthcare:speciality"~"psych|mental|behav|counsel|addict",i]', 'node["amenity"~"clinic|doctors|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'way["amenity"~"clinic|doctors|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'node["healthcare"~"clinic|centre|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'way["healthcare"~"clinic|centre|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]'],
+ };
+ function overpassDirect(type, radius, lat, lng) {
+ var filters = CLIENT_FILTERS[type] || CLIENT_FILTERS.clinic;
+ var ql = "[out:json][timeout:25];(" + filters.map(function (f) { return f + "(around:" + radius + "," + lat + "," + lng + ");"; }).join("") + ");out center tags 250;";
+ function one(base) {
+ var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 10000);
+ return fetch(base, { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "data=" + encodeURIComponent(ql) })
+ .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error("status"); return r.json(); })
+ .then(function (d) { if (!d || !Array.isArray(d.elements) || (d.remark && !d.elements.length)) throw new Error("remark"); return d; })
+ .catch(function (e) { clearTimeout(t); throw e; });
+ }
+ return Promise.any(OVERPASS_MIRRORS.map(one)).then(function (data) {
+ var seen = {};
+ return (data.elements || []).map(function (e) {
+ var c = e.type === "node" ? { lat: e.lat, lon: e.lon } : (e.center || {});
+ var tg = e.tags || {};
+ var addr = [tg["addr:housenumber"], tg["addr:street"]].filter(Boolean).join(" ");
+ if (tg["addr:city"]) addr += (addr ? ", " : "") + tg["addr:city"];
+ return { name: tg.name || tg.operator || "(Unnamed location)", lat: c.lat, lng: c.lon, phone: tg.phone || tg["contact:phone"] || "", address: addr };
+ }).filter(function (x) { if (!isFinite(x.lat) || !isFinite(x.lng)) return false; var k = x.name + "@" + x.lat.toFixed(4) + "," + x.lng.toFixed(4); if (seen[k]) return false; seen[k] = 1; return true; });
+ });
  }
 
  function renderNearList(places) {

@@ -37,6 +37,7 @@ function queryMirror(base, ql) {
     return r.json();
   }).then(function (data) {
     if (!data || !Array.isArray(data.elements)) throw new Error("no data");
+    if (data.remark && data.elements.length === 0) throw new Error("overpass remark: " + data.remark); // rate-limited/timeout -> try next mirror
     return data;
   }).catch(function (e) { clearTimeout(t); throw e; });
 }
