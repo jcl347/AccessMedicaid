@@ -112,6 +112,11 @@ a { color: var(--primary-700); }
 .ts-btn[aria-pressed="true"], .tool-btn[aria-pressed="true"] { background: var(--primary); color: #fff; border-color: var(--primary); }
 .tool-btn:hover, .ts-btn:hover { border-color: var(--primary-bright); }
 
+.read-wrap { display: inline-flex; align-items: center; gap: .35rem; }
+.voice-select { min-height: 40px; max-width: 9.5rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: var(--radius-sm); font-family: inherit; font-weight: 600; font-size: .82rem; padding: .35rem .5rem; cursor: pointer; }
+.voice-select:hover { border-color: var(--primary-bright); }
+.voice-select:focus-visible { outline: 2px solid var(--primary-bright); outline-offset: 1px; }
+
 .lang-wrap { position: relative; }
 .lang-btn { font-weight: 700; }
 .lang-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 120; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-lg); padding: .5rem; width: 290px; display: none; grid-template-columns: 1fr 1fr; gap: .25rem; }

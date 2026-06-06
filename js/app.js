@@ -54,7 +54,7 @@
  function catIcon(cat, cls) { return svg(CAT_ICON[cat] || "info", cls); }
 
  /* ---------- state ---------- */
- var STORE = { plan: "amla.plan", size: "amla.textsize", zip: "amla.zip", lang: "amla.lang" };
+ var STORE = { plan: "amla.plan", size: "amla.textsize", zip: "amla.zip", lang: "amla.lang", voice: "amla.voice" };
  var state = { planId: null, category: null, query: "", care: "urgent care", loc: "", zip: "" };
 
  /* ---------- helpers ---------- */
@@ -161,15 +161,10 @@
  // share ONE grid so single-plan counties sit side by side (no stacked blank rows).
  if (la.length) wrap.appendChild(countyGroup(primary, la, false));
  if (others.length) wrap.appendChild(countyGroup("Greater LA region - surrounding counties", others, true));
- var extra = el("div", { class: "county-group" });
- extra.appendChild(el("div", { class: "county-title", html: svg("info") + "<span>Not sure which plan?</span>" }));
- var g2 = el("div", { class: "plan-grid" });
- g2.appendChild(planCard({ id: "__all__", name: "I'm not sure / show me everything", relationship: "See resources that work for every plan and statewide", brandColor: "#687888" }, false));
- extra.appendChild(g2); wrap.appendChild(extra);
  flow(wrap);
  }
  function planCard(p, showArea) {
- var checked = state.planId === p.id || (p.id === "__all__" && !state.planId);
+ var checked = state.planId === p.id;
  var kids = [];
  if (showArea && p.serviceArea) kids.push(el("span", { class: "pc-area", text: p.serviceArea }));
  kids.push(el("span", { class: "pc-name", text: p.name }));
@@ -177,7 +172,7 @@
  kids.push(el("span", { class: "pc-check", text: "✓ Selected" }));
  var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, kids);
  card.addEventListener("click", function () {
- state.planId = p.id === "__all__" ? null : p.id;
+ state.planId = p.id;
  store(false, STORE.plan, state.planId || "");
  renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit(); renderTriage();
  $("#needs-step").scrollIntoView({ block: "start" });
@@ -966,12 +961,21 @@
  renderNearList(places.slice(0, 20));
  }
  function acquire() {
- // Try our cached serverless proxy first; if it has no usable hits (e.g. Overpass
- // rate-limited Vercel's IP), fall back to querying Overpass directly from the
- // browser (a residential IP, which Overpass serves reliably).
- return fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "osm"; return d.places; } geo.lastSource = "osm"; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); })
- .catch(function () { geo.lastSource = "osm"; return overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng); });
+ // Run BOTH paths in parallel and merge: the cached serverless proxy (which may use
+ // Google Places) AND a direct browser Overpass query (the browser's own IP reaches
+ // Overpass reliably even when Vercel's datacenter IP is rate-limited/blocked).
+ var serverSource = "osm";
+ var server = fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
+ .then(function (d) { if (d && d.ok && Array.isArray(d.places)) { serverSource = d.source || "osm"; return d.places; } return []; })
+ .catch(function () { return []; });
+ var direct = overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng).catch(function () { return []; });
+ return Promise.all([server, direct]).then(function (res) {
+ var sv = res[0] || [], dr = res[1] || [];
+ geo.lastSource = sv.length ? serverSource : "osm";
+ var seen = {}, out = [];
+ sv.concat(dr).forEach(function (p) { if (!p || !isFinite(p.lat) || !isFinite(p.lng)) return; var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; out.push(p); });
+ return out;
+ });
  }
  function attempt(n) {
  acquire().then(function (places) { if (token !== geo.t) return; process(places); }).catch(function () { retryOrFail(n); });
@@ -1154,17 +1158,85 @@
  Array.prototype.forEach.call(document.querySelectorAll(".ts-btn"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-size") === size ? "true" : "false"); });
  }
  }
+ // Natural-sounding voices vary by OS/browser. We rank the warmer "neural"/"online"
+ // voices first (Microsoft Aria/Jenny, Google US English, Apple Samantha/Siri) so the
+ // default doesn't land on a robotic fallback. Users can still pick any installed voice.
+ var VOICE_RANK = ["aria", "jenny", "michelle", "ava", "emma", "guy", "natural", "online", "google us english", "google uk english female", "samantha", "siri", "karen", "moira", "tessa", "google"];
+ function scoreVoice(v) {
+ var n = (v.name || "").toLowerCase(), s = 0;
+ for (var i = 0; i < VOICE_RANK.length; i++) { if (n.indexOf(VOICE_RANK[i]) >= 0) { s = VOICE_RANK.length - i + 20; break; } }
+ if (/en[-_]us/i.test(v.lang)) s += 6; else if (/^en/i.test(v.lang)) s += 3;
+ if (v.localService === false) s += 2; // cloud voices are usually higher quality
+ if (/female|woman/i.test(n)) s += 1;
+ return s;
+ }
+ function enVoices() {
+ var all = window.speechSynthesis.getVoices() || [];
+ var en = all.filter(function (v) { return /^en/i.test(v.lang || ""); });
+ return (en.length ? en : all).sort(function (a, b) { return scoreVoice(b) - scoreVoice(a); });
+ }
  function initReadAloud() {
  var btn = $("#readAloudBtn"); if (!btn) return;
- if (!("speechSynthesis" in window)) { btn.style.display = "none"; return; }
- var on = false;
- btn.addEventListener("click", function () {
- if (on) { window.speechSynthesis.cancel(); on = false; btn.setAttribute("aria-pressed", "false"); return; }
- var main = $("#main"); var text = main ? main.innerText.replace(/\s+/g, " ").slice(0, 8000) : "";
- var u = new SpeechSynthesisUtterance(text); u.rate = 0.95;
- u.onend = function () { on = false; btn.setAttribute("aria-pressed", "false"); };
- window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); on = true; btn.setAttribute("aria-pressed", "true");
+ var synth = window.speechSynthesis;
+ if (!("speechSynthesis" in window) || !synth) { btn.style.display = "none"; var sel0 = $("#voiceSelect"); if (sel0) sel0.style.display = "none"; return; }
+ var sel = $("#voiceSelect");
+ var on = false, voices = [], chosen = null;
+ var savedName = store(true, STORE.voice) || "";
+
+ function buildList() {
+ voices = enVoices();
+ if (!voices.length) return;
+ chosen = (savedName && find(voices, function (v) { return v.name === savedName; })) || voices[0];
+ if (sel) {
+ sel.innerHTML = "";
+ voices.forEach(function (v) {
+ var o = document.createElement("option");
+ o.value = v.name; o.textContent = v.name.replace(/^(Microsoft|Google)\s+/, "") + (/en[-_]?gb/i.test(v.lang) ? " (UK)" : "");
+ if (v.name === chosen.name) o.selected = true;
+ sel.appendChild(o);
  });
+ sel.style.display = "";
+ }
+ }
+ function find(arr, fn) { for (var i = 0; i < arr.length; i++) { if (fn(arr[i])) return arr[i]; } return null; }
+
+ buildList();
+ // Voices often load asynchronously - rebuild when they arrive.
+ if (typeof synth.onvoiceschanged !== "undefined") synth.onvoiceschanged = buildList;
+ setTimeout(buildList, 350);
+
+ if (sel) sel.addEventListener("change", function () {
+ chosen = find(voices, function (v) { return v.name === sel.value; }) || chosen;
+ store(false, STORE.voice, chosen ? chosen.name : "");
+ if (on) { stop(); start(); } // restart with the new voice so the change is audible
+ });
+
+ function stop() { synth.cancel(); on = false; btn.setAttribute("aria-pressed", "false"); }
+ // Split into sentences so we can add natural pauses and gently vary pitch/rate -
+ // the single biggest fix for the "monotone" robot read of one long utterance.
+ function chunk(text) {
+ var parts = text.replace(/\s+/g, " ").split(/(?<=[.!?:])\s+(?=[A-Z0-9"'])/);
+ var out = [], buf = "";
+ parts.forEach(function (p) { if ((buf + " " + p).length > 240) { if (buf) out.push(buf.trim()); buf = p; } else { buf += " " + p; } });
+ if (buf.trim()) out.push(buf.trim());
+ return out.slice(0, 120);
+ }
+ function start() {
+ var main = $("#main"); var text = main ? main.innerText.slice(0, 9000) : "";
+ var sentences = chunk(text); if (!sentences.length) return;
+ on = true; btn.setAttribute("aria-pressed", "true");
+ synth.cancel();
+ sentences.forEach(function (s, i) {
+ var u = new SpeechSynthesisUtterance(s);
+ if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
+ u.rate = 0.96 + (i % 3) * 0.02; // 0.96 - 1.00, subtle cadence shifts
+ u.pitch = 1.02 + (i % 2 ? -0.06 : 0.06); // gentle rise/fall between sentences
+ u.volume = 1;
+ if (i === sentences.length - 1) u.onend = function () { on = false; btn.setAttribute("aria-pressed", "false"); };
+ synth.speak(u);
+ });
+ }
+ btn.addEventListener("click", function () { if (on) stop(); else start(); });
  }
  function initPrint() { var b = $("#printBtn"); if (b) b.addEventListener("click", function () { window.print(); }); }
  function initSearch() {
