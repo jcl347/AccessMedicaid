@@ -281,34 +281,42 @@
 
  /* ---------- dynamic web-mining (/api/live) ---------- */
  function clearLive() { var p = $("#livePanel"); if (p) p.innerHTML = ""; }
- function bestUrlFor(plan, category) {
- var items = (plan.resources || []).filter(function (r) { return r.category === category && r.url && /^https?:/.test(r.url); });
- if (!items.length) return "";
- var own = items.filter(function (r) { return sameBrand(r.url, plan); })[0];
- return (own || items[0]).url;
+ function candidateUrls(plan, category) {
+ var urls = [], seen = {};
+ function push(u) { if (!u || !/^https?:/.test(u)) return; var key; try { var x = new URL(u); key = x.host + x.pathname; } catch (e) { key = u; } if (seen[key]) return; seen[key] = 1; urls.push(u); }
+ (plan.resources || []).filter(function (r) { return r.category === category && r.url && sameBrand(r.url, plan); }).forEach(function (r) { push(r.url); });
+ (plan.resources || []).filter(function (r) { return r.category === category && r.url && !sameBrand(r.url, plan); }).forEach(function (r) { push(r.url); });
+ return urls.slice(0, 3);
  }
  function sameBrand(url, plan) {
  try { var h = new URL(url).hostname; var ph = new URL(plan.website).hostname.replace(/^www\./, ""); var base = ph.split(".").slice(-2).join("."); return h.indexOf(base) !== -1; } catch (e) { return false; }
  }
  function mineForCategory(plan, category) {
  var panel = $("#livePanel"); if (!panel) return;
- var url = bestUrlFor(plan, category);
- if (!url) { panel.innerHTML = ""; return; }
- var host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
+ var urls = candidateUrls(plan, category);
+ if (!urls.length) { panel.innerHTML = ""; return; }
+ var host = ""; try { host = new URL(urls[0]).hostname.replace(/^www\./, ""); } catch (e) {}
  panel.innerHTML = "";
  panel.appendChild(el("div", { class: "live-panel" }, [
- el("div", { class: "live-head", html: '<span class="live-badge"><span class="dot"></span> LIVE</span> <span>Getting the latest for ' + shortLabel(category) + " from " + (host || "the official site") + "…</span>" }),
+ el("div", { class: "live-head", html: '<span class="live-badge"><span class="dot"></span> LIVE</span> <span>Getting the latest for ' + shortLabel(category) + " from " + (host || "the official site") + "...</span>" }),
  el("div", { class: "live-body" }, [el("div", { class: "live-skel w70" }), el("div", { class: "live-skel w40" })]),
  ]));
  var token = (state._mineToken = (state._mineToken || 0) + 1);
- fetch("/api/live?url=" + encodeURIComponent(url), { headers: { Accept: "application/json" } })
- .then(function (r) { return r.json(); })
- .then(function (d) { if (token !== state._mineToken) return; if (!d || !d.ok) { panel.innerHTML = ""; return; } renderLive(panel, d, category); })
- .catch(function () { if (token === state._mineToken) panel.innerHTML = ""; });
+ Promise.all(urls.map(function (u) {
+ return fetch("/api/live?url=" + encodeURIComponent(u), { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).catch(function () { return { ok: false }; });
+ })).then(function (results) {
+ if (token !== state._mineToken) return;
+ var oks = results.filter(function (d) { return d && d.ok; });
+ if (!oks.length) { panel.innerHTML = ""; return; }
+ var phones = [], pseen = {};
+ oks.forEach(function (d) { (d.phones || []).forEach(function (ph) { var k = ph.replace(/\D/g, ""); if (k && !pseen[k]) { pseen[k] = 1; phones.push(ph); } }); });
+ var primary = oks[0];
+ renderLive(panel, { host: primary.host, title: primary.title, snippet: primary.snippet, phones: phones, url: primary.url, fetchedAt: primary.fetchedAt, sources: oks.length }, category);
+ }).catch(function () { if (token === state._mineToken) panel.innerHTML = ""; });
  }
  function renderLive(panel, d, category) {
  var phones = el("div", { class: "live-phones" });
- (d.phones || []).slice(0, 4).forEach(function (ph) { phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + ph + "</span>" })); });
+ (d.phones || []).slice(0, 6).forEach(function (ph) { phones.appendChild(el("a", { class: "btn btn-call", href: telHref(ph), html: svg("phone") + "<span>" + ph + "</span>" })); });
  var when = "just now";
  try { var diff = (Date.now() - new Date(d.fetchedAt).getTime()) / 1000; when = diff < 90 ? "just now" : Math.round(diff / 60) + " min ago"; } catch (e) {}
  panel.innerHTML = "";
@@ -316,8 +324,8 @@
  el("div", { class: "live-head", html: '<span class="live-badge"><span class="dot"></span> LIVE</span> <span>Latest for ' + shortLabel(category) + "</span>" }),
  d.title ? el("div", { class: "live-body", text: d.title }) : null,
  d.snippet ? el("div", { class: "live-body muted", text: d.snippet }) : null,
- (d.phones && d.phones.length) ? el("div", {}, [el("div", { class: "live-sub", text: "Phone numbers found on this page (tap to call; open the page to see what each is for):" }), phones]) : null,
- el("div", { class: "live-meta", html: svg("compass") + "<span>Pulled live from <strong>" + d.host + "</strong> · " + when + "</span>" }, [
+ (d.phones && d.phones.length) ? el("div", {}, [el("div", { class: "live-sub", text: "Phone numbers found on the official page(s) (tap to call; open a page to see what each is for):" }), phones]) : null,
+ el("div", { class: "live-meta", html: svg("compass") + "<span>Pulled live from <strong>" + d.host + "</strong>" + (d.sources > 1 ? " plus " + (d.sources - 1) + " more official page" + (d.sources - 1 > 1 ? "s" : "") : "") + " · " + when + "</span>" }, [
  el("a", { class: "btn btn-ghost", href: d.url, target: "_blank", rel: "noopener", html: "<span>View page</span>" + svg("external") }),
  ]),
  ]));
@@ -594,7 +602,8 @@
  if (token !== geo.t) return;
  if (!d || !d.ok) { setMapLabel("We couldn't load places right now. Use the Google Maps link below."); if (list) list.innerHTML = ""; return; }
  var places = (d.places || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; });
- if (isoOn) places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); });
+ if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
+ else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
  places.forEach(function (p) {
  L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .92 }).addTo(geo.layer)
