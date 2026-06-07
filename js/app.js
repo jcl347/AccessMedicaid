@@ -1255,6 +1255,8 @@
  var sp = store(true, STORE.plan);
  if (sp && DATA.plans.some(function (p) { return p.id === sp; })) state.planId = sp;
  }
+ // Default to L.A. Care (the largest Medi-Cal plan in the region) when nothing is chosen yet.
+ if (!state.planId && DATA.plans.some(function (p) { return p.id === "la-care"; })) state.planId = "la-care";
  renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit(); renderTriage();
  initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); renderStartHere(); initFeedback(); initApptPrint(); initReveal(); maybeNotify();
  if (!reduceMotion) document.addEventListener("pointerdown", rippleHandler, true);

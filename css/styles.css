@@ -154,7 +154,7 @@ a { color: var(--primary-700); }
 
 /* ---------- Stats band (cmspriorauth-style metrics) ---------- */
 .stats-band { position: relative; overflow: hidden; background: var(--navy); }
-.stats-band::before { content: ""; position: absolute; inset: 0; background: url("https://images.unsplash.com/photo-1716585937221-8fe9d05a87c6?auto=format&fit=crop&w=2000&q=60") center/cover; opacity: .15; }
+.stats-band::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,.08), rgba(255,255,255,0) 45%), radial-gradient(120% 140% at 85% 10%, rgba(56,132,200,.35), transparent 60%); }
 .stats-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1.5rem 0; }
 .stat { text-align: center; }
 .stat-num { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; color: #fff; letter-spacing: -.02em; line-height: 1.1; }
