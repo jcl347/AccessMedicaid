@@ -54,6 +54,9 @@ function zipsWithin(lat, lng, radiusM, max) {
   out.sort(function (a, b) { return a[1] - b[1]; });
   return out.slice(0, max || 40).map(function (x) { return x[0]; });
 }
+// Bigger search areas (e.g. a 30-min drive isochrone) need more ZIPs so in-network
+// coverage expands to fill the reachable area rather than stopping at a small cap.
+function zipCap(radiusM) { return radiusM > 24000 ? 220 : radiusM > 12000 ? 140 : 90; }
 // Coordinates for a Location: prefer real FHIR position, else the ZIP centroid (approx).
 function coordsFor(res) {
   var pos = res && res.position;
@@ -143,7 +146,7 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
     var u = base + "/Location?near=" + nearParam(lat, lng, km) + "&_count=100";
     return { url: u, bundle: parseBundle(await fetchText(u, 9000)) };
   }
-  var zips = zipsWithin(lat, lng, radius, 80);
+  var zips = zipsWithin(lat, lng, radius, zipCap(radius));
   if (!zips.length && zip) zips = [zip5(zip)];
   if (!zips.length) return { error: "no-zips" };
   var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=300";
@@ -174,7 +177,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     var b1 = parseBundle(await fetchText(u1, 9000));
     if (b1 && b1.entry && b1.entry.length) { indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
   } else {
-    var zips = zipsWithin(lat, lng, radius, 80);
+    var zips = zipsWithin(lat, lng, radius, zipCap(radius));
     if (!zips.length && zip) zips = [zip5(zip)];
     if (!zips.length) return { ok: false, reason: "no-zips" };
     var u2 = base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(zips.join(",")) + inc + "&_count=400";

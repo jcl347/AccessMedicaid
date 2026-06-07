@@ -758,7 +758,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -993,8 +993,10 @@
  var places = (rawPlaces || []).map(function (p) { p.dist = haversineMi(geo.center, { lat: p.lat, lng: p.lng }); return p; });
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
- places.sort(function (a, b) { return a.dist - b.dist; });
- var inNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
+ // In-network first, then by distance, so verified providers lead the list.
+ places.sort(function (a, b) { return (b.inNetwork ? 1 : 0) - (a.inNetwork ? 1 : 0) || a.dist - b.dist; });
+ var anyNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
+ var hasPlan = planHasInNetwork();
  // Many providers share one ZIP-centroid coordinate (approximate pins), which would stack
  // them into a single dot. Fan same-coordinate pins out in a small golden-angle spiral
  // (well within the ZIP area) so EVERY result is visible on the map.
@@ -1011,8 +1013,8 @@
  });
  });
  places.forEach(function (p) {
- var isNet = inNet || p.inNetwork;
- var net = isNet ? '<br><span style="color:#2f7d52;font-weight:700">In-network with your plan</span>' : "";
+ var isNet = !!p.inNetwork;
+ var net = isNet ? '<br><span style="color:#2f7d52;font-weight:700">In-network with your plan</span>' : (hasPlan ? '<br><span style="color:#8a6d00;font-weight:600">Not in your plan\'s directory - confirm coverage</span>' : "");
  var spec = p.specialty ? "<br><em>" + escapeHtml(p.specialty) + "</em>" : "";
  var lng2 = (p.languages && p.languages.length) ? "<br>Languages: " + escapeHtml(p.languages.slice(0, 6).join(", ")) : "";
  var ipa2 = p.ipa ? "<br>Group/IPA: " + escapeHtml(p.ipa) : "";
@@ -1029,45 +1031,52 @@
  else if (ring) { try { bounds.extend(ring.getBounds()); } catch (e) {} }
  try { geo.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 }); } catch (e) {}
  }
- var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !inNet;
+ var netCount = places.filter(function (p) { return p.inNetwork; }).length;
+ var outCount = places.length - netCount;
+ var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !netCount;
+ var lgp = $("#lgPlaceText"); if (lgp) lgp.textContent = netCount ? "Other nearby (verify coverage)" : "Places nearby";
  var pl = getPlan();
- var noun = (inNet && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
- var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
- var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ", nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ", nearest listed first.");
- setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
- // Green frame + explicit data-source badge so it's clear when the list is verified
- // in-network (FHIR / plan directory) data versus public map data.
- var wrap = $("#mapFrameWrap"); if (wrap) wrap.classList.toggle("in-network", inNet && places.length > 0);
- renderMapSource(inNet && places.length > 0, pl);
+ var noun = ((geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
+ var src = netCount ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var lead;
+ if (netCount) lead = "Found " + netCount + " in-network " + noun + (outCount ? " plus " + outCount + " other nearby (verify coverage)" : "") + " within " + scope + ". In-network listed first.";
+ else lead = "Found " + places.length + " " + noun + " within " + scope + (hasPlan ? " (none matched your plan's directory - verify coverage)" : "") + ", nearest first.";
+ setMapLabel((places.length ? lead : ("No " + noun + " found within " + scope + ". " + (hasPlan && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
+ // Green frame + explicit data-source badge when verified in-network (FHIR / directory) data is shown.
+ var wrap = $("#mapFrameWrap"); if (wrap) wrap.classList.toggle("in-network", netCount > 0);
+ renderMapSource(netCount > 0, pl);
  renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
  function acquireFhir() {
- // PRIMARY source of truth: the selected plan's public provider directory (FHIR for most
- // plans; Health Net via its public JSON). Returns in-network results, or null to fall back.
+ // The selected plan's official provider directory (FHIR for most plans; Health Net via its
+ // public JSON). Returns { places, source, approx, refreshed } for in-network results, or null.
  var pid = state.planId;
  if (!pid || inNetworkIds().indexOf(pid) < 0) return Promise.resolve(null);
- // Pass a typed ZIP when present - helps endpoints that geo-filter by postal code (e.g. Molina).
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) {
- if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "fhir"; geo.lastApprox = !!d.approxByZip; geo.lastRefreshed = d.refreshed || ""; return d.places; }
- return null;
- })
+ .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? { places: d.places, source: d.source || "fhir", approx: !!d.approxByZip, refreshed: d.refreshed || "" } : null; })
  .catch(function () { return null; });
  }
+ function mergeKey(p) { return (p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 18) + "@" + (isFinite(p.lat) ? p.lat.toFixed(2) : "") + "," + (isFinite(p.lng) ? p.lng.toFixed(2) : ""); }
  function acquire() {
- return acquireFhir().then(function (fp) {
- if (fp && fp.length) return fp;
- geo.lastApprox = false;
- return acquirePublic();
+ // Show BOTH: in-network providers from the plan's directory AND other nearby (out-of-network)
+ // places from public map data, so members see the full picture.
+ return Promise.all([acquireFhir(), acquirePublic()]).then(function (r) {
+ var f = r[0], pub = (r[1] && r[1].places) || [];
+ var fhir = (f && f.places) || [];
+ fhir.forEach(function (p) { p.inNetwork = true; });
+ pub.forEach(function (p) { p.inNetwork = false; });
+ if (fhir.length) { geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; }
+ else { geo.lastSource = (r[1] && r[1].source) || "osm"; geo.lastApprox = false; }
+ var seen = {}; fhir.forEach(function (p) { seen[mergeKey(p)] = true; });
+ return fhir.concat(pub.filter(function (p) { return !seen[mergeKey(p)]; }));
  });
  }
  function acquirePublic() {
- // Fallback: run BOTH public paths in parallel and merge - the cached serverless proxy
- // (which may use Google Places) AND a direct browser Overpass query (the browser's own
- // IP reaches Overpass reliably even when Vercel's datacenter IP is rate-limited).
+ // Public map data (out-of-network / unverified): the cached serverless proxy (which may use
+ // Google Places) AND a direct browser Overpass query merged. Returns { places, source }.
  var serverSource = "osm";
  var server = fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) { if (d && d.ok && Array.isArray(d.places)) { serverSource = d.source || "osm"; return d.places; } return []; })
@@ -1075,10 +1084,9 @@
  var direct = overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng).catch(function () { return []; });
  return Promise.all([server, direct]).then(function (res) {
  var sv = res[0] || [], dr = res[1] || [];
- geo.lastSource = sv.length ? serverSource : "osm";
  var seen = {}, out = [];
  sv.concat(dr).forEach(function (p) { if (!p || !isFinite(p.lat) || !isFinite(p.lng)) return; var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; out.push(p); });
- return out;
+ return { places: out, source: sv.length ? serverSource : "osm" };
  });
  }
  function attempt(n) {
@@ -1164,6 +1172,7 @@
  function renderNearList(places) {
  var list = $("#nearList"); if (!list) return; list.innerHTML = "";
  if (!places.length) return;
+ var hasPlan = planHasInNetwork();
  places.forEach(function (p) {
  var actions = el("div", { class: "near-actions" });
  if (p.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(p.phone), html: svg("phone") + "<span>Call: " + p.phone + "</span>" }));
@@ -1175,7 +1184,7 @@
  list.appendChild(el("div", { class: "near-item" }, [
  el("div", { class: "ni-name", text: p.name }),
  p.specialty ? el("div", { class: "ni-spec", text: p.specialty }) : null,
- p.inNetwork ? el("div", { class: "ni-net", html: svg("check") + "<span>In-network with your plan" + (p.newPatients ? " - accepting new patients" : "") + "</span>" }) : null,
+ p.inNetwork ? el("div", { class: "ni-net", html: svg("check") + "<span>In-network with your plan" + (p.newPatients ? " - accepting new patients" : "") + "</span>" }) : (hasPlan ? el("div", { class: "ni-out", text: "Not in your plan's directory - confirm coverage" }) : null),
  meta.length ? el("div", { class: "ni-addr", text: meta.join("  |  ") }) : null,
  el("div", { class: "ni-dist", text: p.dist.toFixed(1) + " miles away" }),
  p.address ? el("div", { class: "ni-addr", text: p.address + (p.approxByZip ? " (approx. ZIP area)" : "") }) : null,
@@ -1241,6 +1250,7 @@
  });
  if (geo.shared && geo.center) { if (geo.iso.mode) applyIso(); else runSearch(); }
  else if (saved) geocode(saved);
+ else if (geo.iso.mode) applyIso(); // default: 30-min drive reachable area
  else runSearch();
  }
 
