@@ -78,7 +78,12 @@ function langsOf(p) { var out = []; ((p && p.communication) || []).forEach(funct
 function langMatch(list, want) { if (!want) return true; want = want.toLowerCase(); return (list || []).some(function (L) { return String(L).toLowerCase().indexOf(want) >= 0; }); }
 function telOf(res) { var ph = "", web = ""; ((res && res.telecom) || []).forEach(function (t) { if (t && t.value) { if (t.system === "phone" && !ph) ph = t.value; if (t.system === "url" && !web) web = t.value; } }); return { phone: ph, website: web }; }
 function addrOf(loc) { var a = (loc && loc.address) || {}; var s = [].concat(a.line || []).filter(Boolean).join(" "); if (a.city) s += (s ? ", " : "") + a.city; if (a.state) s += (s ? ", " : "") + a.state; if (a.postalCode) s += " " + a.postalCode; return s.trim(); }
-function specialtyText(pr) { var s = ""; ((pr && pr.specialty) || []).forEach(function (cc) { (cc.coding || []).forEach(function (c) { s += " " + (c.display || c.code || ""); }); if (cc.text) s += " " + cc.text; }); return s.trim(); }
+function specialtyText(pr) {
+  var set = [];
+  function add(v) { v = (v || "").trim(); if (v && set.indexOf(v) < 0) set.push(v); }
+  ((pr && pr.specialty) || []).forEach(function (cc) { (cc.coding || []).forEach(function (c) { add(c.display || c.code); }); add(cc.text); });
+  return set.join(", ");
+}
 function specialtyMatcher(s) {
   s = (s || "").toLowerCase().trim();
   if (!s) return null;

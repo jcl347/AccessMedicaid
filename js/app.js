@@ -995,6 +995,21 @@
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
  var inNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
+ // Many providers share one ZIP-centroid coordinate (approximate pins), which would stack
+ // them into a single dot. Fan same-coordinate pins out in a small golden-angle spiral
+ // (well within the ZIP area) so EVERY result is visible on the map.
+ var groups = {};
+ places.forEach(function (p) { var k = p.lat.toFixed(4) + "," + p.lng.toFixed(4); (groups[k] = groups[k] || []).push(p); });
+ Object.keys(groups).forEach(function (k) {
+ var arr = groups[k]; if (arr.length < 2) { arr[0]._mlat = arr[0].lat; arr[0]._mlng = arr[0].lng; return; }
+ var cosLat = Math.cos(arr[0].lat * Math.PI / 180) || 1;
+ arr.forEach(function (p, i) {
+ if (i === 0) { p._mlat = p.lat; p._mlng = p.lng; return; }
+ var ang = i * 2.399963, rad = 0.0009 * Math.sqrt(i); // ~100m * sqrt(i)
+ p._mlat = p.lat + rad * Math.cos(ang);
+ p._mlng = p.lng + (rad * Math.sin(ang)) / cosLat;
+ });
+ });
  places.forEach(function (p) {
  var isNet = inNet || p.inNetwork;
  var net = isNet ? '<br><span style="color:#2f7d52;font-weight:700">In-network with your plan</span>' : "";
@@ -1004,12 +1019,12 @@
  var npx = p.newPatients ? "<br><span style=\"color:#2f7d52\">Accepting new patients</span>" : "";
  var approx = p.approxByZip ? '<br><span style="color:#8a6d00">Approximate (ZIP-area) location - call to confirm address</span>' : "";
  var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + npx + lng2 + ipa2 + "<br>" + escapeHtml(p.address || "") + approx + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
- L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: .92 }).addTo(geo.layer).bindPopup(pop);
+ L.circleMarker([p._mlat, p._mlng], { radius: 7, color: "#fff", weight: 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: .92 }).addTo(geo.layer).bindPopup(pop);
  });
  // Expand the view so EVERY result is visible, plus the reachable area / search ring.
  if (places.length) {
  var bounds = L.latLngBounds([[geo.center.lat, geo.center.lng]]);
- places.forEach(function (p) { bounds.extend([p.lat, p.lng]); });
+ places.forEach(function (p) { bounds.extend([p._mlat, p._mlng]); });
  if (isoOn && geo.iso.layer) { try { bounds.extend(geo.iso.layer.getBounds()); } catch (e) {} }
  else if (ring) { try { bounds.extend(ring.getBounds()); } catch (e) {} }
  try { geo.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 }); } catch (e) {}
