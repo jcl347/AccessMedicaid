@@ -999,22 +999,16 @@
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
  var inNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
- var dotColor = inNet ? "#16a34a" : "#0b66d6";
- var NEAR = 5; // the closest few get highlighted, numbered markers
- places.forEach(function (p, i) {
- var net = inNet || p.inNetwork ? '<br><span style="color:#15803d;font-weight:700">In-network with your plan</span>' : "";
+ places.forEach(function (p) {
+ var isNet = inNet || p.inNetwork;
+ var net = isNet ? '<br><span style="color:#2f7d52;font-weight:700">In-network with your plan</span>' : "";
  var spec = p.specialty ? "<br><em>" + escapeHtml(p.specialty) + "</em>" : "";
  var lng2 = (p.languages && p.languages.length) ? "<br>Languages: " + escapeHtml(p.languages.slice(0, 6).join(", ")) : "";
  var ipa2 = p.ipa ? "<br>Group/IPA: " + escapeHtml(p.ipa) : "";
- var npx = p.newPatients ? "<br><span style=\"color:#15803d\">Accepting new patients</span>" : "";
+ var npx = p.newPatients ? "<br><span style=\"color:#2f7d52\">Accepting new patients</span>" : "";
  var approx = p.approxByZip ? '<br><span style="color:#8a6d00">Approximate (ZIP-area) location - call to confirm address</span>' : "";
  var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + npx + lng2 + ipa2 + "<br>" + escapeHtml(p.address || "") + approx + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
- if (i < NEAR) {
- var icon = L.divIcon({ className: inNet ? "near-pin net" : "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
- L.marker([p.lat, p.lng], { icon: icon, zIndexOffset: 1000 }).addTo(geo.layer).bindPopup(pop);
- } else {
- L.circleMarker([p.lat, p.lng], { radius: 6, color: "#fff", weight: 2, fillColor: dotColor, fillOpacity: .9 }).addTo(geo.layer).bindPopup(pop);
- }
+ L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: .92 }).addTo(geo.layer).bindPopup(pop);
  });
  // Expand the view so EVERY result is visible, plus the reachable area / search ring.
  if (places.length) {
@@ -1028,7 +1022,7 @@
  var pl = getPlan();
  var noun = (inNet && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
  var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Pins are approximate to each provider's ZIP area." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
- var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
+ var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ", nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ", nearest listed first.");
  setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
  // Green frame + explicit data-source badge so it's clear when the list is verified
  // in-network (FHIR / plan directory) data versus public map data.
