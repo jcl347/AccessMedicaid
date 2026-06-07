@@ -363,6 +363,7 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .near-item .ni-net { display: inline-flex; align-items: center; gap: .3rem; font-size: .76rem; font-weight: 800; color: #15803d; margin-top: .2rem; }
 .near-item .ni-net svg { width: 14px; height: 14px; }
 .near-item .ni-out { font-size: .76rem; font-weight: 600; color: #8a6d00; margin-top: .2rem; }
+.near-count { font-size: .82rem; margin: 0 0 .2rem; }
 .near-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .55rem; }
 .near-actions .btn { min-height: 40px; padding: .4rem .75rem; font-size: .9rem; }
 .leaflet-container { font: inherit; border-radius: var(--radius); }

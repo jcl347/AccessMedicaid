@@ -758,7 +758,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "doctor", specialty: "Primary care", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -779,8 +779,12 @@
  function renderRadiusChips() {
  var row = $("#radiusChips"); if (!row) return; row.innerHTML = "";
  RADII.forEach(function (r) {
- var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.radius === r.m ? "true" : "false", text: r.label });
- chip.addEventListener("click", function () { geo.radius = r.m; renderRadiusChips(); runSearch(); });
+ // Active only in radius mode - if a travel-time area is on, no mile chip is "selected".
+ var on = !geo.iso.mode && geo.radius === r.m;
+ var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: r.label });
+ // Picking a mile radius switches to radius mode (clears the reachable area) - the two
+ // distance controls are integrated as one: travel-time OR miles, whichever you pick last.
+ chip.addEventListener("click", function () { geo.radius = r.m; if (geo.iso.mode) { geo.iso.mode = null; applyIso(); } else { renderRadiusChips(); runSearch(); } });
  row.appendChild(chip);
  });
  }
@@ -792,6 +796,7 @@
  function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
  function renderFilters() {
  var inNet = planHasInNetwork();
+ if (!inNet) { geo.specialty = ""; geo.language = ""; } // specialty/language are in-network-only
  var row = $("#careChips");
  if (row) {
  row.innerHTML = "";
@@ -880,7 +885,7 @@
  return false;
  }
  function applyIso() {
- renderIsoChips();
+ renderIsoChips(); renderRadiusChips();
  var clr = $("#isoClearBtn"), lg = $("#lgIso");
  if (!geo.iso.mode) {
  if (geo.iso.layer && geo.map) geo.map.removeLayer(geo.iso.layer);
@@ -1045,8 +1050,8 @@
  // Green frame + explicit data-source badge when verified in-network (FHIR / directory) data is shown.
  var wrap = $("#mapFrameWrap"); if (wrap) wrap.classList.toggle("in-network", netCount > 0);
  renderMapSource(netCount > 0, pl);
- renderNetworkNote(geo.lastSource);
- renderNearList(places.slice(0, 20));
+  renderNetworkNote(geo.lastSource);
+ renderNearList(places.slice(0, 20), places.length);
  }
  function acquireFhir() {
  // The selected plan's official provider directory (FHIR for most plans; Health Net via its
@@ -1077,11 +1082,15 @@
  function acquirePublic() {
  // Public map data (out-of-network / unverified): the cached serverless proxy (which may use
  // Google Places) AND a direct browser Overpass query merged. Returns { places, source }.
+ // For doctor/specialty searches use the richer "clinic" filter - public maps have very few
+ // amenity=doctors nodes, so this surfaces real out-of-network places instead of an empty set.
+ var publicCare = (geo.specialty || geo.care === "doctor") ? "clinic" : geo.care;
+ var purl = "/api/nearby?lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(publicCare) + "&radius=" + effRadius;
  var serverSource = "osm";
- var server = fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
+ var server = fetch(purl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) { if (d && d.ok && Array.isArray(d.places)) { serverSource = d.source || "osm"; return d.places; } return []; })
  .catch(function () { return []; });
- var direct = overpassDirect(geo.care, effRadius, geo.center.lat, geo.center.lng).catch(function () { return []; });
+ var direct = overpassDirect(publicCare, effRadius, geo.center.lat, geo.center.lng).catch(function () { return []; });
  return Promise.all([server, direct]).then(function (res) {
  var sv = res[0] || [], dr = res[1] || [];
  var seen = {}, out = [];
@@ -1169,10 +1178,11 @@
  if (plan.memberServicesPhone) actions.appendChild(el("a", { class: "btn btn-ghost", href: telHref(plan.memberServicesPhone), html: svg("phone") + "<span>Ask Member Services: " + escapeHtml(plan.memberServicesPhone) + "</span>" }));
  box.appendChild(actions);
  }
- function renderNearList(places) {
+ function renderNearList(places, total) {
  var list = $("#nearList"); if (!list) return; list.innerHTML = "";
  if (!places.length) return;
  var hasPlan = planHasInNetwork();
+ if (total && total > places.length) list.appendChild(el("div", { class: "near-count muted", text: "Showing the nearest " + places.length + " of " + total + " - all are pinned on the map above." }));
  places.forEach(function (p) {
  var actions = el("div", { class: "near-actions" });
  if (p.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(p.phone), html: svg("phone") + "<span>Call: " + p.phone + "</span>" }));
