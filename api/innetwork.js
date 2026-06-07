@@ -27,7 +27,7 @@ var CARE_KEYWORDS = {
   mental_health: /behavioral|mental|psych|counsel|wellness|substance|recovery/i,
 };
 var SPECIALTY_KW = {
-  "primary care": /family medicine|family practice|general practice|internal medicine|\bprimary care\b|nurse practitioner|family nurse|adult medicine|family health/i,
+  "primary care": /family medicine|family practice|general practice|general practitioner|internal medicine|\bprimary care\b|nurse practitioner|family nurse|adult medicine|family health|community health|federally qualified|\bfqhc\b/i,
   "pediatrics": /pediatric|\bpeds\b|\bchild|adolescent/i,
   "ob-gyn": /obstetri|gynecolog|ob.?gyn|midwife|maternal.fetal|\bwomen'?s\b/i,
   "mental health": /psychiat|psycholog|behavioral|mental health|counsel|therapist|social work|substance|addiction|marriage and family/i,
@@ -219,7 +219,10 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var loc = lref && lref.reference ? idx[lref.reference] : null; if (!loc) return;
       var co = coordsFor(loc); if (!co || distM(lat, lng, co.lat, co.lng) > maxM) return;
       var name = practName || loc.name || "(In-network provider)";
-      if (match && !match.test((name || "") + " " + (spec || ""))) return;
+      // Match the provider's SPECIALTY (precise); only fall back to the name when no specialty
+      // is listed - matching the name directly would leak across specialties (e.g. a surname
+      // "Childs" matching pediatrics).
+      if (match && !match.test(spec || name)) return;
       var lt = telOf(loc);
       var k = name + "@" + co.lat.toFixed(4) + "," + co.lng.toFixed(4);
       if (seen[k]) return; seen[k] = 1;
@@ -243,7 +246,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language) {
     var r = HN.records[i];
     if (!isFinite(r.lat) || !isFinite(r.lng) || distM(lat, lng, r.lat, r.lng) > maxM) continue;
     if (providerMode) {
-      if (match && !match.test((r.specialty || "") + " " + (r.name || ""))) continue;
+      if (match && !match.test(r.specialty || r.name || "")) continue;
       if (language && !langMatch(r.languages, language)) continue;
     } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
     var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
@@ -279,7 +282,9 @@ module.exports = async function handler(req, res) {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
       var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
-      var wantProviders = !!(specialty || language);
+      // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
+      // doctor is returned and flagged - not just facility records (location mode = clinics).
+      var wantProviders = !!(specialty || language || type === "doctor");
       var r0 = wantProviders ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
                              : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
       // If provider/specialty mode returned nothing (some directories - IEHP, Molina - can't
