@@ -5,25 +5,29 @@
       "baseUrl": "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4",
       "verified": true,
       "vendor": "Edifecs (HAPI FHIR R4)",
-      "notes": "Public-no-auth confirmed; Da Vinci PDEX Plan-Net. From lacare.org/technical-information."
+      "notes": "Public-no-auth confirmed; Da Vinci PDEX Plan-Net. From lacare.org/technical-information.",
+      "geo": "postal"
     },
     "phc": {
       "baseUrl": "https://us120.fhir.edifecsfedcloud.com/php_pdfhir",
       "verified": true,
       "vendor": "Edifecs (HAPI FHIR R4)",
-      "notes": "Plan states 'open and does not require secure credentials'. Verified live."
+      "notes": "Plan states 'open and does not require secure credentials'. Verified live.",
+      "geo": "postal"
     },
     "caloptima": {
       "baseUrl": "https://us120.fhir.edifecsfedcloud.com/copt_pdfhir",
       "verified": true,
       "vendor": "Edifecs (HAPI FHIR R4)",
-      "notes": "Public-no-auth verified (Patient Access copt_fhir correctly 401s)."
+      "notes": "Public-no-auth verified (Patient Access copt_fhir correctly 401s).",
+      "geo": "postal"
     },
     "iehp": {
       "baseUrl": "https://fhir.iehp.org/provider-directory",
       "verified": true,
       "vendor": "HAPI FHIR R4 (self-hosted)",
-      "notes": "Open API, CapabilityStatement + live Practitioner query with real NPIs verified. CORS enabled."
+      "notes": "Open API, CapabilityStatement + live Practitioner query with real NPIs verified. CORS enabled.",
+      "geo": "postal"
     },
     "health-net": {
       "baseUrl": "",

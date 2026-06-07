@@ -1,23 +1,21 @@
 /* Vercel serverless function: in-network providers from a plan's FHIR Provider Directory.
  *
- * CMS-9115-F requires Medi-Cal managed care plans to publish a PUBLIC (no-auth) Provider
- * Directory API in HL7 FHIR R4, following the Da Vinci PDEX Plan-Net IG. This function
- * queries the selected plan's endpoint and returns in-network results normalized to the
- * shape the map uses. It is the PRIMARY source of truth for the map; the client falls back
- * to Google/OpenStreetMap only when a plan has no usable endpoint or it returns nothing.
+ * CMS-9115-F requires Medi-Cal plans to publish a PUBLIC FHIR R4 (Da Vinci PDEX Plan-Net)
+ * Provider Directory. We use it as the PRIMARY map source; the client falls back to
+ * Google/OpenStreetMap only when a plan has no usable endpoint or it returns nothing.
  *
- * Geo strategy per endpoint (data/fhir-endpoints.json -> plans[id].geo):
- *   - "near"   (default): GET {base}/Location?near=<lat>|<lng>|<dist>|km   (FHIR R4 geo)
- *   - "postal" (e.g. Molina, whose server 500s on `near`): reverse-geocode the point to a
- *              ZIP, then GET {base}/Location?address-postalcode=<zip>, distance-filter here.
+ * IMPORTANT reality check (verified live): most of these directories DO NOT populate
+ * Location.position (no lat/lng), so FHIR `near=` returns nothing. We therefore query by
+ * postal code (ZIPs within the search radius, from data/zip-centroids.json) and place pins
+ * at the ZIP centroid - approximate to the provider's ZIP area, like Health Net. Endpoints
+ * that DO store coordinates (e.g. Blue Shield Promise / Smile CDR) use geo `near` with
+ * exact positions. Per-endpoint mode is data/fhir-endpoints.json -> plans[id].geo.
  *
- * Two modes:
- *   - locations (default): in-network service locations.
- *   - providers (?specialty=...): PractitionerRole joined to Practitioner + Location.
+ * Modes: locations (default) and providers (?specialty=... or ?language=...).
  */
 var ENDPOINTS = require("../data/fhir-endpoints.json");
-// Health Net has no public FHIR endpoint; its directory is preprocessed to JSON. Optional.
 var HN = null; try { HN = require("../data/healthnet-providers.json"); } catch (e) { HN = null; }
+var ZIPC = {}; try { ZIPC = require("../data/zip-centroids.json"); } catch (e) { ZIPC = {}; }
 
 var CARE_KEYWORDS = {
   pharmacy: /pharmac|drug|\brx\b|apothec/i,
@@ -35,14 +33,12 @@ var SPECIALTY_KW = {
   "mental health": /psych|behavioral|mental|counsel|therapist|social work|substance|addiction/i,
   "cardiology": /cardio|heart|vascular/i,
   "dermatology": /dermat|skin/i,
-  "dental": /dental|dentist|orthodont|oral|endodont|periodont/i,
   "vision": /optom|ophthalmol|vision|\beye/i,
   "orthopedics": /orthop|bone|joint|sports medicine/i,
-  "endocrinology": /endocrin|diabet|thyroid/i,
-  "neurology": /neurolog|nerve|seizure/i,
 };
 
 function num(x) { var n = parseFloat(x); return isFinite(n) ? n : null; }
+function zip5(z) { var m = String(z == null ? "" : z).match(/\d{5}/); return m ? m[0] : ""; }
 function distM(aLat, aLng, bLat, bLng) {
   var R = 6371000, toRad = Math.PI / 180;
   var dLat = (bLat - aLat) * toRad, dLng = (bLng - aLng) * toRad;
@@ -51,10 +47,26 @@ function distM(aLat, aLng, bLat, bLng) {
 }
 function nearParam(lat, lng, km) { return lat + "%7C" + lng + "%7C" + km.toFixed(1) + "%7Ckm"; }
 
-function fetchText(url, ms, headers) {
+// ZIP codes whose centroid is within the radius, nearest first (caps the query size).
+function zipsWithin(lat, lng, radiusM, max) {
+  var out = [];
+  for (var z in ZIPC) { var c = ZIPC[z]; if (!c) continue; var d = distM(lat, lng, c[0], c[1]); if (d <= radiusM) out.push([z, d]); }
+  out.sort(function (a, b) { return a[1] - b[1]; });
+  return out.slice(0, max || 40).map(function (x) { return x[0]; });
+}
+// Coordinates for a Location: prefer real FHIR position, else the ZIP centroid (approx).
+function coordsFor(res) {
+  var pos = res && res.position;
+  if (pos) { var la = num(pos.latitude), lo = num(pos.longitude); if (isFinite(la) && isFinite(lo)) return { lat: la, lng: lo, approx: false }; }
+  var z = res && res.address ? zip5(res.address.postalCode) : "";
+  var c = z && ZIPC[z];
+  return c ? { lat: c[0], lng: c[1], approx: true } : null;
+}
+
+function fetchText(url, ms) {
   var ctrl = new AbortController();
   var t = setTimeout(function () { ctrl.abort(); }, ms || 9000);
-  return fetch(url, { signal: ctrl.signal, headers: headers || { Accept: "application/fhir+json, application/json", "User-Agent": "AccessMediCalLA-Navigator/1.0 (+https://github.com/jcl347/AccessMedicaid)" } })
+  return fetch(url, { signal: ctrl.signal, headers: { Accept: "application/fhir+json, application/json", "User-Agent": "AccessMediCalLA-Navigator/1.0 (+https://github.com/jcl347/AccessMedicaid)" } })
     .then(function (r) { clearTimeout(t); return r.text().then(function (body) { return { ok: r.ok, status: r.status, body: body }; }); })
     .catch(function (e) { clearTimeout(t); throw e; });
 }
@@ -75,83 +87,56 @@ function specialtyMatcher(s) {
   return new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 }
 function normLocation(loc) {
-  var pos = loc.position || {};
-  var t = telOf(loc);
-  var typeText = "";
+  var co = coordsFor(loc); if (!co) return null;
+  var t = telOf(loc), typeText = "";
   (loc.type || []).forEach(function (tc) { (tc.coding || []).forEach(function (c) { typeText += " " + (c.display || c.code || ""); }); if (tc.text) typeText += " " + tc.text; });
-  return { name: loc.name || "(In-network location)", lat: num(pos.latitude), lng: num(pos.longitude), phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, _typeText: typeText };
+  return { name: loc.name || "(In-network location)", lat: co.lat, lng: co.lng, phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, approxByZip: co.approx, _typeText: typeText };
 }
 
-// Reverse-geocode a point to a 5-digit ZIP (for endpoints that lack `near`).
-async function reverseZip(lat, lng) {
-  try {
-    var u = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&addressdetails=1&lat=" + lat + "&lon=" + lng;
-    var r = await fetchText(u, 6000, { "User-Agent": "AccessMediCalLA-Navigator/1.0 (+https://github.com/jcl347/AccessMedicaid)" });
-    if (!r.ok) return "";
-    var j = JSON.parse(r.body);
-    var pc = j && j.address && j.address.postcode ? String(j.address.postcode) : "";
-    return pc ? pc.split(/[-\s]/)[0] : "";
-  } catch (e) { return ""; }
-}
-
-// Fetch a bundle of nearby Locations using the endpoint's geo strategy.
-async function nearbyLocationBundle(base, geoMode, lat, lng, km, zip) {
-  if (geoMode === "postal") {
-    var z = zip || (await reverseZip(lat, lng));
-    if (!z) return { error: "no-zip" };
-    var u = base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=300";
-    return { url: u, zip: z, bundle: parseBundle(await fetchText(u, 9000)) };
+// Fetch a Location bundle by the endpoint's geo strategy.
+async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
+  if (geoMode === "near") {
+    var u = base + "/Location?near=" + nearParam(lat, lng, km) + "&_count=100";
+    return { url: u, bundle: parseBundle(await fetchText(u, 9000)) };
   }
-  var u2 = base + "/Location?near=" + nearParam(lat, lng, km) + "&_count=100";
-  return { url: u2, bundle: parseBundle(await fetchText(u2, 9000)) };
+  var zips = zipsWithin(lat, lng, radius, 80);
+  if (!zips.length && zip) zips = [zip5(zip)];
+  if (!zips.length) return { error: "no-zips" };
+  var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=300";
+  return { url: u2, zips: zips, bundle: parseBundle(await fetchText(u2, 9000)) };
 }
 
 async function locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug) {
-  var lb = await nearbyLocationBundle(base, geoMode, lat, lng, km, zip);
-  if (lb.error === "no-zip") return { ok: false, reason: "no-zip" };
+  var lb = await locationBundle(base, geoMode, lat, lng, km, radius, zip);
+  if (lb.error) return { ok: false, reason: lb.error };
   if (!lb.bundle) return { ok: false, reason: "fhir-error", query: debug ? [lb.url] : undefined };
   var maxM = radius * 1.1 + 400;
-  var places = bundleResources(lb.bundle, "Location").map(normLocation).filter(function (p) { return isFinite(p.lat) && isFinite(p.lng) && distM(lat, lng, p.lat, p.lng) <= maxM; });
-
+  var places = bundleResources(lb.bundle, "Location").map(normLocation).filter(function (p) { return p && distM(lat, lng, p.lat, p.lng) <= maxM; });
   var GENERIC = { clinic: 1, doctor: 1 };
   var kw = CARE_KEYWORDS[type];
   if (kw) { var f = places.filter(function (p) { return kw.test((p.name || "") + " " + (p._typeText || "")); }); if (!GENERIC[type] || f.length) places = f; }
-
   var seen = {}, out = [];
   places.forEach(function (p) { var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; delete p._typeText; out.push(p); });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: "locations", type: type, radius: radius, count: out.length, places: out.slice(0, 100), query: debug ? [lb.url] : undefined };
+  return { ok: true, mode: "locations", type: type, radius: radius, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 120), query: debug ? [lb.url] : undefined };
 }
 
 async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug) {
   var inc = "&_include=PractitionerRole:practitioner&_include=PractitionerRole:location&_include=PractitionerRole:organization";
   var queries = [], idx = {}, roles = [];
-
-  // Primary (near endpoints only): chained location.near on PractitionerRole.
-  if (geoMode !== "postal") {
-    var url1 = base + "/PractitionerRole?location.near=" + nearParam(lat, lng, km) + inc + "&_count=200";
-    queries.push(url1);
-    var b1 = parseBundle(await fetchText(url1, 9000));
+  if (geoMode === "near") {
+    var u1 = base + "/PractitionerRole?location.near=" + nearParam(lat, lng, km) + inc + "&_count=200";
+    queries.push(u1);
+    var b1 = parseBundle(await fetchText(u1, 9000));
     if (b1 && b1.entry && b1.entry.length) { indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
-  }
-
-  // Fallback / postal: find nearby Locations, then PractitionerRoles at those locations.
-  if (!roles.length) {
-    var lb = await nearbyLocationBundle(base, geoMode, lat, lng, km, zip);
-    if (lb.error === "no-zip") return { ok: false, reason: "no-zip" };
-    queries.push(lb.url);
-    if (!lb.bundle || !lb.bundle.entry || !lb.bundle.entry.length) return { ok: false, reason: "no-locations", query: debug ? queries : undefined };
-    indexBundle(lb.bundle, idx);
-    var locList = bundleResources(lb.bundle, "Location").filter(function (l) { return l.position; });
-    locList.forEach(function (l) { l.__d = distM(lat, lng, num(l.position.latitude), num(l.position.longitude)); });
-    locList = locList.filter(function (l) { return isFinite(l.__d) && l.__d <= radius * 1.1 + 400; }).sort(function (a, b) { return a.__d - b.__d; }).slice(0, 35);
-    var ids = locList.map(function (l) { return l.id; }).filter(Boolean);
-    if (!ids.length) return { ok: false, reason: "no-locations", query: debug ? queries : undefined };
-    var purl = base + "/PractitionerRole?location=" + encodeURIComponent(ids.map(function (i) { return "Location/" + i; }).join(",")) + "&_include=PractitionerRole:practitioner&_count=400";
-    queries.push(purl);
-    var pb = parseBundle(await fetchText(purl, 9000));
-    if (!pb || !pb.entry) { var purl2 = base + "/PractitionerRole?location=" + encodeURIComponent(ids.join(",")) + "&_include=PractitionerRole:practitioner&_count=400"; queries.push(purl2); pb = parseBundle(await fetchText(purl2, 9000)); }
-    if (pb && pb.entry) { indexBundle(pb, idx); roles = bundleResources(pb, "PractitionerRole"); }
+  } else {
+    var zips = zipsWithin(lat, lng, radius, 80);
+    if (!zips.length && zip) zips = [zip5(zip)];
+    if (!zips.length) return { ok: false, reason: "no-zips" };
+    var u2 = base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(zips.join(",")) + inc + "&_count=400";
+    queries.push(u2);
+    var b2 = parseBundle(await fetchText(u2, 10000));
+    if (b2 && b2.entry && b2.entry.length) { indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
   }
   if (!roles.length) return { ok: false, reason: "no-providers", query: debug ? queries : undefined };
 
@@ -159,32 +144,28 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   var maxM = radius * 1.1 + 400;
   var seen = {}, out = [];
   roles.forEach(function (pr) {
-    var spec = specialtyText(pr);
-    var prTel = telOf(pr);
+    var spec = specialtyText(pr), prTel = telOf(pr);
     var pract = (pr.practitioner && pr.practitioner.reference) ? idx[pr.practitioner.reference] : null;
-    var practName = humanName(pract);
-    var languages = langsOf(pract);
+    var practName = humanName(pract), languages = langsOf(pract);
     var ipa = (pr.organization && pr.organization.reference && idx[pr.organization.reference]) ? (idx[pr.organization.reference].name || "") : "";
     if (language && !langMatch(languages, language)) return;
     [].concat(pr.location || []).forEach(function (lref) {
-      var loc = lref && lref.reference ? idx[lref.reference] : null;
-      if (!loc || !loc.position) return;
-      var lat2 = num(loc.position.latitude), lng2 = num(loc.position.longitude);
-      if (!isFinite(lat2) || !isFinite(lng2) || distM(lat, lng, lat2, lng2) > maxM) return;
+      var loc = lref && lref.reference ? idx[lref.reference] : null; if (!loc) return;
+      var co = coordsFor(loc); if (!co || distM(lat, lng, co.lat, co.lng) > maxM) return;
       var name = practName || loc.name || "(In-network provider)";
       if (match && !match.test((name || "") + " " + (spec || ""))) return;
       var lt = telOf(loc);
-      var k = name + "@" + lat2.toFixed(4) + "," + lng2.toFixed(4);
+      var k = name + "@" + co.lat.toFixed(4) + "," + co.lng.toFixed(4);
       if (seen[k]) return; seen[k] = 1;
-      out.push({ name: name, specialty: spec, lat: lat2, lng: lng2, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, languages: languages, ipa: ipa });
+      out.push({ name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa });
     });
   });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: "providers", specialty: specialty, language: language, count: out.length, places: out.slice(0, 80), query: debug ? queries : undefined };
+  return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 80), query: debug ? queries : undefined };
 }
 
 // Health Net: filter the preprocessed JSON dataset (ZIP-centroid coordinates).
-function healthNetSearch(lat, lng, radius, type, specialty, language, debug) {
+function healthNetSearch(lat, lng, radius, type, specialty, language) {
   if (!HN || !Array.isArray(HN.records)) return { ok: false, reason: "no-dataset" };
   var maxM = radius * 1.1 + 400;
   var match = specialty ? specialtyMatcher(specialty) : null;
@@ -198,9 +179,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language, debug) {
     if (providerMode) {
       if (match && !match.test((r.specialty || "") + " " + (r.name || ""))) continue;
       if (language && !langMatch(r.languages, language)) continue;
-    } else if (!cats || cats.indexOf(r.cat) < 0) {
-      continue; // type not represented in the directory (e.g. pharmacy/dentist) -> let client fall back
-    }
+    } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
     var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
     out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients });
   }
@@ -226,19 +205,17 @@ module.exports = async function handler(req, res) {
   if (!cfg || (!cfg.baseUrl && !cfg.dataset)) { res.status(200).json({ ok: false, reason: "no-endpoint", plan: plan }); return; }
 
   try {
-    var result;
     if (cfg.dataset) {
-      // Health Net (preprocessed JSON dataset, ZIP-centroid coordinates).
-      result = healthNetSearch(lat, lng, radius, type, specialty, language, debug);
-      if (result.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-      res.status(200).json(Object.assign({ plan: plan }, result));
+      var hn = healthNetSearch(lat, lng, radius, type, specialty, language);
+      if (hn.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
+      res.status(200).json(Object.assign({ plan: plan }, hn));
       return;
     }
     var base = String(cfg.baseUrl).replace(/\/+$/, "");
-    var geoMode = cfg.geo === "postal" ? "postal" : "near";
+    var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
     var km = Math.max(0.5, radius / 1000);
-    result = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
-                                     : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
+    var result = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
+                                         : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
     if (result.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
     res.status(200).json(Object.assign({ source: "fhir", plan: plan, geo: geoMode, refreshed: "live" }, result));
   } catch (e) {

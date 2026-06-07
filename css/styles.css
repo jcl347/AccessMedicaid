@@ -270,6 +270,12 @@ a { color: var(--primary-700); }
 .map-source { display: inline-flex; align-items: center; gap: .4rem; margin: .6rem 0 0; padding: .3rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 700; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); }
 .map-source svg { width: 15px; height: 15px; }
 .map-source.in-network { background: #f1f8f4; border-color: #d6e8dc; color: #2f7d52; }
+/* Professional FHIR mark (flame), shown when the map is using FHIR/directory data. */
+.map-source .fhir-badge { display: inline-flex; align-items: center; gap: .25rem; font-weight: 800; letter-spacing: .02em; color: #b5121b; background: #fff; border: 1px solid #e6cdca; border-radius: 6px; padding: .05rem .4rem; margin-right: .15rem; }
+.map-source .fhir-badge svg { width: 14px; height: 14px; fill: #e8590c; stroke: #e8590c; }
+.filter-q { display: block; width: 100%; margin: .1rem 0 .45rem; font-weight: 700; }
+.chip.chip-spec[aria-pressed="true"] { background: #2f9e63; border-color: #2f9e63; color: #fff; }
+.chip.chip-spec[aria-pressed="true"] svg { color: #fff; }
 .map-open { display: inline-flex; align-items: center; gap: .4rem; margin-top: .7rem; font-weight: 700; }
 .map-open svg { width: 17px; height: 17px; }
 

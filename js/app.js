@@ -21,6 +21,7 @@
  creditCard: '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
  refresh: '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ flame: '<path d="M12 23a7 7 0 0 0 7-7c0-2-1-3.8-2.4-5.2-.3 1.2-1.3 2.2-2.6 2.2 1.2-3 .2-5.8-2.4-8 .3 2.4-1 4.1-2.4 5.6C6.9 11.6 5 13.5 5 16a7 7 0 0 0 7 7z"/>',
  gift: '<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
  clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
  book: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
@@ -295,7 +296,7 @@
  list.innerHTML = "";
  renderPlanContext(plan);
  renderNetworkNote();
- if (typeof renderSpecialtyControls === "function") renderSpecialtyControls();
+ if (typeof renderFilters === "function") renderFilters();
  var items = (plan ? planResources(plan) : []).filter(matches);
  var catLabel = state.category ? "“" + shortLabel(state.category) + "”" : "all topics";
  ctx.textContent = plan
@@ -775,14 +776,6 @@
  function dirUrl(lat, lng, mode) { return "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng + "&travelmode=" + (mode || "driving"); }
  function setMapLabel(t) { var l = $("#mapLabel"); if (l) l.textContent = t; }
 
- function renderCareChips() {
- var row = $("#careChips"); if (!row) return; row.innerHTML = "";
- CARE_TYPES.forEach(function (c) {
- var chip = el("button", { class: "chip", type: "button", "aria-pressed": geo.care === c.key ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
- chip.addEventListener("click", function () { geo.care = c.key; renderCareChips(); runSearch(); });
- row.appendChild(chip);
- });
- }
  function renderRadiusChips() {
  var row = $("#radiusChips"); if (!row) return; row.innerHTML = "";
  RADII.forEach(function (r) {
@@ -791,41 +784,44 @@
  row.appendChild(chip);
  });
  }
- // Specialty search (FHIR plans only): filter the map to in-network providers of a
- // specialty (e.g. Pediatrics, OB-GYN). Hidden for plans without a FHIR directory.
- var SPECIALTIES = ["Primary care", "Pediatrics", "OB-GYN", "Mental health", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
+ // ONE unified filter set. Care types (place kinds) always show; provider specialties are
+ // appended when the selected plan has an in-network directory (they're FHIR-only). A
+ // separate optional "preferred language" row also shows for in-network plans.
+ var SPECIALTIES = ["Primary care", "Pediatrics", "OB-GYN", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
  var LANGUAGES = ["Spanish", "Mandarin", "Cantonese", "Vietnamese", "Korean", "Armenian", "Tagalog", "Russian", "Arabic"];
  function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
- function renderSpecialtyControls() {
- var rowWrap = $("#specialtyRow"); if (!rowWrap) return;
- if (!planHasInNetwork()) { rowWrap.hidden = true; geo.specialty = ""; geo.language = ""; return; }
- rowWrap.hidden = false;
- var row = $("#specialtyChips");
+ function renderFilters() {
+ var inNet = planHasInNetwork();
+ var row = $("#careChips");
  if (row) {
  row.innerHTML = "";
- var anyChip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.specialty ? "false" : "true", text: "Any provider" });
- anyChip.addEventListener("click", function () { geo.specialty = ""; var si = $("#specialtyInput"); if (si) si.value = ""; renderSpecialtyControls(); runSearch(); });
- row.appendChild(anyChip);
- SPECIALTIES.forEach(function (s) {
+ CARE_TYPES.forEach(function (c) {
+ var on = geo.care === c.key && !geo.specialty;
+ var chip = el("button", { class: "chip", type: "button", "aria-pressed": on ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
+ chip.addEventListener("click", function () { geo.care = c.key; geo.specialty = ""; renderFilters(); runSearch(); });
+ row.appendChild(chip);
+ });
+ if (inNet) SPECIALTIES.forEach(function (s) {
  var on = geo.specialty.toLowerCase() === s.toLowerCase();
- var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
- chip.addEventListener("click", function () { geo.specialty = on ? "" : s; var si = $("#specialtyInput"); if (si) si.value = on ? "" : s; renderSpecialtyControls(); runSearch(); });
+ var chip = el("button", { class: "chip chip-spec", type: "button", "aria-pressed": on ? "true" : "false", html: svg("plusCircle") + "<span>" + s + "</span>" });
+ chip.addEventListener("click", function () { geo.specialty = on ? "" : s; if (!on) geo.care = "doctor"; renderFilters(); runSearch(); });
  row.appendChild(chip);
  });
  }
+ var langRow = $("#langRow"); if (langRow) langRow.hidden = !inNet;
  var lrow = $("#languageChips");
- if (lrow) {
+ if (lrow && inNet) {
  lrow.innerHTML = "";
  var anyLang = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.language ? "false" : "true", text: "Any language" });
- anyLang.addEventListener("click", function () { geo.language = ""; renderSpecialtyControls(); runSearch(); });
+ anyLang.addEventListener("click", function () { geo.language = ""; renderFilters(); runSearch(); });
  lrow.appendChild(anyLang);
  LANGUAGES.forEach(function (s) {
  var on = geo.language.toLowerCase() === s.toLowerCase();
  var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
- chip.addEventListener("click", function () { geo.language = on ? "" : s; renderSpecialtyControls(); runSearch(); });
+ chip.addEventListener("click", function () { geo.language = on ? "" : s; renderFilters(); runSearch(); });
  lrow.appendChild(chip);
  });
- }
+ } else if (lrow) { lrow.innerHTML = ""; geo.language = ""; }
  }
 
  /* ---------- travel-time isochrones (reachable area) ---------- */
@@ -1117,10 +1113,10 @@
  var sp = plan ? shortPlan(plan.name) : "your plan";
  if (inNet && geo.lastSource === "fhir") {
  box.hidden = false; box.className = "map-source in-network";
- box.innerHTML = svg("shield") + "<span>Data source: " + escapeHtml(sp) + " live FHIR provider directory (in-network)</span>";
+ box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>Live in-network data from " + escapeHtml(sp) + "'s FHIR provider directory" + (geo.lastApprox ? " (pins approximate to ZIP area)" : "") + "</span>";
  } else if (inNet && geo.lastSource === "healthnet") {
  box.hidden = false; box.className = "map-source in-network";
- box.innerHTML = svg("shield") + "<span>Data source: " + escapeHtml(sp) + " published provider directory (in-network" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + ")</span>";
+ box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>In-network data from " + escapeHtml(sp) + "'s published provider directory" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + " (pins approximate to ZIP area)</span>";
  } else {
  box.hidden = false; box.className = "map-source";
  box.innerHTML = svg("info") + "<span>Data source: " + (geo.lastSource === "google" ? "Google Places" : "OpenStreetMap") + " (public map data - not filtered by insurance)</span>";
@@ -1209,9 +1205,7 @@
  }
 
  function initNearMe() {
- renderCareChips(); renderRadiusChips(); renderIsoChips(); renderSpecialtyControls(); initShare();
- var si = $("#specialtyInput");
- if (si) { var st; si.addEventListener("input", function () { clearTimeout(st); st = setTimeout(function () { geo.specialty = si.value.trim(); renderSpecialtyControls(); runSearch(); }, 450); }); }
+ renderFilters(); renderRadiusChips(); renderIsoChips(); initShare();
  var addr = $("#addrInput");
  var saved = store(true, STORE.zip) || "";
  function doAddr() { var v = addr ? addr.value.trim() : ""; if (!v) return; store(false, STORE.zip, v); geocode(v); }

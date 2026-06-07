@@ -167,31 +167,6 @@
  </div>
  </section>
 
- <!-- STEP 2: NEEDS -->
- <section class="section" id="needs-step" aria-labelledby="needs-step-title">
- <div class="wrap">
- <div class="section-head" data-reveal><span class="step-num" aria-hidden="true">2</span><h2 id="needs-step-title">What do you need today?</h2></div>
- <p class="section-sub" data-reveal>Tap a button, or search. When you choose a topic, we'll also pull the <strong>latest info live</strong> from your plan's official website.</p>
- <div class="search-row" data-reveal>
- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
- <label for="searchBox" class="visually-hidden">Search resources</label>
- <input type="search" id="searchBox" class="search-box" placeholder="Search (ride, nurse, dentist, renew, mental health…)" autocomplete="off" />
- </div>
- <div class="needs-grid" id="needsGrid" aria-label="Common needs"></div>
- </div>
- </section>
-
- <!-- RESULTS -->
- <section class="section" id="results" aria-labelledby="results-title" aria-live="polite">
- <div class="wrap">
- <div class="section-head"><h2 id="results-title">Your resources</h2></div>
- <div id="planContext"></div>
- <p class="results-context" id="resultsContext"></p>
- <div id="livePanel"></div>
- <div class="results-list" id="resultsList"></div>
- </div>
- </section>
-
  <!-- NEAR ME / MAPS -->
  <section class="section tinted" id="near-me" aria-labelledby="near-title">
  <div class="wrap">
@@ -209,13 +184,11 @@
  <span>Use my location</span>
  </button>
  </div>
- <div class="chip-row" id="careChips" aria-label="Type of care"></div>
- <div class="spec-row" id="specialtyRow" hidden>
- <span class="radius-label" id="specialtyLabel">Find an in-network provider (your plan):</span>
- <div class="chip-row" id="specialtyChips" aria-label="Provider specialty"></div>
- <input type="text" id="specialtyInput" class="zip-input spec-input" placeholder="Or type a specialty (e.g., cardiology)" aria-label="Type a provider specialty" />
- <span class="radius-label" style="width:100%;margin-top:.25rem;">Preferred language (optional):</span>
- <div class="chip-row" id="languageChips" aria-label="Provider language"></div>
+ <span class="radius-label filter-q">What do you need? <span class="muted" style="font-weight:500">Pick a place or, with an in-network plan, a provider specialty.</span></span>
+ <div class="chip-row" id="careChips" aria-label="Type of care or provider specialty"></div>
+ <div class="spec-row" id="langRow" hidden>
+ <span class="radius-label" style="width:100%;">Preferred language (optional):</span>
+ <div class="chip-row" id="languageChips" aria-label="Preferred language"></div>
  </div>
  <div class="radius-row">
  <span class="radius-label">Search within:</span>
@@ -266,6 +239,32 @@
  </a>
  </div>
  </section>
+
+ <!-- STEP 2: NEEDS -->
+ <section class="section" id="needs-step" aria-labelledby="needs-step-title">
+ <div class="wrap">
+ <div class="section-head" data-reveal><span class="step-num" aria-hidden="true">2</span><h2 id="needs-step-title">What do you need today?</h2></div>
+ <p class="section-sub" data-reveal>Tap a button, or search. When you choose a topic, we'll also pull the <strong>latest info live</strong> from your plan's official website.</p>
+ <div class="search-row" data-reveal>
+ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+ <label for="searchBox" class="visually-hidden">Search resources</label>
+ <input type="search" id="searchBox" class="search-box" placeholder="Search (ride, nurse, dentist, renew, mental health…)" autocomplete="off" />
+ </div>
+ <div class="needs-grid" id="needsGrid" aria-label="Common needs"></div>
+ </div>
+ </section>
+
+ <!-- RESULTS -->
+ <section class="section" id="results" aria-labelledby="results-title" aria-live="polite">
+ <div class="wrap">
+ <div class="section-head"><h2 id="results-title">Your resources</h2></div>
+ <div id="planContext"></div>
+ <p class="results-context" id="resultsContext"></p>
+ <div id="livePanel"></div>
+ <div class="results-list" id="resultsList"></div>
+ </div>
+ </section>
+
 
  <!-- WHERE TO GO (triage) -->
  <section class="section tinted" id="where-to-go" aria-labelledby="wtg-title">
@@ -341,7 +340,6 @@
  </button>
  </div>
  </section>
-
 
  <!-- EQUITY IMAGE BAND -->
  <section class="image-band" id="equity" aria-labelledby="equity-title" style="--band-img:url('https://images.unsplash.com/photo-1758613171176-ea64579c2dcf?auto=format&fit=crop&w=2000&q=72')">
