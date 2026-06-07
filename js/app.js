@@ -290,6 +290,7 @@
  var list = $("#resultsList"), ctx = $("#resultsContext"), plan = getPlan();
  list.innerHTML = "";
  renderPlanContext(plan);
+ renderNetworkNote();
  var items = (plan ? planResources(plan) : []).filter(matches);
  var catLabel = state.category ? "“" + shortLabel(state.category) + "”" : "all topics";
  ctx.textContent = plan
@@ -930,6 +931,7 @@
 
  function runSearch() {
  var open = $("#mapOpen"); if (open) open.href = gmapsSearch();
+ renderNetworkNote();
  if (!window.L) { mapFallback(); setMapLabel("Showing " + careLabel().toLowerCase() + " near " + geo.label + "."); return; }
  var map = ensureMap(); if (!map) return;
  var isoOn = !!geo.iso.fc;
@@ -1031,6 +1033,24 @@
  });
  }
 
+ // Tier 1 in-network helper: map pins come from public map data (OSM/Google) and are
+ // NOT filtered by insurance. Point members to their plan's official directory + Member
+ // Services so they can confirm a place takes their plan before traveling.
+ function shortPlan(name) { return (name || "").replace(/\s*\(.*?\)\s*/g, "").replace(/\s+Health Plan$/i, "").trim() || "your plan"; }
+ function renderNetworkNote() {
+ var box = $("#networkNote"); if (!box) return;
+ var plan = getPlan();
+ box.innerHTML = "";
+ if (!plan) { box.hidden = true; return; }
+ box.hidden = false;
+ var sp = shortPlan(plan.name);
+ box.appendChild(el("div", { class: "nn-head", html: svg("shield") + "<span>Does this place take <strong>" + escapeHtml(sp) + "</strong>?</span>" }));
+ box.appendChild(el("p", { class: "nn-body", text: "These map results come from public map data, so they are not filtered by insurance. Before you go, confirm the clinic or pharmacy accepts your plan." }));
+ var actions = el("div", { class: "nn-actions" });
+ if (plan.findADoctorUrl) actions.appendChild(el("a", { class: "btn btn-call", href: plan.findADoctorUrl, target: "_blank", rel: "noopener", html: svg("plusCircle") + "<span>Check " + escapeHtml(sp) + " provider directory</span>" }));
+ if (plan.memberServicesPhone) actions.appendChild(el("a", { class: "btn btn-ghost", href: telHref(plan.memberServicesPhone), html: svg("phone") + "<span>Ask Member Services: " + escapeHtml(plan.memberServicesPhone) + "</span>" }));
+ box.appendChild(actions);
+ }
  function renderNearList(places) {
  var list = $("#nearList"); if (!list) return; list.innerHTML = "";
  if (!places.length) return;
