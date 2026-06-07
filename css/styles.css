@@ -371,6 +371,8 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .leaflet-popup-content a { font-weight: 700; }
 .iso-controls { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: .85rem 1rem; margin: 0 0 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
 .iso-controls .radius-label { width: 100%; }
+.iso-controls .dist-head { font-weight: 800; }
+.dist-sub { width: 100%; font-size: .8rem; font-weight: 700; color: var(--ink-2); margin: .25rem 0 -.2rem; }
 .iso-note { width: 100%; font-size: .82rem; margin: .25rem 0 0; }
 .map-legend { display: flex; flex-wrap: wrap; gap: .9rem; margin: .7rem 0 .2rem; font-size: .82rem; color: var(--ink-2); }
 .lg-item { display: inline-flex; align-items: center; gap: .4rem; }

@@ -190,14 +190,12 @@
  <span class="radius-label" style="width:100%;">Preferred language (optional):</span>
  <div class="chip-row" id="languageChips" aria-label="Preferred language"></div>
  </div>
- <div class="radius-row">
- <span class="radius-label">Search within:</span>
- <div class="chip-row" id="radiusChips" aria-label="Search radius"></div>
- </div>
-
- <!-- Travel-time isochrone (reachable area) -->
+ <!-- How far: one distance control - by miles OR by travel time (pick either) -->
  <div class="iso-controls" data-reveal>
- <span class="radius-label">How far can you get? Show what's reachable:</span>
+ <span class="radius-label dist-head">How far? Search by distance or travel time:</span>
+ <span class="dist-sub">Within a distance</span>
+ <div class="chip-row" id="radiusChips" aria-label="Search radius"></div>
+ <span class="dist-sub">Or what's reachable</span>
  <div class="chip-row" id="isoModeChips" aria-label="Travel mode"></div>
  <div class="chip-row" id="isoMinChips" aria-label="Travel time"></div>
  <button type="button" class="btn btn-ghost" id="isoClearBtn" hidden>
