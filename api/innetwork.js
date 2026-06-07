@@ -27,14 +27,14 @@ var CARE_KEYWORDS = {
   mental_health: /behavioral|mental|psych|counsel|wellness|substance|recovery/i,
 };
 var SPECIALTY_KW = {
-  "primary care": /family|general practice|internal medicine|\bprimary\b|pediatric|geriatric|nurse practitioner/i,
-  "pediatrics": /pediatric|\bpeds\b|child|adolescent/i,
-  "ob-gyn": /obstetri|gynecolog|ob.?gyn|\bwomen|midwife|maternal/i,
-  "mental health": /psych|behavioral|mental|counsel|therapist|social work|substance|addiction/i,
+  "primary care": /family medicine|family practice|general practice|internal medicine|\bprimary care\b|nurse practitioner|family nurse|adult medicine|family health/i,
+  "pediatrics": /pediatric|\bpeds\b|\bchild|adolescent/i,
+  "ob-gyn": /obstetri|gynecolog|ob.?gyn|midwife|maternal.fetal|\bwomen'?s\b/i,
+  "mental health": /psychiat|psycholog|behavioral|mental health|counsel|therapist|social work|substance|addiction|marriage and family/i,
   "cardiology": /cardio|heart|vascular/i,
   "dermatology": /dermat|skin/i,
-  "vision": /optom|ophthalmol|vision|\beye/i,
-  "orthopedics": /orthop|bone|joint|sports medicine/i,
+  "vision": /optom|ophthalmol|\bvision\b|\beye\b/i,
+  "orthopedics": /orthop|\bbone|\bjoint|sports medicine/i,
 };
 
 function num(x) { var n = parseFloat(x); return isFinite(n) ? n : null; }
@@ -149,7 +149,7 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
   var zips = zipsWithin(lat, lng, radius, zipCap(radius));
   if (!zips.length && zip) zips = [zip5(zip)];
   if (!zips.length) return { error: "no-zips" };
-  var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=300";
+  var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=500";
   return { url: u2, zips: zips, bundle: parseBundle(await fetchText(u2, 9000)) };
 }
 
@@ -165,7 +165,7 @@ async function locationSearch(base, geoMode, lat, lng, km, radius, type, zip, de
   var seen = {}, out = [];
   places.forEach(function (p) { var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; delete p._typeText; out.push(p); });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: "locations", type: type, radius: radius, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 120), query: debug ? [lb.url] : undefined };
+  return { ok: true, mode: "locations", type: type, radius: radius, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? [lb.url] : undefined };
 }
 
 async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug) {
@@ -180,9 +180,9 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     var zips = zipsWithin(lat, lng, radius, zipCap(radius));
     if (!zips.length && zip) zips = [zip5(zip)];
     if (!zips.length) return { ok: false, reason: "no-zips" };
-    var u2 = base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(zips.join(",")) + inc + "&_count=400";
+    var u2 = base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(zips.join(",")) + inc + "&_count=500";
     queries.push(u2);
-    var b2 = parseBundle(await fetchText(u2, 10000));
+    var b2 = parseBundle(await fetchText(u2, 12000));
     if (b2 && b2.entry && b2.entry.length) { indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
   }
   if (!roles.length) return { ok: false, reason: "no-providers", query: debug ? queries : undefined };
@@ -208,7 +208,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     });
   });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 80), query: debug ? queries : undefined };
+  return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
 }
 
 // Health Net: filter the preprocessed JSON dataset (ZIP-centroid coordinates).
@@ -231,7 +231,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language) {
     out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
   }
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 120) };
+  return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
 }
 
 module.exports = async function handler(req, res) {
