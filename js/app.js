@@ -1029,6 +1029,10 @@
  var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Pins are approximate to each provider's ZIP area." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
  var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
  setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
+ // Green frame + explicit data-source badge so it's clear when the list is verified
+ // in-network (FHIR / plan directory) data versus public map data.
+ var wrap = $("#mapFrameWrap"); if (wrap) wrap.classList.toggle("in-network", inNet && places.length > 0);
+ renderMapSource(inNet && places.length > 0, pl);
  renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
@@ -1113,6 +1117,21 @@
  // NOT filtered by insurance. Point members to their plan's official directory + Member
  // Services so they can confirm a place takes their plan before traveling.
  function shortPlan(name) { return (name || "").replace(/\s*\(.*?\)\s*/g, "").replace(/\s+Health Plan$/i, "").trim() || "your plan"; }
+ // A clear, persistent badge naming where the map results came from.
+ function renderMapSource(inNet, plan) {
+ var box = $("#mapSource"); if (!box) return;
+ var sp = plan ? shortPlan(plan.name) : "your plan";
+ if (inNet && geo.lastSource === "fhir") {
+ box.hidden = false; box.className = "map-source in-network";
+ box.innerHTML = svg("shield") + "<span>Data source: " + escapeHtml(sp) + " live FHIR provider directory (in-network)</span>";
+ } else if (inNet && geo.lastSource === "healthnet") {
+ box.hidden = false; box.className = "map-source in-network";
+ box.innerHTML = svg("shield") + "<span>Data source: " + escapeHtml(sp) + " published provider directory (in-network" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + ")</span>";
+ } else {
+ box.hidden = false; box.className = "map-source";
+ box.innerHTML = svg("info") + "<span>Data source: " + (geo.lastSource === "google" ? "Google Places" : "OpenStreetMap") + " (public map data - not filtered by insurance)</span>";
+ }
+ }
  function fmtRefreshed(d) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ""); if (!m) return d || ""; var mo = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; return mo[(+m[2]) - 1] + " " + (+m[3]) + ", " + m[1]; }
  function renderNetworkNote(source) {
  var box = $("#networkNote"); if (!box) return;
