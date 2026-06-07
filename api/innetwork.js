@@ -39,6 +39,25 @@ var SPECIALTY_KW = {
 
 function num(x) { var n = parseFloat(x); return isFinite(n) ? n : null; }
 function zip5(z) { var m = String(z == null ? "" : z).match(/\d{5}/); return m ? m[0] : ""; }
+
+// L.A. Care (and similar Edifecs directories) pack "ORG NAME - Service Type - STREET" into
+// address.line, and stamp a placeholder admin address ("9230 W Olympic Blvd Fl 2") with
+// mismatched/varying ZIPs onto many unrelated providers. Extract the real street, and flag the
+// placeholder so it isn't mapped.
+function cleanStreet(line) {
+  var s = String(line || "");
+  var parts = s.split(/\s+-\s*(?=\S)/); // "ORG - Type - STREET" / "ORG - Type -STREET"
+  s = (parts.length > 1 ? parts[parts.length - 1] : s).replace(/\s*\|\s*\d+\s*$/, "").trim();
+  return s;
+}
+var PLACEHOLDER_ADDR = /9230\s*w\s*olympic\s*blvd/i;
+// General placeholder detector: the same street stamped on >3 different ZIPs can't be a real
+// single address - drop those records so they don't pile onto one point.
+function dropPlaceholders(list) {
+  var byStreet = {};
+  list.forEach(function (p) { var s = ((p._addr && p._addr.street) || "").toLowerCase(); if (!s) return; (byStreet[s] = byStreet[s] || {})[(p._addr && p._addr.zip) || ""] = 1; });
+  return list.filter(function (p) { var s = ((p._addr && p._addr.street) || "").toLowerCase(); return !s || Object.keys(byStreet[s]).length <= 3; });
+}
 function distM(aLat, aLng, bLat, bLng) {
   var R = 6371000, toRad = Math.PI / 180;
   var dLat = (bLat - aLat) * toRad, dLng = (bLng - aLng) * toRad;
@@ -59,11 +78,14 @@ function zipsWithin(lat, lng, radiusM, max) {
 function zipCap(radiusM) { return radiusM > 24000 ? 220 : radiusM > 12000 ? 140 : 90; }
 // Coordinates for a Location: prefer real FHIR position, else the ZIP centroid (approx).
 function coordsFor(res) {
+  var a = res && res.address;
+  // Drop the known placeholder admin address - it's unmappable (wrong/varying ZIPs).
+  if (a && PLACEHOLDER_ADDR.test(cleanStreet([].concat(a.line || []).filter(Boolean).join(" ")))) return null;
   var pos = res && res.position;
   // Use a real position only if it isn't the 0,0 "null island" some servers return (e.g. BSP
   // postalcode-mode Locations) - fall back to the ZIP centroid in that case.
   if (pos) { var la = num(pos.latitude), lo = num(pos.longitude); if (isFinite(la) && isFinite(lo) && (Math.abs(la) > 0.01 || Math.abs(lo) > 0.01)) return { lat: la, lng: lo, approx: false }; }
-  var z = res && res.address ? zip5(res.address.postalCode) : "";
+  var z = a ? zip5(a.postalCode) : "";
   var c = z && ZIPC[z];
   return c ? { lat: c[0], lng: c[1], approx: true } : null;
 }
@@ -82,7 +104,7 @@ function humanName(p) { if (!p) return ""; var n = (p.name && p.name[0]) || {}; 
 function langsOf(p) { var out = []; ((p && p.communication) || []).forEach(function (cc) { var c = (cc.coding && cc.coding[0]) || {}; var v = c.display || c.code || cc.text; if (v && out.indexOf(v) < 0) out.push(v); }); return out; }
 function langMatch(list, want) { if (!want) return true; want = want.toLowerCase(); return (list || []).some(function (L) { return String(L).toLowerCase().indexOf(want) >= 0; }); }
 function telOf(res) { var ph = "", web = ""; ((res && res.telecom) || []).forEach(function (t) { if (t && t.value) { if (t.system === "phone" && !ph) ph = t.value; if (t.system === "url" && !web) web = t.value; } }); return { phone: ph, website: web }; }
-function addrOf(loc) { var a = (loc && loc.address) || {}; var s = [].concat(a.line || []).filter(Boolean).join(" "); if (a.city) s += (s ? ", " : "") + a.city; if (a.state) s += (s ? ", " : "") + a.state; if (a.postalCode) s += " " + a.postalCode; return s.trim(); }
+function addrOf(loc) { var a = (loc && loc.address) || {}; var s = cleanStreet([].concat(a.line || []).filter(Boolean).join(" ")); if (a.city) s += (s ? ", " : "") + a.city; if (a.state) s += (s ? ", " : "") + a.state; if (a.postalCode) s += " " + a.postalCode; return s.trim(); }
 function specialtyText(pr) {
   var set = [];
   function add(v) { v = (v || "").trim(); if (v && set.indexOf(v) < 0) set.push(v); }
@@ -102,7 +124,7 @@ function specialtyMatcher(s) {
 var GEO_CACHE = {};
 function addrParts(loc) {
   var a = (loc && loc.address) || {};
-  return { street: [].concat(a.line || []).filter(Boolean).join(" "), city: a.city || "", state: a.state || "CA", zip: zip5(a.postalCode) };
+  return { street: cleanStreet([].concat(a.line || []).filter(Boolean).join(" ")), city: a.city || "", state: a.state || "CA", zip: zip5(a.postalCode) };
 }
 function csvCell(s) { return String(s == null ? "" : s).replace(/[",\r\n]/g, " ").trim(); }
 function parseCsvLine(line) { var out = [], cur = "", q = false; for (var i = 0; i < line.length; i++) { var ch = line[i]; if (q) { if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; } else { if (ch === ",") { out.push(cur); cur = ""; } else if (ch === '"') q = true; else cur += ch; } } out.push(cur); return out; }
@@ -166,6 +188,7 @@ async function locationSearch(base, geoMode, lat, lng, km, radius, type, zip, de
   if (kw) { var f = places.filter(function (p) { return kw.test((p.name || "") + " " + (p._typeText || "")); }); if (!GENERIC[type] || f.length) places = f; }
   var seen = {}, out = [];
   places.forEach(function (p) { var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; delete p._typeText; out.push(p); });
+  out = dropPlaceholders(out);
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
   return { ok: true, mode: "locations", type: type, radius: radius, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? [lb.url] : undefined };
 }
@@ -229,6 +252,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       out.push({ name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, _addr: addrParts(loc) });
     });
   });
+  out = dropPlaceholders(out);
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
   return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
 }
@@ -252,6 +276,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language) {
     var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
     out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
   }
+  out = dropPlaceholders(out);
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
   return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
 }
