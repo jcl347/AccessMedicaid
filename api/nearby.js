@@ -61,13 +61,24 @@ function firstNonEmpty(promises) {
   });
 }
 
+/* Drop results that are irrelevant to people filling Medi-Cal scripts or seeking care:
+ * Google's "pharmacy" type pulls in veterinary hospitals (pet pharmacies), and OSM tags
+ * cannabis dispensaries as pharmacies. Filter by Google's own place types and by name. */
+var DROP_TYPES = { veterinary_care: 1, pet_store: 1 };
+var DROP_NAME = /(animal hospital|veterinar|\bvet\b|dog\s*&\s*cat|dog and cat|pet hospital|pet clinic|pet care|\bcannabis\b|dispensary|marijuana|\bweed\b|medmen|smoke shop|vape)/i;
+function isRelevant(name, types) {
+  if (DROP_NAME.test(name || "")) return false;
+  if (types && types.some(function (t) { return DROP_TYPES[t]; })) return false;
+  return true;
+}
+
 /* Optional Google Places provider (used only if GOOGLE_MAPS_API_KEY is set in Vercel).
  * Higher-quality clinic data + phone numbers. NOTE: Google's Places terms generally
  * expect results to be shown on a Google map; enabling this is the project owner's call. */
 var GOOGLE_TYPE = { pharmacy: ["pharmacy"], hospital: ["hospital"], dentist: ["dentist"], doctor: ["doctor"] };
 var GOOGLE_TEXT = { clinic: "community health clinic", urgent_care: "urgent care clinic", mental_health: "mental health clinic" };
 async function googlePlaces(type, radius, lat, lng, key) {
-  var fieldMask = "places.displayName,places.location,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri";
+  var fieldMask = "places.displayName,places.location,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.types,places.primaryType";
   var url, body, circle = { center: { latitude: lat, longitude: lng }, radius: Math.min(radius, 50000) };
   if (GOOGLE_TYPE[type]) { url = "https://places.googleapis.com/v1/places:searchNearby"; body = { includedTypes: GOOGLE_TYPE[type], maxResultCount: 20, locationRestriction: { circle: circle } }; }
   else { url = "https://places.googleapis.com/v1/places:searchText"; body = { textQuery: GOOGLE_TEXT[type] || "medical clinic", maxResultCount: 20, locationBias: { circle: circle } }; }
@@ -76,10 +87,12 @@ async function googlePlaces(type, radius, lat, lng, key) {
   clearTimeout(t);
   if (!r.ok) { var et = ""; try { et = await r.text(); } catch (_) {} throw new Error("google " + r.status + (et ? ": " + et.replace(/\s+/g, " ").slice(0, 400) : "")); }
   var j = await r.json();
-  return (j.places || []).map(function (p) {
-    var loc = p.location || {};
-    return { name: (p.displayName && p.displayName.text) || "(Unnamed location)", lat: loc.latitude, lng: loc.longitude, phone: p.nationalPhoneNumber || "", address: p.formattedAddress || "", website: p.websiteUri || "" };
-  }).filter(function (x) { return isFinite(x.lat) && isFinite(x.lng); });
+  return (j.places || [])
+    .filter(function (p) { return isRelevant((p.displayName && p.displayName.text) || "", (p.types || []).concat(p.primaryType || [])); })
+    .map(function (p) {
+      var loc = p.location || {};
+      return { name: (p.displayName && p.displayName.text) || "(Unnamed location)", lat: loc.latitude, lng: loc.longitude, phone: p.nationalPhoneNumber || "", address: p.formattedAddress || "", website: p.websiteUri || "" };
+    }).filter(function (x) { return isFinite(x.lat) && isFinite(x.lng); });
 }
 
 module.exports = async function handler(req, res) {
@@ -129,6 +142,7 @@ module.exports = async function handler(req, res) {
       };
     }).filter(function (x) {
       if (!isFinite(x.lat) || !isFinite(x.lng)) return false;
+      if (!isRelevant(x.name, [])) return false;
       var k = x.name + "@" + x.lat.toFixed(4) + "," + x.lng.toFixed(4);
       if (seen[k]) return false; seen[k] = 1; return true;
     });
