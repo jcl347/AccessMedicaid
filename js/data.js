@@ -2789,5 +2789,14 @@ window.AM_DATA = {
     "iehp",
     "molina",
     "blue-shield-promise"
+  ],
+  "inNetworkPlans": [
+    "la-care",
+    "phc",
+    "caloptima",
+    "iehp",
+    "health-net",
+    "molina",
+    "blue-shield-promise"
   ]
 };

@@ -13,3 +13,4 @@ npm-debug.log*
 # Local scratch
 *.log
 .tmp/
+data/.healthnet-cache/

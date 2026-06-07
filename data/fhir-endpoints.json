@@ -27,9 +27,10 @@
     },
     "health-net": {
       "baseUrl": "",
-      "verified": false,
-      "vendor": "Centene (partner portal)",
-      "notes": "PD API exists but base URL is gated behind partners.centene.com 'Getting Started' tab. County JSON directory files also published (non-FHIR)."
+      "dataset": "healthnet-providers.json",
+      "verified": true,
+      "vendor": "Centene (public machine-readable JSON directories)",
+      "notes": "FHIR base URL is portal-gated, so we use Health Net's public per-county Medi-Cal provider-directory JSON, flattened + ZIP-centroid geocoded by scripts/build-healthnet.mjs into data/healthnet-providers.json. Pins are approximate to the provider's ZIP area (source has no per-record coordinates)."
     },
     "molina": {
       "baseUrl": "https://api.interop.molinahealthcare.com/providerdirectory",

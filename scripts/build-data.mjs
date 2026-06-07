@@ -1,7 +1,7 @@
 /* Build the website data bundle (js/data.js) from the JSON "database" in /data.
  The /data JSON files are the single source of truth. Run: node scripts/build-data.mjs
  The site reads window.AM_DATA so it works by simply opening index.html (no server). */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,11 +15,19 @@ const barriersDoc = read("barriers.json");
 const stateDoc = read("state-resources.json");
 const fhirDoc = read("fhir-endpoints.json");
 
-// Plan ids that have a usable public FHIR Provider Directory endpoint, so the client
-// can query in-network providers directly (and skip the call for plans without one).
+// Plan ids with a usable public FHIR Provider Directory endpoint (true live FHIR).
 const fhirPlans = Object.keys(fhirDoc.plans || {}).filter(
  (id) => (fhirDoc.plans[id] && fhirDoc.plans[id].baseUrl || "").length > 0
 );
+// All plans /api/innetwork can serve in-network results for: FHIR endpoints + any plan with
+// a preprocessed dataset file present (e.g. Health Net's JSON directory). The client uses
+// this to gate the call, show the badge, and offer specialty/language filters.
+const inNetworkPlans = Object.keys(fhirDoc.plans || {}).filter((id) => {
+ const p = fhirDoc.plans[id] || {};
+ if ((p.baseUrl || "").length > 0) return true;
+ if (p.dataset && existsSync(join(dataDir, p.dataset))) return true;
+ return false;
+});
 
 // Flatten the grouped manifest into an ordered plan list, attaching the
 // service area (county) and brand-accent color to each plan.
@@ -45,6 +53,7 @@ const bundle = {
  stateSources: stateDoc.sources || [],
  barrierSources: barriersDoc.sources || [],
  fhirPlans,
+ inNetworkPlans,
 };
 
 const banner = "/* AUTO-GENERATED from /data by scripts/build-data.mjs - do not edit by hand. */\n";

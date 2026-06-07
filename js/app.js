@@ -169,7 +169,9 @@
  if (showArea && p.serviceArea) kids.push(el("span", { class: "pc-area", text: p.serviceArea }));
  kids.push(el("span", { class: "pc-name", text: p.name }));
  kids.push(el("span", { class: "pc-rel", text: p.relationship || "" }));
- if (DATA.fhirPlans && DATA.fhirPlans.indexOf(p.id) >= 0) kids.push(el("span", { class: "pc-fhir", title: "Connected to " + p.name + "'s official FHIR provider directory (CMS interoperability), so the map can show live in-network providers.", html: svg("check") + "<span>Live in-network map</span>" }));
+ var inFhir = DATA.fhirPlans && DATA.fhirPlans.indexOf(p.id) >= 0;
+ var inAny = (DATA.inNetworkPlans || DATA.fhirPlans || []).indexOf(p.id) >= 0;
+ if (inAny) kids.push(el("span", { class: "pc-fhir", title: inFhir ? ("Connected to " + p.name + "'s official FHIR provider directory (CMS interoperability) so the map can show live in-network providers.") : ("Uses " + p.name + "'s official published provider directory for in-network results (pins approximate to ZIP area)."), html: svg("check") + "<span>In-network map</span>" }));
  kids.push(el("span", { class: "pc-check", text: "✓ Selected" }));
  var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, kids);
  card.addEventListener("click", function () {
@@ -754,7 +756,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", radius: 8047, map: null, layer: null, t: 0, shared: false, iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -791,12 +793,14 @@
  // Specialty search (FHIR plans only): filter the map to in-network providers of a
  // specialty (e.g. Pediatrics, OB-GYN). Hidden for plans without a FHIR directory.
  var SPECIALTIES = ["Primary care", "Pediatrics", "OB-GYN", "Mental health", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
- function planHasFhir() { return !!(state.planId && DATA.fhirPlans && DATA.fhirPlans.indexOf(state.planId) >= 0); }
+ var LANGUAGES = ["Spanish", "Mandarin", "Cantonese", "Vietnamese", "Korean", "Armenian", "Tagalog", "Russian", "Arabic"];
+ function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
  function renderSpecialtyControls() {
  var rowWrap = $("#specialtyRow"); if (!rowWrap) return;
- if (!planHasFhir()) { rowWrap.hidden = true; if (geo.specialty) { geo.specialty = ""; } return; }
+ if (!planHasInNetwork()) { rowWrap.hidden = true; geo.specialty = ""; geo.language = ""; return; }
  rowWrap.hidden = false;
- var row = $("#specialtyChips"); if (row) {
+ var row = $("#specialtyChips");
+ if (row) {
  row.innerHTML = "";
  var anyChip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.specialty ? "false" : "true", text: "Any provider" });
  anyChip.addEventListener("click", function () { geo.specialty = ""; var si = $("#specialtyInput"); if (si) si.value = ""; renderSpecialtyControls(); runSearch(); });
@@ -806,6 +810,19 @@
  var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
  chip.addEventListener("click", function () { geo.specialty = on ? "" : s; var si = $("#specialtyInput"); if (si) si.value = on ? "" : s; renderSpecialtyControls(); runSearch(); });
  row.appendChild(chip);
+ });
+ }
+ var lrow = $("#languageChips");
+ if (lrow) {
+ lrow.innerHTML = "";
+ var anyLang = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.language ? "false" : "true", text: "Any language" });
+ anyLang.addEventListener("click", function () { geo.language = ""; renderSpecialtyControls(); runSearch(); });
+ lrow.appendChild(anyLang);
+ LANGUAGES.forEach(function (s) {
+ var on = geo.language.toLowerCase() === s.toLowerCase();
+ var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
+ chip.addEventListener("click", function () { geo.language = on ? "" : s; renderSpecialtyControls(); runSearch(); });
+ lrow.appendChild(chip);
  });
  }
  }
@@ -980,13 +997,17 @@
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
- var inNet = geo.lastSource === "fhir";
+ var inNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
  var dotColor = inNet ? "#16a34a" : "#0b66d6";
  var NEAR = 5; // the closest few get highlighted, numbered markers
  places.forEach(function (p, i) {
  var net = inNet || p.inNetwork ? '<br><span style="color:#15803d;font-weight:700">In-network with your plan</span>' : "";
  var spec = p.specialty ? "<br><em>" + escapeHtml(p.specialty) + "</em>" : "";
- var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + "<br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
+ var lng2 = (p.languages && p.languages.length) ? "<br>Languages: " + escapeHtml(p.languages.slice(0, 6).join(", ")) : "";
+ var ipa2 = p.ipa ? "<br>Group/IPA: " + escapeHtml(p.ipa) : "";
+ var npx = p.newPatients ? "<br><span style=\"color:#15803d\">Accepting new patients</span>" : "";
+ var approx = p.approxByZip ? '<br><span style="color:#8a6d00">Approximate (ZIP-area) location - call to confirm address</span>' : "";
+ var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + npx + lng2 + ipa2 + "<br>" + escapeHtml(p.address || "") + approx + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
  if (i < NEAR) {
  var icon = L.divIcon({ className: inNet ? "near-pin net" : "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
  L.marker([p.lat, p.lng], { icon: icon, zIndexOffset: 1000 }).addTo(geo.layer).bindPopup(pop);
@@ -1004,28 +1025,33 @@
  }
  var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !inNet;
  var pl = getPlan();
- var noun = (inNet && geo.specialty) ? (geo.specialty.toLowerCase() + " providers") : careLabel().toLowerCase();
- var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory.") : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var noun = (inNet && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
+ var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Pins are approximate to each provider's ZIP area." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
  var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
  setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
  renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
+ function inNetworkIds() { return (DATA.inNetworkPlans && DATA.inNetworkPlans.length) ? DATA.inNetworkPlans : (DATA.fhirPlans || []); }
  function acquireFhir() {
- // PRIMARY source of truth: the selected plan's public FHIR Provider Directory
- // (CMS-9115-F). Returns in-network locations near the point, or null to fall back.
+ // PRIMARY source of truth: the selected plan's public provider directory (FHIR for most
+ // plans; Health Net via its public JSON). Returns in-network results, or null to fall back.
  var pid = state.planId;
- if (!pid || !DATA.fhirPlans || DATA.fhirPlans.indexOf(pid) < 0) return Promise.resolve(null);
+ if (!pid || inNetworkIds().indexOf(pid) < 0) return Promise.resolve(null);
  // Pass a typed ZIP when present - helps endpoints that geo-filter by postal code (e.g. Molina).
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
- var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (z ? "&zip=" + z : "");
+ var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? d.places : null; })
+ .then(function (d) {
+ if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "fhir"; geo.lastApprox = !!d.approxByZip; return d.places; }
+ return null;
+ })
  .catch(function () { return null; });
  }
  function acquire() {
  return acquireFhir().then(function (fp) {
- if (fp && fp.length) { geo.lastSource = "fhir"; return fp; }
+ if (fp && fp.length) return fp;
+ geo.lastApprox = false;
  return acquirePublic();
  });
  }
@@ -1094,10 +1120,10 @@
  if (!plan) { box.hidden = true; return; }
  box.hidden = false;
  var sp = shortPlan(plan.name);
- if (source === "fhir") {
+ if (source === "fhir" || source === "healthnet") {
  box.className = "net-note net-ok";
  box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
- box.appendChild(el("p", { class: "nn-body", text: "These places come straight from " + plan.name + "'s official provider directory, so they accept your plan. Directories can still lag behind - it is smart to call ahead to confirm." }));
+ box.appendChild(el("p", { class: "nn-body", text: "These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Map pins are approximate to each provider's ZIP area (this directory lists addresses, not exact coordinates)." : "") + " Directories can still lag behind - it is smart to call ahead to confirm." }));
  } else {
  box.className = "net-note";
  box.appendChild(el("div", { class: "nn-head", html: svg("shield") + "<span>Does this place take <strong>" + escapeHtml(sp) + "</strong>?</span>" }));
@@ -1116,12 +1142,16 @@
  if (p.phone) actions.appendChild(el("a", { class: "btn btn-call", href: telHref(p.phone), html: svg("phone") + "<span>Call: " + p.phone + "</span>" }));
  actions.appendChild(el("a", { class: "btn btn-ghost", href: dirUrl(p.lat, p.lng, "driving"), target: "_blank", rel: "noopener", html: svg("navigation") + "<span>Drive</span>" }));
  actions.appendChild(el("a", { class: "btn btn-ghost", href: dirUrl(p.lat, p.lng, "transit"), target: "_blank", rel: "noopener", html: svg("car") + "<span>Transit</span>" }));
+ var meta = [];
+ if (p.languages && p.languages.length) meta.push("Languages: " + p.languages.slice(0, 6).join(", "));
+ if (p.ipa) meta.push("Group/IPA: " + p.ipa);
  list.appendChild(el("div", { class: "near-item" }, [
  el("div", { class: "ni-name", text: p.name }),
  p.specialty ? el("div", { class: "ni-spec", text: p.specialty }) : null,
- p.inNetwork ? el("div", { class: "ni-net", html: svg("check") + "<span>In-network with your plan</span>" }) : null,
+ p.inNetwork ? el("div", { class: "ni-net", html: svg("check") + "<span>In-network with your plan" + (p.newPatients ? " - accepting new patients" : "") + "</span>" }) : null,
+ meta.length ? el("div", { class: "ni-addr", text: meta.join("  |  ") }) : null,
  el("div", { class: "ni-dist", text: p.dist.toFixed(1) + " miles away" }),
- p.address ? el("div", { class: "ni-addr", text: p.address }) : null,
+ p.address ? el("div", { class: "ni-addr", text: p.address + (p.approxByZip ? " (approx. ZIP area)" : "") }) : null,
  actions,
  ]));
  });
