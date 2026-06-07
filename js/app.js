@@ -801,17 +801,25 @@
  if (row) {
  row.innerHTML = "";
  CARE_TYPES.forEach(function (c) {
+ if (inNet && c.key === "doctor") return; // replaced by "All in-network doctors" in the specialty group
  var on = geo.care === c.key && !geo.specialty;
  var chip = el("button", { class: "chip", type: "button", "aria-pressed": on ? "true" : "false", html: svg(c.icon) + "<span>" + c.label + "</span>" });
  chip.addEventListener("click", function () { geo.care = c.key; geo.specialty = ""; renderFilters(); runSearch(); });
  row.appendChild(chip);
  });
- if (inNet) SPECIALTIES.forEach(function (s) {
+ if (inNet) {
+ // "All in-network doctors" - no specialty filter, full PractitionerRole roster.
+ var allOn = geo.care === "doctor" && !geo.specialty;
+ var allChip = el("button", { class: "chip chip-spec", type: "button", "aria-pressed": allOn ? "true" : "false", html: svg("check") + "<span>All in-network doctors</span>" });
+ allChip.addEventListener("click", function () { geo.specialty = ""; geo.care = "doctor"; renderFilters(); runSearch(); });
+ row.appendChild(allChip);
+ SPECIALTIES.forEach(function (s) {
  var on = geo.specialty.toLowerCase() === s.toLowerCase();
  var chip = el("button", { class: "chip chip-spec", type: "button", "aria-pressed": on ? "true" : "false", html: svg("plusCircle") + "<span>" + s + "</span>" });
  chip.addEventListener("click", function () { geo.specialty = on ? "" : s; if (!on) geo.care = "doctor"; renderFilters(); runSearch(); });
  row.appendChild(chip);
  });
+ }
  }
  var langRow = $("#langRow"); if (langRow) langRow.hidden = !inNet;
  var lrow = $("#languageChips");
