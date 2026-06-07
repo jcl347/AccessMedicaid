@@ -150,6 +150,7 @@ const bundle = {
   plan: "health-net",
   source: "Health Net of California Medi-Cal machine-readable provider directory (public JSON)",
   note: "Coordinates are ZIP-code centroids (the source directory has no per-record geocoordinates), so pins are approximate to the provider's ZIP area.",
+  generated: new Date().toISOString().slice(0, 10),
   count: all.length,
   records: all,
 };

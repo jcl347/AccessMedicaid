@@ -205,7 +205,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language, debug) {
     out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients });
   }
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 120) };
+  return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 120) };
 }
 
 module.exports = async function handler(req, res) {
@@ -240,7 +240,7 @@ module.exports = async function handler(req, res) {
     result = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
                                      : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
     if (result.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-    res.status(200).json(Object.assign({ source: "fhir", plan: plan, geo: geoMode }, result));
+    res.status(200).json(Object.assign({ source: "fhir", plan: plan, geo: geoMode, refreshed: "live" }, result));
   } catch (e) {
     res.status(200).json({ ok: false, reason: "exception", plan: plan, detail: debug ? String((e && e.message) || e) : undefined });
   }

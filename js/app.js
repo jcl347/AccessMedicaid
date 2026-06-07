@@ -756,7 +756,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -1043,7 +1043,7 @@
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) {
- if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "fhir"; geo.lastApprox = !!d.approxByZip; return d.places; }
+ if (d && d.ok && Array.isArray(d.places) && d.places.length) { geo.lastSource = d.source || "fhir"; geo.lastApprox = !!d.approxByZip; geo.lastRefreshed = d.refreshed || ""; return d.places; }
  return null;
  })
  .catch(function () { return null; });
@@ -1113,6 +1113,7 @@
  // NOT filtered by insurance. Point members to their plan's official directory + Member
  // Services so they can confirm a place takes their plan before traveling.
  function shortPlan(name) { return (name || "").replace(/\s*\(.*?\)\s*/g, "").replace(/\s+Health Plan$/i, "").trim() || "your plan"; }
+ function fmtRefreshed(d) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ""); if (!m) return d || ""; var mo = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]; return mo[(+m[2]) - 1] + " " + (+m[3]) + ", " + m[1]; }
  function renderNetworkNote(source) {
  var box = $("#networkNote"); if (!box) return;
  var plan = getPlan();
@@ -1124,6 +1125,8 @@
  box.className = "net-note net-ok";
  box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
  box.appendChild(el("p", { class: "nn-body", text: "These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Map pins are approximate to each provider's ZIP area (this directory lists addresses, not exact coordinates)." : "") + " Directories can still lag behind - it is smart to call ahead to confirm." }));
+ var fresh = geo.lastRefreshed === "live" ? "Updated live from the plan's directory." : (geo.lastRefreshed ? ("Directory last refreshed: " + fmtRefreshed(geo.lastRefreshed) + ".") : "");
+ if (fresh) box.appendChild(el("p", { class: "nn-fresh", html: svg("refresh") + "<span>" + escapeHtml(fresh) + "</span>" }));
  } else {
  box.className = "net-note";
  box.appendChild(el("div", { class: "nn-head", html: svg("shield") + "<span>Does this place take <strong>" + escapeHtml(sp) + "</strong>?</span>" }));
