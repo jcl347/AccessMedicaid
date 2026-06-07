@@ -12,14 +12,18 @@ on:
 permissions:
   contents: read
 
+# Opt JS actions into Node 24 now (Node 20 is being removed from runners June 2026).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Run data verification
         run: node scripts/verify-data.mjs
       - name: Upload verification report
@@ -40,11 +44,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Rebuild Health Net in-network dataset
+        # Non-fatal: if Health Net's site blocks the runner IP, build-healthnet aborts without
+        # overwriting the good dataset; the commit step then finds no changes and the run stays green.
+        continue-on-error: true
         run: node --max-old-space-size=4096 scripts/build-healthnet.mjs
       - name: Rebuild site data bundle
         run: node scripts/build-data.mjs

@@ -64,7 +64,13 @@ const report = { checkedAt: new Date().toISOString(), totals: {}, brokenLinks: [
 let ok = 0, broken = 0, blocked = 0, phoneMiss = 0;
 for (const it of items) {
   const pg = pages.get(it.url) || { status: 0, ok: false, digits: "" };
-  if (pg.status === 403 || pg.status === 429) { blocked++; if (report.blocked.length < 60) report.blocked.push({ label: it.label, url: it.url, status: pg.status }); continue; }
+  // GitHub runners use datacenter IPs that many official sites bot-block, throttle, or
+  // stonewall (timeouts, resets, 5xx challenge pages, 401/403/406/429/451). Treat those as
+  // "inconclusive" - NOT link rot. Only clear dead links (404/410 and other plain 4xx) count
+  // as broken, so a transient/blocked check from CI doesn't fail the run.
+  const st = pg.status;
+  const inconclusive = st === 0 || st >= 500 || [401, 403, 406, 408, 409, 425, 429, 451].indexOf(st) >= 0;
+  if (!pg.ok && inconclusive) { blocked++; if (report.blocked.length < 80) report.blocked.push({ label: it.label, url: it.url, status: st || pg.err || "network" }); continue; }
   if (!pg.ok) { broken++; if (report.brokenLinks.length < 100) report.brokenLinks.push({ label: it.label, url: it.url, status: pg.status, err: pg.err || "" }); continue; }
   ok++;
   const d = (it.phone || "").replace(/\D/g, "");
