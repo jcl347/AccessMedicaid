@@ -475,11 +475,13 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .prep-script { background: var(--primary-050); border-radius: 10px; padding: .7rem .9rem; font-style: italic; }
 .feedback-box { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1rem 0; }
 .fb-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
-/* Renewal spotlight - near the top, soft muted-gold accent so it stands out gently. */
-.renew-spotlight { background: #faf8f3; border-top: 3px solid #c79a3e; border-bottom: 1px solid var(--line); }
-.renew-spotlight .renew-eyebrow { display: inline-flex; align-items: center; gap: .4rem; background: #efe6d2; color: #6b531a; padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .6rem; border: 1px solid #e3d4ad; }
+/* Renewal spotlight - near the top. Uses the site's blue scheme (theme variables, so it
+   stays readable in light AND dark mode) with a blue tint + accent bar to stand out. */
+.renew-spotlight { background: var(--primary-050); border-top: 3px solid var(--primary); border-bottom: 1px solid var(--line); }
+.renew-spotlight .renew-eyebrow { display: inline-flex; align-items: center; gap: .4rem; background: var(--primary); color: #fff; padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .6rem; }
 .renew-spotlight .section-head { display: block; }
-.renew-spotlight h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); }
+.renew-spotlight h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); color: var(--ink); }
+.renew-spotlight .section-sub { color: var(--ink-2); }
 .renew-steps { counter-reset: step; list-style: none; margin: 0 0 1.1rem; padding: 0; display: grid; gap: .6rem; }
 .renew-steps li { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .8rem .9rem .8rem 3.1rem; }
 .renew-steps li::before { counter-increment: step; content: counter(step); position: absolute; left: .7rem; top: .75rem; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 800; display: grid; place-items: center; }
