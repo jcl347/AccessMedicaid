@@ -38,9 +38,9 @@
     "molina": {
       "baseUrl": "https://api.interop.molinahealthcare.com/providerdirectory",
       "verified": true,
-      "geo": "postal",
+      "geo": "postal-single",
       "vendor": "HealthEdge/Sapphire via Azure APIM",
-      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively."
+      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively. Server ignores comma-separated address-postalcode (returns 0) and 500s on _include - query ZIPs individually (postal-single). Locations carry real position lat/lng."
     },
     "blue-shield-promise": {
       "baseUrl": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory",

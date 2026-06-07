@@ -173,6 +173,17 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
   var zips = zipsWithin(lat, lng, radius, zipCap(radius));
   if (!zips.length && zip) zips = [zip5(zip)];
   if (!zips.length) return { error: "no-zips" };
+  if (geoMode === "postal-single") {
+    // Some servers (Molina) ignore a comma-separated ZIP list (return total=0) - query the
+    // nearest few ZIPs individually and merge. (Tolerant of this flaky host's timeouts.)
+    var pick = zips.slice(0, 8);
+    var bundles = await Promise.all(pick.map(function (z) {
+      return fetchText(base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=80", 7000).then(parseBundle).catch(function () { return null; });
+    }));
+    var entry = [];
+    bundles.forEach(function (b) { if (b && b.entry) entry = entry.concat(b.entry); });
+    return { url: "per-ZIP x" + pick.length, zips: pick, bundle: { entry: entry } };
+  }
   var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=500";
   return { url: u2, zips: zips, bundle: parseBundle(await fetchText(u2, 9000)) };
 }
@@ -201,7 +212,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     queries.push(u1);
     var b1 = parseBundle(await fetchText(u1, 9000));
     if (b1 && b1.entry && b1.entry.length) { indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
-  } else {
+  } else if (geoMode === "postal") {
     var zips = zipsWithin(lat, lng, radius, zipCap(radius));
     if (!zips.length && zip) zips = [zip5(zip)];
     if (!zips.length) return { ok: false, reason: "no-zips" };
@@ -209,6 +220,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     queries.push(u2);
     var b2 = parseBundle(await fetchText(u2, 12000));
     if (b2 && b2.entry && b2.entry.length) { indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
+    // postal-single (Molina): skip the chained PR query (server 500s); fall through to two-step.
   }
   // Fallback: some servers reject the chained location.* filter on PractitionerRole (IEHP
   // returns HTTP 400). Get nearby Locations first, then PractitionerRoles that reference them.
@@ -305,7 +317,7 @@ module.exports = async function handler(req, res) {
       result = Object.assign({ plan: plan }, result);
     } else {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
-      var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
+      var geoMode = cfg.geo === "near" ? "near" : (cfg.geo === "postal-single" ? "postal-single" : "postal"); // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
       // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
       // doctor is returned and flagged - not just facility records (location mode = clinics).
