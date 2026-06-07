@@ -9,11 +9,10 @@
       "geo": "postal"
     },
     "phc": {
-      "baseUrl": "https://us120.fhir.edifecsfedcloud.com/php_pdfhir",
-      "verified": true,
-      "vendor": "Edifecs (HAPI FHIR R4)",
-      "notes": "Plan states 'open and does not require secure credentials'. Verified live.",
-      "geo": "postal"
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "unknown",
+      "notes": "phc here = PHC California (Positive Healthcare, an AIDS Healthcare Foundation specialty Medi-Cal plan in LA) - NOT Partnership HealthPlan of California (whose Edifecs php_pdfhir endpoint must NOT be used here). No public FHIR Provider Directory confirmed for Positive Healthcare/AHF; uses the Tier-1 directory deep-link + public map fallback until verified."
     },
     "caloptima": {
       "baseUrl": "https://us120.fhir.edifecsfedcloud.com/copt_pdfhir",

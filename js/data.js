@@ -2784,7 +2784,6 @@ window.AM_DATA = {
   ],
   "fhirPlans": [
     "la-care",
-    "phc",
     "caloptima",
     "iehp",
     "molina",
@@ -2792,7 +2791,6 @@ window.AM_DATA = {
   ],
   "inNetworkPlans": [
     "la-care",
-    "phc",
     "caloptima",
     "iehp",
     "health-net",
