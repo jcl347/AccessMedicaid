@@ -1039,6 +1039,7 @@
  var netCount = places.filter(function (p) { return p.inNetwork; }).length;
  var outCount = places.length - netCount;
  var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !netCount;
+ var lgPlace = $("#lgPlace"); if (lgPlace) lgPlace.hidden = outCount === 0;
  var lgp = $("#lgPlaceText"); if (lgp) lgp.textContent = netCount ? "Other nearby (verify coverage)" : "Places nearby";
  var pl = getPlan();
  var noun = ((geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
@@ -1055,28 +1056,32 @@
  }
  function acquireFhir() {
  // The selected plan's official provider directory (FHIR for most plans; Health Net via its
- // public JSON). Returns { places, source, approx, refreshed } for in-network results, or null.
+ // public JSON). Returns { places, source, approx, refreshed } when the plan HAS an in-network
+ // endpoint (places may be empty), or null when the plan has no endpoint (so we use public data).
  var pid = state.planId;
  if (!pid || inNetworkIds().indexOf(pid) < 0) return Promise.resolve(null);
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? { places: d.places, source: d.source || "fhir", approx: !!d.approxByZip, refreshed: d.refreshed || "" } : null; })
- .catch(function () { return null; });
+ .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "" }; })
+ .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "" }; });
  }
- function mergeKey(p) { return (p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 18) + "@" + (isFinite(p.lat) ? p.lat.toFixed(2) : "") + "," + (isFinite(p.lng) ? p.lng.toFixed(2) : ""); }
  function acquire() {
- // Show BOTH: in-network providers from the plan's directory AND other nearby (out-of-network)
- // places from public map data, so members see the full picture.
- return Promise.all([acquireFhir(), acquirePublic()]).then(function (r) {
- var f = r[0], pub = (r[1] && r[1].places) || [];
- var fhir = (f && f.places) || [];
- fhir.forEach(function (p) { p.inNetwork = true; });
- pub.forEach(function (p) { p.inNetwork = false; });
- if (fhir.length) { geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; }
- else { geo.lastSource = (r[1] && r[1].source) || "osm"; geo.lastApprox = false; }
- var seen = {}; fhir.forEach(function (p) { seen[mergeKey(p)] = true; });
- return fhir.concat(pub.filter(function (p) { return !seen[mergeKey(p)]; }));
+ // ONLY in-network: if the selected plan has an in-network directory, show only those results
+ // (even if none). Plans WITHOUT an in-network endpoint fall back to public map data.
+ return acquireFhir().then(function (f) {
+ if (f) {
+ f.places.forEach(function (p) { p.inNetwork = true; });
+ geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed;
+ return f.places;
+ }
+ geo.lastApprox = false;
+ return acquirePublic().then(function (pub) {
+ var pl = (pub && pub.places) || [];
+ pl.forEach(function (p) { p.inNetwork = false; });
+ geo.lastSource = (pub && pub.source) || "osm";
+ return pl;
+ });
  });
  }
  function acquirePublic() {
