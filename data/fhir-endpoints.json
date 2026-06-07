@@ -32,16 +32,18 @@
       "notes": "PD API exists but base URL is gated behind partners.centene.com 'Getting Started' tab. County JSON directory files also published (non-FHIR)."
     },
     "molina": {
-      "baseUrl": "",
-      "verified": false,
-      "vendor": "Cognizant TriZetto (Azure APIM)",
-      "notes": "PD is public-no-auth per Molina docs, but production base URL is rendered client-side in the Azure APIM catalog; not extractable from desk research."
+      "baseUrl": "https://api.interop.molinahealthcare.com/providerdirectory",
+      "verified": true,
+      "geo": "postal",
+      "vendor": "HealthEdge/Sapphire via Azure APIM",
+      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively."
     },
     "blue-shield-promise": {
-      "baseUrl": "",
-      "verified": false,
-      "vendor": "IBM API Connect",
-      "notes": "Only a SANDBOX base URL is documented; production requires developer portal registration."
+      "baseUrl": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory",
+      "verified": true,
+      "geo": "near",
+      "vendor": "Smile CDR / HAPI FHIR 7.6.0",
+      "notes": "Public-no-auth production endpoint verified live; `near` geo search confirmed working (backend mdc = Medi-Cal directory cloud). Production host api.blueshieldca.com, path /bsc/fhir/ (sandbox uses api-dev + /bsc/fhir-sandbox/)."
     },
     "anthem": {
       "baseUrl": "",
