@@ -292,6 +292,7 @@
  list.innerHTML = "";
  renderPlanContext(plan);
  renderNetworkNote();
+ if (typeof renderSpecialtyControls === "function") renderSpecialtyControls();
  var items = (plan ? planResources(plan) : []).filter(matches);
  var catLabel = state.category ? "“" + shortLabel(state.category) + "”" : "all topics";
  ctx.textContent = plan
@@ -753,7 +754,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", radius: 8047, map: null, layer: null, t: 0, shared: false, iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "urgent_care", specialty: "", radius: 8047, map: null, layer: null, t: 0, shared: false, iso: { mode: null, minutes: 20, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -786,6 +787,27 @@
  chip.addEventListener("click", function () { geo.radius = r.m; renderRadiusChips(); runSearch(); });
  row.appendChild(chip);
  });
+ }
+ // Specialty search (FHIR plans only): filter the map to in-network providers of a
+ // specialty (e.g. Pediatrics, OB-GYN). Hidden for plans without a FHIR directory.
+ var SPECIALTIES = ["Primary care", "Pediatrics", "OB-GYN", "Mental health", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
+ function planHasFhir() { return !!(state.planId && DATA.fhirPlans && DATA.fhirPlans.indexOf(state.planId) >= 0); }
+ function renderSpecialtyControls() {
+ var rowWrap = $("#specialtyRow"); if (!rowWrap) return;
+ if (!planHasFhir()) { rowWrap.hidden = true; if (geo.specialty) { geo.specialty = ""; } return; }
+ rowWrap.hidden = false;
+ var row = $("#specialtyChips"); if (row) {
+ row.innerHTML = "";
+ var anyChip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.specialty ? "false" : "true", text: "Any provider" });
+ anyChip.addEventListener("click", function () { geo.specialty = ""; var si = $("#specialtyInput"); if (si) si.value = ""; renderSpecialtyControls(); runSearch(); });
+ row.appendChild(anyChip);
+ SPECIALTIES.forEach(function (s) {
+ var on = geo.specialty.toLowerCase() === s.toLowerCase();
+ var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
+ chip.addEventListener("click", function () { geo.specialty = on ? "" : s; var si = $("#specialtyInput"); if (si) si.value = on ? "" : s; renderSpecialtyControls(); runSearch(); });
+ row.appendChild(chip);
+ });
+ }
  }
 
  /* ---------- travel-time isochrones (reachable area) ---------- */
@@ -963,7 +985,8 @@
  var NEAR = 5; // the closest few get highlighted, numbered markers
  places.forEach(function (p, i) {
  var net = inNet || p.inNetwork ? '<br><span style="color:#15803d;font-weight:700">In-network with your plan</span>' : "";
- var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + net + "<br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
+ var spec = p.specialty ? "<br><em>" + escapeHtml(p.specialty) + "</em>" : "";
+ var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + "<br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
  if (i < NEAR) {
  var icon = L.divIcon({ className: inNet ? "near-pin net" : "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
  L.marker([p.lat, p.lng], { icon: icon, zIndexOffset: 1000 }).addTo(geo.layer).bindPopup(pop);
@@ -981,9 +1004,10 @@
  }
  var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !inNet;
  var pl = getPlan();
+ var noun = (inNet && geo.specialty) ? (geo.specialty.toLowerCase() + " providers") : careLabel().toLowerCase();
  var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory.") : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
- var lead = inNet ? ("Found " + places.length + " in-network " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
- setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
+ var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
+ setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
  renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
@@ -992,7 +1016,7 @@
  // (CMS-9115-F). Returns in-network locations near the point, or null to fall back.
  var pid = state.planId;
  if (!pid || !DATA.fhirPlans || DATA.fhirPlans.indexOf(pid) < 0) return Promise.resolve(null);
- var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius;
+ var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? d.places : null; })
  .catch(function () { return null; });
@@ -1092,6 +1116,8 @@
  actions.appendChild(el("a", { class: "btn btn-ghost", href: dirUrl(p.lat, p.lng, "transit"), target: "_blank", rel: "noopener", html: svg("car") + "<span>Transit</span>" }));
  list.appendChild(el("div", { class: "near-item" }, [
  el("div", { class: "ni-name", text: p.name }),
+ p.specialty ? el("div", { class: "ni-spec", text: p.specialty }) : null,
+ p.inNetwork ? el("div", { class: "ni-net", html: svg("check") + "<span>In-network with your plan</span>" }) : null,
  el("div", { class: "ni-dist", text: p.dist.toFixed(1) + " miles away" }),
  p.address ? el("div", { class: "ni-addr", text: p.address }) : null,
  actions,
@@ -1135,7 +1161,9 @@
  }
 
  function initNearMe() {
- renderCareChips(); renderRadiusChips(); renderIsoChips(); initShare();
+ renderCareChips(); renderRadiusChips(); renderIsoChips(); renderSpecialtyControls(); initShare();
+ var si = $("#specialtyInput");
+ if (si) { var st; si.addEventListener("input", function () { clearTimeout(st); st = setTimeout(function () { geo.specialty = si.value.trim(); renderSpecialtyControls(); runSearch(); }, 450); }); }
  var addr = $("#addrInput");
  var saved = store(true, STORE.zip) || "";
  function doAddr() { var v = addr ? addr.value.trim() : ""; if (!v) return; store(false, STORE.zip, v); geocode(v); }
