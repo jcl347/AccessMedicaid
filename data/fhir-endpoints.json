@@ -1,0 +1,71 @@
+{
+  "_comment": "FHIR R4 (HL7 Da Vinci PDEX Plan-Net) Provider Directory base URLs per Medi-Cal plan. CMS-9115-F requires the Provider Directory API to be PUBLIC (no authentication). The map uses a plan's endpoint as the primary in-network source of truth and only falls back to Google/OpenStreetMap when no endpoint is set or it returns nothing. baseUrl is filled ONLY for endpoints firsthand-verified to be live, public, and returning real FHIR data via Location?near geo search. Leave baseUrl empty when unconfirmed; those plans use the Tier-1 directory deep-link + public map data instead.",
+  "plans": {
+    "la-care": {
+      "baseUrl": "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4",
+      "verified": true,
+      "vendor": "Edifecs (HAPI FHIR R4)",
+      "notes": "Public-no-auth confirmed; Da Vinci PDEX Plan-Net. From lacare.org/technical-information."
+    },
+    "phc": {
+      "baseUrl": "https://us120.fhir.edifecsfedcloud.com/php_pdfhir",
+      "verified": true,
+      "vendor": "Edifecs (HAPI FHIR R4)",
+      "notes": "Plan states 'open and does not require secure credentials'. Verified live."
+    },
+    "caloptima": {
+      "baseUrl": "https://us120.fhir.edifecsfedcloud.com/copt_pdfhir",
+      "verified": true,
+      "vendor": "Edifecs (HAPI FHIR R4)",
+      "notes": "Public-no-auth verified (Patient Access copt_fhir correctly 401s)."
+    },
+    "iehp": {
+      "baseUrl": "https://fhir.iehp.org/provider-directory",
+      "verified": true,
+      "vendor": "HAPI FHIR R4 (self-hosted)",
+      "notes": "Open API, CapabilityStatement + live Practitioner query with real NPIs verified. CORS enabled."
+    },
+    "health-net": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "Centene (partner portal)",
+      "notes": "PD API exists but base URL is gated behind partners.centene.com 'Getting Started' tab. County JSON directory files also published (non-FHIR)."
+    },
+    "molina": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "Cognizant TriZetto (Azure APIM)",
+      "notes": "PD is public-no-auth per Molina docs, but production base URL is rendered client-side in the Azure APIM catalog; not extractable from desk research."
+    },
+    "blue-shield-promise": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "IBM API Connect",
+      "notes": "Only a SANDBOX base URL is documented; production requires developer portal registration."
+    },
+    "anthem": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "Elevance HealthOS",
+      "notes": "metadata public at totalview.healthos.elevancehealth.com/.../AnthemBlueCross/api/v1/fhir but data queries 403 without an API key (request via InteroperabilityWorkgroup@Anthem.com)."
+    },
+    "gold-coast": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "Edifecs",
+      "notes": "Edifecs-hosted PD API asserted on official site but no production base URL published; portal requires registration."
+    },
+    "kaiser": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "none (PDF directories)",
+      "notes": "No public Provider Directory FHIR endpoint; Medi-Cal directories are regional PDFs. Use Tier-1 deep-link only."
+    },
+    "kern": {
+      "baseUrl": "",
+      "verified": false,
+      "vendor": "unknown",
+      "notes": "Only a member-consent Patient Access API evidenced; no public Provider Directory endpoint found."
+    }
+  }
+}

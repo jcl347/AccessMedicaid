@@ -2781,5 +2781,11 @@ window.AM_DATA = {
     "https://healthconsumer.org/",
     "https://mcweb.apps.prd.cammis.medi-cal.ca.gov/assets/869D30AF-4BC7-4132-AF6A-AF75893E9221/aidcodes.pdf",
     "https://www.dhcs.ca.gov/services/Documents/MMCD/Aid-Code-Chart-2024.pdf"
+  ],
+  "fhirPlans": [
+    "la-care",
+    "phc",
+    "caloptima",
+    "iehp"
   ]
 };

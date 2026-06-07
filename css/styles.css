@@ -181,6 +181,8 @@ a { color: var(--primary-700); }
 .plan-card[aria-checked="true"] { border-color: var(--primary); box-shadow: var(--shadow); background: var(--primary-050); }
 .plan-card .pc-name { font-weight: 800; font-size: 1.04rem; padding-right: 1.4rem; }
 .plan-card .pc-rel { font-size: .82rem; color: var(--muted); }
+.plan-card .pc-fhir { display: inline-flex; align-items: center; gap: .3rem; align-self: flex-start; margin-top: .15rem; padding: .15rem .5rem; border-radius: 999px; background: #e7f6ec; color: #15803d; font-size: .72rem; font-weight: 800; border: 1px solid #bfe6cc; }
+.plan-card .pc-fhir svg { width: 13px; height: 13px; }
 .plan-card .pc-check { position: absolute; top: .7rem; right: .8rem; color: var(--primary); font-weight: 800; font-size: .8rem; opacity: 0; transform: scale(.6); transition: opacity .25s var(--ease), transform .25s var(--ease); }
 .plan-card[aria-checked="true"] .pc-check { opacity: 1; transform: scale(1); }
 @media (prefers-color-scheme: dark){ .plan-card[aria-checked="true"] .pc-check { color: var(--primary); } }
@@ -356,17 +358,21 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .lg-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); }
 .lg-you { background: #c0395f; } .lg-place { background: #0b66d6; }
 .lg-near { background: #f59e0b; color: #1a1206; width: 18px; height: 18px; font-size: .68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+.lg-net { background: #16a34a; color: #fff; width: 18px; height: 18px; font-size: .66rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
 .lg-swatch { width: 16px; height: 12px; border-radius: 3px; display: inline-block; }
 .lg-ring { background: rgba(10,93,194,.12); border: 1px solid var(--primary); }
 .lg-iso { background: rgba(34,197,94,.18); border: 1px solid #15803d; }
 /* numbered marker for the closest results (Leaflet divIcon) */
 .near-pin { display: flex; align-items: center; justify-content: center; background: #f59e0b; color: #1a1206; font-weight: 800; font-size: .82rem; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,.45); }
+.near-pin.net { background: #16a34a; color: #fff; }
 .lg-area { background: rgba(34,197,94,.22); border: 1px solid #15803d; }
 .net-note { margin: .8rem 0 .2rem; padding: .85rem 1rem; border: 1px solid var(--line); border-left: 4px solid var(--primary); border-radius: var(--radius-sm); background: var(--surface-2, #f4f8fd); }
 .net-note .nn-head { display: flex; align-items: center; gap: .45rem; font-weight: 700; color: var(--ink); }
 .net-note .nn-head svg { width: 18px; height: 18px; color: var(--primary); }
 .net-note .nn-body { margin: .35rem 0 .6rem; font-size: .9rem; color: var(--ink-2); }
 .net-note .nn-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.net-note.net-ok { border-left-color: #16a34a; background: #f0fbf4; }
+.net-note.net-ok .nn-head svg { color: #16a34a; }
 .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .8rem; }
 .share-status { font-size: .85rem; color: var(--primary-700); font-weight: 600; }
 @media (prefers-color-scheme: dark){ .share-status { color: var(--primary); } }

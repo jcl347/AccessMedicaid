@@ -169,6 +169,7 @@
  if (showArea && p.serviceArea) kids.push(el("span", { class: "pc-area", text: p.serviceArea }));
  kids.push(el("span", { class: "pc-name", text: p.name }));
  kids.push(el("span", { class: "pc-rel", text: p.relationship || "" }));
+ if (DATA.fhirPlans && DATA.fhirPlans.indexOf(p.id) >= 0) kids.push(el("span", { class: "pc-fhir", title: "Connected to " + p.name + "'s official FHIR provider directory (CMS interoperability), so the map can show live in-network providers.", html: svg("check") + "<span>Live in-network map</span>" }));
  kids.push(el("span", { class: "pc-check", text: "✓ Selected" }));
  var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, kids);
  card.addEventListener("click", function () {
@@ -957,14 +958,17 @@
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
+ var inNet = geo.lastSource === "fhir";
+ var dotColor = inNet ? "#16a34a" : "#0b66d6";
  var NEAR = 5; // the closest few get highlighted, numbered markers
  places.forEach(function (p, i) {
- var pop = "<strong>" + escapeHtml(p.name) + "</strong><br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
+ var net = inNet || p.inNetwork ? '<br><span style="color:#15803d;font-weight:700">In-network with your plan</span>' : "";
+ var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + net + "<br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
  if (i < NEAR) {
- var icon = L.divIcon({ className: "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
+ var icon = L.divIcon({ className: inNet ? "near-pin net" : "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
  L.marker([p.lat, p.lng], { icon: icon, zIndexOffset: 1000 }).addTo(geo.layer).bindPopup(pop);
  } else {
- L.circleMarker([p.lat, p.lng], { radius: 6, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .9 }).addTo(geo.layer).bindPopup(pop);
+ L.circleMarker([p.lat, p.lng], { radius: 6, color: "#fff", weight: 2, fillColor: dotColor, fillOpacity: .9 }).addTo(geo.layer).bindPopup(pop);
  }
  });
  // Expand the view so EVERY result is visible, plus the reachable area / search ring.
@@ -975,14 +979,34 @@
  else if (ring) { try { bounds.extend(ring.getBounds()); } catch (e) {} }
  try { geo.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 }); } catch (e) {}
  }
- var src = geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.";
- setMapLabel((places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
+ var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !inNet;
+ var pl = getPlan();
+ var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory.") : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var lead = inNet ? ("Found " + places.length + " in-network " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; nearest listed first.") : ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.");
+ setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
+ renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
+ function acquireFhir() {
+ // PRIMARY source of truth: the selected plan's public FHIR Provider Directory
+ // (CMS-9115-F). Returns in-network locations near the point, or null to fall back.
+ var pid = state.planId;
+ if (!pid || !DATA.fhirPlans || DATA.fhirPlans.indexOf(pid) < 0) return Promise.resolve(null);
+ var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius;
+ return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
+ .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? d.places : null; })
+ .catch(function () { return null; });
+ }
  function acquire() {
- // Run BOTH paths in parallel and merge: the cached serverless proxy (which may use
- // Google Places) AND a direct browser Overpass query (the browser's own IP reaches
- // Overpass reliably even when Vercel's datacenter IP is rate-limited/blocked).
+ return acquireFhir().then(function (fp) {
+ if (fp && fp.length) { geo.lastSource = "fhir"; return fp; }
+ return acquirePublic();
+ });
+ }
+ function acquirePublic() {
+ // Fallback: run BOTH public paths in parallel and merge - the cached serverless proxy
+ // (which may use Google Places) AND a direct browser Overpass query (the browser's own
+ // IP reaches Overpass reliably even when Vercel's datacenter IP is rate-limited).
  var serverSource = "osm";
  var server = fetch(nurl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) { if (d && d.ok && Array.isArray(d.places)) { serverSource = d.source || "osm"; return d.places; } return []; })
@@ -1037,15 +1061,22 @@
  // NOT filtered by insurance. Point members to their plan's official directory + Member
  // Services so they can confirm a place takes their plan before traveling.
  function shortPlan(name) { return (name || "").replace(/\s*\(.*?\)\s*/g, "").replace(/\s+Health Plan$/i, "").trim() || "your plan"; }
- function renderNetworkNote() {
+ function renderNetworkNote(source) {
  var box = $("#networkNote"); if (!box) return;
  var plan = getPlan();
  box.innerHTML = "";
  if (!plan) { box.hidden = true; return; }
  box.hidden = false;
  var sp = shortPlan(plan.name);
+ if (source === "fhir") {
+ box.className = "net-note net-ok";
+ box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
+ box.appendChild(el("p", { class: "nn-body", text: "These places come straight from " + plan.name + "'s official provider directory, so they accept your plan. Directories can still lag behind - it is smart to call ahead to confirm." }));
+ } else {
+ box.className = "net-note";
  box.appendChild(el("div", { class: "nn-head", html: svg("shield") + "<span>Does this place take <strong>" + escapeHtml(sp) + "</strong>?</span>" }));
  box.appendChild(el("p", { class: "nn-body", text: "These map results come from public map data, so they are not filtered by insurance. Before you go, confirm the clinic or pharmacy accepts your plan." }));
+ }
  var actions = el("div", { class: "nn-actions" });
  if (plan.findADoctorUrl) actions.appendChild(el("a", { class: "btn btn-call", href: plan.findADoctorUrl, target: "_blank", rel: "noopener", html: svg("plusCircle") + "<span>Check " + escapeHtml(sp) + " provider directory</span>" }));
  if (plan.memberServicesPhone) actions.appendChild(el("a", { class: "btn btn-ghost", href: telHref(plan.memberServicesPhone), html: svg("phone") + "<span>Ask Member Services: " + escapeHtml(plan.memberServicesPhone) + "</span>" }));

@@ -13,6 +13,13 @@ const meta = read("meta.json");
 const index = read("index.json");
 const barriersDoc = read("barriers.json");
 const stateDoc = read("state-resources.json");
+const fhirDoc = read("fhir-endpoints.json");
+
+// Plan ids that have a usable public FHIR Provider Directory endpoint, so the client
+// can query in-network providers directly (and skip the call for plans without one).
+const fhirPlans = Object.keys(fhirDoc.plans || {}).filter(
+ (id) => (fhirDoc.plans[id] && fhirDoc.plans[id].baseUrl || "").length > 0
+);
 
 // Flatten the grouped manifest into an ordered plan list, attaching the
 // service area (county) and brand-accent color to each plan.
@@ -37,6 +44,7 @@ const bundle = {
  stateResources: stateDoc.resources,
  stateSources: stateDoc.sources || [],
  barrierSources: barriersDoc.sources || [],
+ fhirPlans,
 };
 
 const banner = "/* AUTO-GENERATED from /data by scripts/build-data.mjs - do not edit by hand. */\n";
