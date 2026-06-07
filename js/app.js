@@ -1016,7 +1016,9 @@
  // (CMS-9115-F). Returns in-network locations near the point, or null to fall back.
  var pid = state.planId;
  if (!pid || !DATA.fhirPlans || DATA.fhirPlans.indexOf(pid) < 0) return Promise.resolve(null);
- var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "");
+ // Pass a typed ZIP when present - helps endpoints that geo-filter by postal code (e.g. Molina).
+ var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
+ var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
  .then(function (d) { return (d && d.ok && Array.isArray(d.places) && d.places.length) ? d.places : null; })
  .catch(function () { return null; });
