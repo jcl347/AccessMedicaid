@@ -73,6 +73,7 @@
  function telHref(p) { return "tel:" + String(p || "").replace(/[^0-9+]/g, ""); }
  function store(get, key, val) { try { return get ? localStorage.getItem(key) : localStorage.setItem(key, val); } catch (e) { return null; } }
  function getPlan() { return DATA.plans.filter(function (p) { return p.id === state.planId; })[0] || null; }
+ function inNetworkIds() { return (DATA.inNetworkPlans && DATA.inNetworkPlans.length) ? DATA.inNetworkPlans : (DATA.fhirPlans || []); }
  function shortLabel(c) { return c.replace(/\s*\(.*?\)\s*/g, "").trim(); }
 
  /* ---------- animations ---------- */
@@ -1036,7 +1037,6 @@
  renderNetworkNote(geo.lastSource);
  renderNearList(places.slice(0, 20));
  }
- function inNetworkIds() { return (DATA.inNetworkPlans && DATA.inNetworkPlans.length) ? DATA.inNetworkPlans : (DATA.fhirPlans || []); }
  function acquireFhir() {
  // PRIMARY source of truth: the selected plan's public provider directory (FHIR for most
  // plans; Health Net via its public JSON). Returns in-network results, or null to fall back.
