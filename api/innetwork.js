@@ -91,11 +91,50 @@ function specialtyMatcher(s) {
   for (var k in SPECIALTY_KW) { if (s.indexOf(k) >= 0 || k.indexOf(s) >= 0) return SPECIALTY_KW[k]; }
   return new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
 }
+// --- street-level geocoding via the FREE U.S. Census batch geocoder (no API key) ---
+// Upgrades approximate ZIP-centroid pins to EXACT coordinates where the street address
+// matches. Strictly additive: any failure (or no match) leaves the ZIP-centroid pin.
+var GEO_CACHE = {};
+function addrParts(loc) {
+  var a = (loc && loc.address) || {};
+  return { street: [].concat(a.line || []).filter(Boolean).join(" "), city: a.city || "", state: a.state || "CA", zip: zip5(a.postalCode) };
+}
+function csvCell(s) { return String(s == null ? "" : s).replace(/[",\r\n]/g, " ").trim(); }
+function parseCsvLine(line) { var out = [], cur = "", q = false; for (var i = 0; i < line.length; i++) { var ch = line[i]; if (q) { if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; } else { if (ch === ",") { out.push(cur); cur = ""; } else if (ch === '"') q = true; else cur += ch; } } out.push(cur); return out; }
+async function censusGeocode(places) {
+  if (!places || !places.length || typeof FormData === "undefined") return;
+  var rows = [], map = {};
+  places.forEach(function (p, i) {
+    var a = p._addr || {}; var street = csvCell(a.street);
+    if (!street || (!a.zip && !a.city)) return;
+    var key = (street + "|" + (a.zip || a.city)).toLowerCase();
+    if (Object.prototype.hasOwnProperty.call(GEO_CACHE, key)) { var c = GEO_CACHE[key]; if (c) { p.lat = c[0]; p.lng = c[1]; p.approxByZip = false; } return; }
+    map[i] = key;
+    rows.push(i + "," + street + "," + csvCell(a.city) + "," + csvCell(a.state || "CA") + "," + csvCell(a.zip));
+  });
+  if (!rows.length) return;
+  var fd = new FormData();
+  fd.append("benchmark", "Public_AR_Current");
+  fd.append("addressFile", new Blob([rows.join("\n")], { type: "text/csv" }), "a.csv");
+  var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 8000);
+  var r = await fetch("https://geocoding.geo.census.gov/geocoder/locations/addressbatch", { method: "POST", body: fd, signal: ctrl.signal });
+  clearTimeout(t);
+  if (!r.ok) return;
+  var text = await r.text();
+  text.split(/\r?\n/).forEach(function (line) {
+    if (!line) return;
+    var f = parseCsvLine(line); var id = parseInt(f[0], 10);
+    if (!(id in map)) return;
+    if (f[2] === "Match" && f[5]) { var ll = f[5].split(","); var lo = parseFloat(ll[0]), la = parseFloat(ll[1]); if (isFinite(la) && isFinite(lo)) { var p = places[id]; if (p) { p.lat = la; p.lng = lo; p.approxByZip = false; } GEO_CACHE[map[id]] = [la, lo]; return; } }
+    GEO_CACHE[map[id]] = null;
+  });
+}
+
 function normLocation(loc) {
   var co = coordsFor(loc); if (!co) return null;
   var t = telOf(loc), typeText = "";
   (loc.type || []).forEach(function (tc) { (tc.coding || []).forEach(function (c) { typeText += " " + (c.display || c.code || ""); }); if (tc.text) typeText += " " + tc.text; });
-  return { name: loc.name || "(In-network location)", lat: co.lat, lng: co.lng, phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, approxByZip: co.approx, _typeText: typeText };
+  return { name: loc.name || "(In-network location)", lat: co.lat, lng: co.lng, phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, approxByZip: co.approx, _typeText: typeText, _addr: addrParts(loc) };
 }
 
 // Fetch a Location bundle by the endpoint's geo strategy.
@@ -162,7 +201,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var lt = telOf(loc);
       var k = name + "@" + co.lat.toFixed(4) + "," + co.lng.toFixed(4);
       if (seen[k]) return; seen[k] = 1;
-      out.push({ name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa });
+      out.push({ name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, _addr: addrParts(loc) });
     });
   });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
@@ -186,7 +225,7 @@ function healthNetSearch(lat, lng, radius, type, specialty, language) {
       if (language && !langMatch(r.languages, language)) continue;
     } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
     var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
-    out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients });
+    out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
   }
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
   return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 120) };
@@ -210,19 +249,28 @@ module.exports = async function handler(req, res) {
   if (!cfg || (!cfg.baseUrl && !cfg.dataset)) { res.status(200).json({ ok: false, reason: "no-endpoint", plan: plan }); return; }
 
   try {
+    var result;
     if (cfg.dataset) {
-      var hn = healthNetSearch(lat, lng, radius, type, specialty, language);
-      if (hn.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-      res.status(200).json(Object.assign({ plan: plan }, hn));
-      return;
+      result = healthNetSearch(lat, lng, radius, type, specialty, language);
+      result = Object.assign({ plan: plan }, result);
+    } else {
+      var base = String(cfg.baseUrl).replace(/\/+$/, "");
+      var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
+      var km = Math.max(0.5, radius / 1000);
+      var r0 = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
+                                       : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
+      result = Object.assign({ source: "fhir", plan: plan, geo: geoMode, refreshed: "live" }, r0);
     }
-    var base = String(cfg.baseUrl).replace(/\/+$/, "");
-    var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
-    var km = Math.max(0.5, radius / 1000);
-    var result = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
-                                         : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
+    // Upgrade approximate ZIP-centroid pins to exact street coordinates (free Census
+    // geocoder). Best-effort: failures keep the ZIP pin. Then drop the temp address field.
+    if (result.ok && Array.isArray(result.places) && result.places.length) {
+      try { await censusGeocode(result.places); } catch (e) { /* keep ZIP-centroid coords */ }
+      result.approxByZip = result.places.some(function (p) { return p.approxByZip; });
+      result.geocoded = result.places.filter(function (p) { return !p.approxByZip; }).length;
+      result.places.forEach(function (p) { delete p._addr; });
+    }
     if (result.ok) res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
-    res.status(200).json(Object.assign({ source: "fhir", plan: plan, geo: geoMode, refreshed: "live" }, result));
+    res.status(200).json(result);
   } catch (e) {
     res.status(200).json({ ok: false, reason: "exception", plan: plan, detail: debug ? String((e && e.message) || e) : undefined });
   }

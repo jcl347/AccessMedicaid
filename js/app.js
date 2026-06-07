@@ -1032,7 +1032,7 @@
  var lgNet = $("#lgNet"); if (lgNet) lgNet.hidden = !inNet;
  var pl = getPlan();
  var noun = (inNet && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
- var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Pins are approximate to each provider's ZIP area." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var src = inNet ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
  var lead = inNet ? ("Found " + places.length + " in-network " + noun + " within " + scope + ", nearest listed first.") : ("Found " + places.length + " " + noun + " within " + scope + ", nearest listed first.");
  setMapLabel((places.length ? lead : ("No " + (inNet ? "in-network " : "") + noun + " found within " + scope + ". " + (inNet && geo.specialty ? "Try another specialty, a wider radius, or your plan's full directory." : "Try a wider radius or time."))) + src);
  // Green frame + explicit data-source badge so it's clear when the list is verified
@@ -1128,10 +1128,10 @@
  var sp = plan ? shortPlan(plan.name) : "your plan";
  if (inNet && geo.lastSource === "fhir") {
  box.hidden = false; box.className = "map-source in-network";
- box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>Live in-network data from " + escapeHtml(sp) + "'s FHIR provider directory" + (geo.lastApprox ? " (pins approximate to ZIP area)" : "") + "</span>";
+ box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>Live in-network data from " + escapeHtml(sp) + "'s FHIR provider directory" + (geo.lastApprox ? " (some pins approximate to ZIP area)" : "") + "</span>";
  } else if (inNet && geo.lastSource === "healthnet") {
  box.hidden = false; box.className = "map-source in-network";
- box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>In-network data from " + escapeHtml(sp) + "'s published provider directory" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + " (pins approximate to ZIP area)</span>";
+ box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>In-network data from " + escapeHtml(sp) + "'s published provider directory" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + (geo.lastApprox ? " (some pins approximate to ZIP area)" : "") + "</span>";
  } else {
  box.hidden = false; box.className = "map-source";
  box.innerHTML = svg("info") + "<span>Data source: " + (geo.lastSource === "google" ? "Google Places" : "OpenStreetMap") + " (public map data - not filtered by insurance)</span>";
@@ -1148,7 +1148,7 @@
  if (source === "fhir" || source === "healthnet") {
  box.className = "net-note net-ok";
  box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
- box.appendChild(el("p", { class: "nn-body", text: "These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Map pins are approximate to each provider's ZIP area (this directory lists addresses, not exact coordinates)." : "") + " Directories can still lag behind - it is smart to call ahead to confirm." }));
+ box.appendChild(el("p", { class: "nn-body", text: "These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Most pins are geocoded to the street address; a few are approximate to the ZIP area." : "") + " Directories can still lag behind - it is smart to call ahead to confirm." }));
  var fresh = geo.lastRefreshed === "live" ? "Updated live from the plan's directory." : (geo.lastRefreshed ? ("Directory last refreshed: " + fmtRefreshed(geo.lastRefreshed) + ".") : "");
  if (fresh) box.appendChild(el("p", { class: "nn-fresh", html: svg("refresh") + "<span>" + escapeHtml(fresh) + "</span>" }));
  } else {
