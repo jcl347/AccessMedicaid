@@ -29,3 +29,33 @@ jobs:
           name: verification-report
           path: data/verification-report.json
           if-no-files-found: warn
+
+  # Weekly refresh of the Health Net in-network directory. Health Net has no public FHIR
+  # endpoint, so we re-download its public county JSON, flatten + ZIP-centroid geocode it,
+  # rebuild the site bundle, and commit the result. (The 6 FHIR plans are live per request
+  # and need no refresh.) build-healthnet.mjs aborts without writing if a download fails,
+  # so a bad week can never overwrite the good dataset.
+  refresh-providers:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Rebuild Health Net in-network dataset
+        run: node --max-old-space-size=4096 scripts/build-healthnet.mjs
+      - name: Rebuild site data bundle
+        run: node scripts/build-data.mjs
+      - name: Commit refreshed data if changed
+        run: |
+          if [ -n "$(git status --porcelain data/healthnet-providers.json js/data.js)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/healthnet-providers.json js/data.js
+            git commit -m "chore: weekly refresh of Health Net in-network directory"
+            git push
+          else
+            echo "No changes to commit."
+          fi

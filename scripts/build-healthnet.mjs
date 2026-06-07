@@ -140,6 +140,12 @@ const all = [...merged.values()].map((r) => { r.specialty = r.specialties.join("
 const byCat = {};
 for (const r of all) byCat[r.cat] = (byCat[r.cat] || 0) + 1;
 
+// Safety: never overwrite a good dataset with garbage if a download failed/was blocked.
+if (all.length < 1000) {
+  console.error(`Refusing to write: only ${all.length} records parsed (a source download likely failed). Existing data/healthnet-providers.json left untouched.`);
+  process.exit(1);
+}
+
 const bundle = {
   plan: "health-net",
   source: "Health Net of California Medi-Cal machine-readable provider directory (public JSON)",
