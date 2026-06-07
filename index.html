@@ -312,8 +312,10 @@
  </div>
  <div class="map-legend" id="mapLegend" aria-label="Map legend">
  <span class="lg-item"><span class="lg-dot lg-you"></span> Your location</span>
- <span class="lg-item"><span class="lg-dot lg-place"></span> A place you can call/visit</span>
- <span class="lg-item"><span class="lg-swatch lg-ring"></span> Search radius</span>
+ <span class="lg-item"><span class="lg-dot lg-near">1</span> Closest to you</span>
+ <span class="lg-item"><span class="lg-dot lg-place"></span> Other places nearby</span>
+ <span class="lg-item" id="lgRing"><span class="lg-swatch lg-ring"></span> Search radius</span>
+ <span class="lg-item" id="lgIso" hidden><span class="lg-swatch lg-iso"></span> <span id="lgIsoText">Reachable area</span></span>
  </div>
  <div class="near-list" id="nearList" aria-live="polite"></div>
  <div class="share-row">

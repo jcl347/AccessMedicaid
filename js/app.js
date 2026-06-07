@@ -864,7 +864,7 @@
  geo.iso.layer = L.geoJSON(d.geojson, { style: { color: "#15803d", weight: 2, fillColor: "#22c55e", fillOpacity: .16 } }).addTo(geo.map);
  var b = fcBounds(d.geojson);
  var far = Math.max(haversineMi(geo.center, { lat: b.maxLat, lng: b.maxLng }), haversineMi(geo.center, { lat: b.minLat, lng: b.minLng }));
- geo.iso.radius = Math.min(Math.max(Math.ceil(far * 1609) + 250, 1609), 24140);
+ geo.iso.radius = Math.min(Math.max(Math.ceil(far * 1609) + 250, 1609), 40000);
  try { geo.map.fitBounds(geo.iso.layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
  if (clr) clr.hidden = false;
  if (lg) { lg.hidden = false; var t = $("#lgIsoText"); if (t) t.textContent = "Reachable in " + geo.iso.minutes + " min (" + isoModeLabel() + ")"; }
@@ -936,9 +936,12 @@
  var effRadius = isoOn && geo.iso.radius ? geo.iso.radius : geo.radius;
  if (!isoOn) map.setView([geo.center.lat, geo.center.lng], geo.radius > 16000 ? 10 : geo.radius > 8000 ? 11 : 12);
  setTimeout(function () { if (geo.map) geo.map.invalidateSize(); }, 60);
+ // Legend reflects the active mode: search-radius ring vs reachable area.
+ var lgRing = $("#lgRing"), lgIso = $("#lgIso"); if (lgRing) lgRing.hidden = isoOn; if (lgIso) lgIso.hidden = !isoOn;
  if (geo.layer) geo.layer.clearLayers();
  L.circleMarker([geo.center.lat, geo.center.lng], { radius: 8, color: "#fff", weight: 3, fillColor: "#c0395f", fillOpacity: 1 }).addTo(geo.layer).bindPopup("You searched here:<br>" + escapeHtml(geo.label));
- if (!isoOn) L.circle([geo.center.lat, geo.center.lng], { radius: geo.radius, color: "#0a5dc2", weight: 1, fillColor: "#0a5dc2", fillOpacity: .06 }).addTo(geo.layer);
+ var ring = null;
+ if (!isoOn) ring = L.circle([geo.center.lat, geo.center.lng], { radius: geo.radius, color: "#0a5dc2", weight: 1, fillColor: "#0a5dc2", fillOpacity: .06 }).addTo(geo.layer);
  var scope = isoOn ? ("a " + geo.iso.minutes + " min " + isoModeLabel() + " of " + geo.label) : (miFor(effRadius) + " mi of " + geo.label);
  setMapLabel("Finding " + careLabel().toLowerCase() + " within " + scope + "...");
  var list = $("#nearList"); if (list) list.innerHTML = '<div class="empty-note">Searching the map for the closest places...</div>';
@@ -952,12 +955,26 @@
  if (isoOn) { places = places.filter(function (p) { return pointInFC(p.lng, p.lat, geo.iso.fc); }); }
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  places.sort(function (a, b) { return a.dist - b.dist; });
- places.forEach(function (p) {
- L.circleMarker([p.lat, p.lng], { radius: 7, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .92 }).addTo(geo.layer)
- .bindPopup("<strong>" + escapeHtml(p.name) + "</strong><br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>');
+ var NEAR = 5; // the closest few get highlighted, numbered markers
+ places.forEach(function (p, i) {
+ var pop = "<strong>" + escapeHtml(p.name) + "</strong><br>" + escapeHtml(p.address || "") + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
+ if (i < NEAR) {
+ var icon = L.divIcon({ className: "near-pin", html: String(i + 1), iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -13] });
+ L.marker([p.lat, p.lng], { icon: icon, zIndexOffset: 1000 }).addTo(geo.layer).bindPopup(pop);
+ } else {
+ L.circleMarker([p.lat, p.lng], { radius: 6, color: "#fff", weight: 2, fillColor: "#0b66d6", fillOpacity: .9 }).addTo(geo.layer).bindPopup(pop);
+ }
  });
+ // Expand the view so EVERY result is visible, plus the reachable area / search ring.
+ if (places.length) {
+ var bounds = L.latLngBounds([[geo.center.lat, geo.center.lng]]);
+ places.forEach(function (p) { bounds.extend([p.lat, p.lng]); });
+ if (isoOn && geo.iso.layer) { try { bounds.extend(geo.iso.layer.getBounds()); } catch (e) {} }
+ else if (ring) { try { bounds.extend(ring.getBounds()); } catch (e) {} }
+ try { geo.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 }); } catch (e) {}
+ }
  var src = geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.";
- setMapLabel((places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". All are on the map; nearest listed first.") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
+ setMapLabel((places.length ? ("Found " + places.length + " " + careLabel().toLowerCase() + " within " + scope + ". The " + Math.min(NEAR, places.length) + " closest are numbered; all are on the map, nearest listed first.") : ("No " + careLabel().toLowerCase() + " found within " + scope + ". Try a wider radius or time.")) + src);
  renderNearList(places.slice(0, 20));
  }
  function acquire() {

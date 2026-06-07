@@ -101,7 +101,7 @@ module.exports = async function handler(req, res) {
   var lat = parseFloat(q.lat), lng = parseFloat(q.lng);
   var type = String(q.type || "clinic").toLowerCase();
   var radius = parseInt(q.radius || "8047", 10) || 8047;
-  radius = Math.min(Math.max(radius, 500), 24140); // 0.3 - 15 mi
+  radius = Math.min(Math.max(radius, 500), 40000); // 0.3 - ~25 mi (covers a 30-min drive isochrone)
   if (!isFinite(lat) || !isFinite(lng)) { res.status(400).json({ ok: false, error: "Missing coordinates" }); return; }
 
   // Prefer Google Places when a key is configured; otherwise use OpenStreetMap/Overpass.

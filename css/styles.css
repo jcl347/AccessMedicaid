@@ -355,8 +355,12 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .lg-item { display: inline-flex; align-items: center; gap: .4rem; }
 .lg-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); }
 .lg-you { background: #c0395f; } .lg-place { background: #0b66d6; }
+.lg-near { background: #f59e0b; color: #1a1206; width: 18px; height: 18px; font-size: .68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
 .lg-swatch { width: 16px; height: 12px; border-radius: 3px; display: inline-block; }
 .lg-ring { background: rgba(10,93,194,.12); border: 1px solid var(--primary); }
+.lg-iso { background: rgba(34,197,94,.18); border: 1px solid #15803d; }
+/* numbered marker for the closest results (Leaflet divIcon) */
+.near-pin { display: flex; align-items: center; justify-content: center; background: #f59e0b; color: #1a1206; font-weight: 800; font-size: .82rem; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,.45); }
 .lg-area { background: rgba(34,197,94,.22); border: 1px solid #15803d; }
 .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .8rem; }
 .share-status { font-size: .85rem; color: var(--primary-700); font-weight: 600; }
