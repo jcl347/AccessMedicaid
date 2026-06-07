@@ -1225,7 +1225,9 @@
  if (sel) sel.addEventListener("change", function () {
  chosen = find(voices, function (v) { return v.name === sel.value; }) || chosen;
  store(false, STORE.voice, chosen ? chosen.name : "");
- if (on) { stop(); start(); } // restart with the new voice so the change is audible
+ // Selecting a voice only saves the preference and stops any current read.
+ // Reading NEVER auto-starts here - it begins only from the Read-aloud button.
+ if (on) stop();
  });
 
  function stop() { synth.cancel(); on = false; btn.setAttribute("aria-pressed", "false"); }
@@ -1254,6 +1256,10 @@
  });
  }
  btn.addEventListener("click", function () { if (on) stop(); else start(); });
+ // Never let speech linger past the page: stop on leave/hide. Reading only ever
+ // begins from the click handler above.
+ window.addEventListener("pagehide", function () { if (on) stop(); });
+ document.addEventListener("visibilitychange", function () { if (document.hidden && on) stop(); });
  }
  function initPrint() { var b = $("#printBtn"); if (b) b.addEventListener("click", function () { window.print(); }); }
  function initSearch() {
