@@ -1325,70 +1325,67 @@
  var en = all.filter(function (v) { return /^en/i.test(v.lang || ""); });
  return (en.length ? en : all).sort(function (a, b) { return scoreVoice(b) - scoreVoice(a); });
  }
+ // Pick the section the reader is currently looking at, so Read aloud reads THAT part
+ // of the page rather than dumping the entire site. Falls back to the first section.
+ function currentSection() {
+ var secs = document.querySelectorAll("main section");
+ var vh = window.innerHeight || 800, best = null, bestScore = Infinity;
+ Array.prototype.forEach.call(secs, function (s) {
+ var r = s.getBoundingClientRect();
+ if (r.bottom < 80 || r.top > vh - 60) return; // not meaningfully in view
+ var score = Math.abs(r.top - 90); // closest to just under the sticky header
+ if (score < bestScore) { bestScore = score; best = s; }
+ });
+ return best || secs[0] || null;
+ }
+ function sectionText(node) {
+ if (!node) return "";
+ // Read the heading + prose, skip control chrome (chips, map, legend, inputs).
+ var bits = [];
+ Array.prototype.forEach.call(node.querySelectorAll("h1,h2,h3,p,li"), function (e) {
+ if (e.closest(".chip-row,.map-frame-wrap,.map-legend,.map-source,.radius-row,.spec-row,.search-row,.share-row,.iso-controls")) return;
+ var t = (e.innerText || "").trim();
+ if (t) bits.push(t);
+ });
+ return bits.join(". ").replace(/\s+/g, " ").slice(0, 4500);
+ }
  function initReadAloud() {
  var btn = $("#readAloudBtn"); if (!btn) return;
  var synth = window.speechSynthesis;
- if (!("speechSynthesis" in window) || !synth) { btn.style.display = "none"; var sel0 = $("#voiceSelect"); if (sel0) sel0.style.display = "none"; return; }
- var sel = $("#voiceSelect");
+ if (!("speechSynthesis" in window) || !synth) { btn.style.display = "none"; return; }
  var on = false, voices = [], chosen = null;
- var savedName = store(true, STORE.voice) || "";
-
- function buildList() {
- voices = enVoices();
- if (!voices.length) return;
- chosen = (savedName && find(voices, function (v) { return v.name === savedName; })) || voices[0];
- if (sel) {
- sel.innerHTML = "";
- voices.forEach(function (v) {
- var o = document.createElement("option");
- o.value = v.name; o.textContent = v.name.replace(/^(Microsoft|Google)\s+/, "") + (/en[-_]?gb/i.test(v.lang) ? " (UK)" : "");
- if (v.name === chosen.name) o.selected = true;
- sel.appendChild(o);
- });
- sel.style.display = "";
- }
- }
- function find(arr, fn) { for (var i = 0; i < arr.length; i++) { if (fn(arr[i])) return arr[i]; } return null; }
-
- buildList();
- // Voices often load asynchronously - rebuild when they arrive.
- if (typeof synth.onvoiceschanged !== "undefined") synth.onvoiceschanged = buildList;
- setTimeout(buildList, 350);
-
- if (sel) sel.addEventListener("change", function () {
- chosen = find(voices, function (v) { return v.name === sel.value; }) || chosen;
- store(false, STORE.voice, chosen ? chosen.name : "");
- // Selecting a voice only saves the preference and stops any current read.
- // Reading NEVER auto-starts here - it begins only from the Read-aloud button.
- if (on) stop();
- });
+ function buildVoices() { voices = enVoices(); chosen = voices[0] || null; }
+ buildVoices();
+ if (typeof synth.onvoiceschanged !== "undefined") synth.onvoiceschanged = buildVoices;
+ setTimeout(buildVoices, 350);
 
  function stop() { synth.cancel(); on = false; btn.setAttribute("aria-pressed", "false"); }
- // Split into sentences so we can add natural pauses and gently vary pitch/rate -
- // the single biggest fix for the "monotone" robot read of one long utterance.
+ // Split into sentences for natural pauses and gentle pitch/rate variation (less monotone).
  function chunk(text) {
  var parts = text.replace(/\s+/g, " ").split(/(?<=[.!?:])\s+(?=[A-Z0-9"'])/);
  var out = [], buf = "";
  parts.forEach(function (p) { if ((buf + " " + p).length > 240) { if (buf) out.push(buf.trim()); buf = p; } else { buf += " " + p; } });
  if (buf.trim()) out.push(buf.trim());
- return out.slice(0, 120);
+ return out.slice(0, 80);
  }
  function start() {
- var main = $("#main"); var text = main ? main.innerText.slice(0, 9000) : "";
- var sentences = chunk(text); if (!sentences.length) return;
+ var sentences = chunk(sectionText(currentSection())); if (!sentences.length) return;
  on = true; btn.setAttribute("aria-pressed", "true");
  synth.cancel();
  sentences.forEach(function (s, i) {
  var u = new SpeechSynthesisUtterance(s);
  if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
- u.rate = 0.96 + (i % 3) * 0.02; // 0.96 - 1.00, subtle cadence shifts
- u.pitch = 1.02 + (i % 2 ? -0.06 : 0.06); // gentle rise/fall between sentences
+ u.rate = 0.96 + (i % 3) * 0.02;
+ u.pitch = 1.02 + (i % 2 ? -0.06 : 0.06);
  u.volume = 1;
  if (i === sentences.length - 1) u.onend = function () { on = false; btn.setAttribute("aria-pressed", "false"); };
  synth.speak(u);
  });
  }
  btn.addEventListener("click", function () { if (on) stop(); else start(); });
+ // Never let speech linger past the page: stop on leave/hide.
+ window.addEventListener("pagehide", function () { if (on) stop(); });
+ document.addEventListener("visibilitychange", function () { if (document.hidden && on) stop(); });
  // Never let speech linger past the page: stop on leave/hide. Reading only ever
  // begins from the click handler above.
  window.addEventListener("pagehide", function () { if (on) stop(); });

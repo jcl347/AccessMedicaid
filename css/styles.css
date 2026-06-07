@@ -474,6 +474,11 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 .prep-script { background: var(--primary-050); border-radius: 10px; padding: .7rem .9rem; font-style: italic; }
 .feedback-box { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1rem 0; }
 .fb-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+/* Renewal spotlight - near the top, amber accent so it stands out from the blue theme. */
+.renew-spotlight { background: linear-gradient(180deg, #fff7ed 0%, #fffdf8 100%); border-top: 5px solid #f59e0b; border-bottom: 1px solid var(--line); }
+.renew-spotlight .renew-eyebrow { display: inline-flex; align-items: center; gap: .4rem; background: #f59e0b; color: #1a1206; padding: .3rem .8rem; border-radius: 999px; font-size: .78rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .6rem; }
+.renew-spotlight .section-head { display: block; }
+.renew-spotlight h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); }
 .renew-steps { counter-reset: step; list-style: none; margin: 0 0 1.1rem; padding: 0; display: grid; gap: .6rem; }
 .renew-steps li { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .8rem .9rem .8rem 3.1rem; }
 .renew-steps li::before { counter-increment: step; content: counter(step); position: absolute; left: .7rem; top: .75rem; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 800; display: grid; place-items: center; }
