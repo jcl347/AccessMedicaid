@@ -1042,8 +1042,9 @@
  var lgPlace = $("#lgPlace"); if (lgPlace) lgPlace.hidden = outCount === 0;
  var lgp = $("#lgPlaceText"); if (lgp) lgp.textContent = netCount ? "Other nearby (verify coverage)" : "Places nearby";
  var pl = getPlan();
- var noun = ((geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : careLabel().toLowerCase();
- var src = netCount ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var specUnavail = geo.lastSpecUnavail && (geo.specialty || geo.language);
+ var noun = (!specUnavail && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : (specUnavail ? "in-network clinics" : careLabel().toLowerCase());
+ var src = netCount ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "") + (specUnavail ? " (This plan's directory can't filter by specialty online - showing in-network clinics; call them to find a " + (geo.specialty || "provider").toLowerCase() + ".)" : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
  var lead;
  if (netCount) lead = "Found " + netCount + " in-network " + noun + (outCount ? " plus " + outCount + " other nearby (verify coverage)" : "") + " within " + scope + ". In-network listed first.";
  else lead = "Found " + places.length + " " + noun + " within " + scope + (hasPlan ? " (none matched your plan's directory - verify coverage)" : "") + ", nearest first.";
@@ -1063,8 +1064,8 @@
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "" }; })
- .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "" }; });
+ .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable) }; })
+ .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false }; });
  }
  function acquire() {
  // ONLY in-network: if the selected plan has an in-network directory, show only those results
@@ -1072,7 +1073,7 @@
  return acquireFhir().then(function (f) {
  if (f) {
  f.places.forEach(function (p) { p.inNetwork = true; });
- geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed;
+ geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail;
  return f.places;
  }
  geo.lastApprox = false;

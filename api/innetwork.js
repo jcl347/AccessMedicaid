@@ -60,7 +60,9 @@ function zipCap(radiusM) { return radiusM > 24000 ? 220 : radiusM > 12000 ? 140 
 // Coordinates for a Location: prefer real FHIR position, else the ZIP centroid (approx).
 function coordsFor(res) {
   var pos = res && res.position;
-  if (pos) { var la = num(pos.latitude), lo = num(pos.longitude); if (isFinite(la) && isFinite(lo)) return { lat: la, lng: lo, approx: false }; }
+  // Use a real position only if it isn't the 0,0 "null island" some servers return (e.g. BSP
+  // postalcode-mode Locations) - fall back to the ZIP centroid in that case.
+  if (pos) { var la = num(pos.latitude), lo = num(pos.longitude); if (isFinite(la) && isFinite(lo) && (Math.abs(la) > 0.01 || Math.abs(lo) > 0.01)) return { lat: la, lng: lo, approx: false }; }
   var z = res && res.address ? zip5(res.address.postalCode) : "";
   var c = z && ZIPC[z];
   return c ? { lat: c[0], lng: c[1], approx: true } : null;
@@ -185,6 +187,23 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     var b2 = parseBundle(await fetchText(u2, 12000));
     if (b2 && b2.entry && b2.entry.length) { indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
   }
+  // Fallback: some servers reject the chained location.* filter on PractitionerRole (IEHP
+  // returns HTTP 400). Get nearby Locations first, then PractitionerRoles that reference them.
+  if (!roles.length) {
+    var lb = await locationBundle(base, geoMode, lat, lng, km, radius, zip);
+    if (lb && lb.bundle) {
+      indexBundle(lb.bundle, idx);
+      var locs = bundleResources(lb.bundle, "Location").map(function (l) { var co = coordsFor(l); return co ? { id: l.id, d: distM(lat, lng, co.lat, co.lng) } : null; }).filter(function (x) { return x && x.id && x.d <= radius * 1.1 + 400; });
+      locs.sort(function (a, b) { return a.d - b.d; });
+      var ids = locs.slice(0, 40).map(function (x) { return x.id; });
+      if (ids.length) {
+        var u3 = base + "/PractitionerRole?location=" + encodeURIComponent(ids.map(function (i) { return "Location/" + i; }).join(",")) + "&_include=PractitionerRole:practitioner&_include=PractitionerRole:organization&_count=500";
+        queries.push(u3);
+        var b3 = parseBundle(await fetchText(u3, 12000));
+        if (b3 && b3.entry && b3.entry.length) { indexBundle(b3, idx); roles = bundleResources(b3, "PractitionerRole"); }
+      }
+    }
+  }
   if (!roles.length) return { ok: false, reason: "no-providers", query: debug ? queries : undefined };
 
   var match = specialtyMatcher(specialty);
@@ -260,8 +279,16 @@ module.exports = async function handler(req, res) {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
       var geoMode = cfg.geo === "near" ? "near" : "postal"; // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
-      var r0 = (specialty || language) ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
-                                       : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
+      var wantProviders = !!(specialty || language);
+      var r0 = wantProviders ? await providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug)
+                             : await locationSearch(base, geoMode, lat, lng, km, radius, type, zip, debug);
+      // If provider/specialty mode returned nothing (some directories - IEHP, Molina - can't
+      // filter PractitionerRole by location via the API), fall back to in-network LOCATIONS so
+      // the map still shows in-network places to call.
+      if (wantProviders && (!r0.ok || !r0.places || !r0.places.length)) {
+        var rl = await locationSearch(base, geoMode, lat, lng, km, radius, "clinic", zip, debug);
+        if (rl.ok && rl.places && rl.places.length) { rl.specialtyUnavailable = true; r0 = rl; }
+      }
       result = Object.assign({ source: "fhir", plan: plan, geo: geoMode, refreshed: "live" }, r0);
     }
     // Upgrade approximate ZIP-centroid pins to exact street coordinates (free Census
