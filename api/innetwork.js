@@ -86,7 +86,7 @@ function zipsWithin(lat, lng, radiusM, max) {
 }
 // Bigger search areas (e.g. a 30-min drive isochrone) need more ZIPs so in-network
 // coverage expands to fill the reachable area rather than stopping at a small cap.
-function zipCap(radiusM) { return radiusM > 24000 ? 220 : radiusM > 12000 ? 140 : 90; }
+function zipCap(radiusM) { return radiusM > 34000 ? 320 : radiusM > 24000 ? 240 : radiusM > 12000 ? 140 : 90; }
 // Coordinates for a Location: prefer real FHIR position, else the ZIP centroid (approx).
 function coordsFor(res) {
   var a = res && res.address;
@@ -491,7 +491,7 @@ module.exports = async function handler(req, res) {
   var language = String(q.language || "").trim();
   var zip = String(q.zip || "").trim();
   var radius = parseInt(q.radius || "8047", 10) || 8047;
-  radius = Math.min(Math.max(radius, 500), 40000);
+  radius = Math.min(Math.max(radius, 500), 48000); // up to ~30 mi - covers a 30-min drive isochrone
   var debug = String(q.debug || "") === "1";
   if (!isFinite(lat) || !isFinite(lng)) { res.status(400).json({ ok: false, error: "Missing coordinates" }); return; }
 

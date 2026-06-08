@@ -896,6 +896,21 @@
  (fc.features || []).forEach(function (f) { if (f.geometry) scan(f.geometry.coordinates); });
  return b;
  }
+ // The farthest the reachable-area polygon extends from the search point (miles). Uses the TRUE
+ // max distance to any polygon vertex - not just two bounding-box corners - so the provider query
+ // radius covers the WHOLE area (a far NW/SE lobe of a drive isochrone was being clipped before).
+ function fcMaxDist(fc, c) {
+ var max = 0;
+ function scan(coords) {
+ for (var i = 0; i < coords.length; i++) {
+ var p = coords[i];
+ if (typeof p[0] === "number") { var d = haversineMi(c, { lat: p[1], lng: p[0] }); if (d > max) max = d; }
+ else scan(p);
+ }
+ }
+ (fc.features || []).forEach(function (f) { if (f.geometry) scan(f.geometry.coordinates); });
+ return max;
+ }
  function pointInRing(x, y, ring) {
  var inside = false;
  for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
@@ -939,9 +954,9 @@
  geo.iso.fc = d.geojson;
  if (geo.iso.layer && geo.map) geo.map.removeLayer(geo.iso.layer);
  geo.iso.layer = L.geoJSON(d.geojson, { style: { color: "#15803d", weight: 2, fillColor: "#22c55e", fillOpacity: .16 } }).addTo(geo.map);
- var b = fcBounds(d.geojson);
- var far = Math.max(haversineMi(geo.center, { lat: b.maxLat, lng: b.maxLng }), haversineMi(geo.center, { lat: b.minLat, lng: b.minLng }));
- geo.iso.radius = Math.min(Math.max(Math.ceil(far * 1609) + 250, 1609), 40000);
+ // Cover the FULL reachable area: radius = the polygon's farthest reach + a small buffer.
+ var far = fcMaxDist(d.geojson, geo.center);
+ geo.iso.radius = Math.min(Math.max(Math.ceil(far * 1609) + 600, 1609), 48000);
  try { geo.map.fitBounds(geo.iso.layer.getBounds(), { padding: [20, 20] }); } catch (e) {}
  if (clr) clr.hidden = false;
  if (lg) { lg.hidden = false; var t = $("#lgIsoText"); if (t) t.textContent = "Reachable in " + geo.iso.minutes + " min (" + isoModeLabel() + ")"; }
@@ -1062,7 +1077,7 @@
  var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + npx + lng2 + ipa2 + "<br>" + escapeHtml(p.address || "") + approx + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
  // In-network dots are bigger and bolder so they stand out from the smaller, muted
  // out-of-network (public map) pins - and brought to the front so green is never hidden.
- var mk = L.circleMarker([p._mlat, p._mlng], { radius: isNet ? 11 : 6, color: "#fff", weight: isNet ? 3 : 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: isNet ? 1 : .8 }).addTo(geo.layer).bindPopup(pop);
+ var mk = L.circleMarker([p._mlat, p._mlng], { radius: isNet ? 8 : 5, color: "#fff", weight: isNet ? 2.5 : 1.5, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: isNet ? 1 : .8 }).addTo(geo.layer).bindPopup(pop);
  if (isNet && mk.bringToFront) mk.bringToFront();
  });
  // Expand the view so EVERY result is visible, plus the reachable area / search ring.
