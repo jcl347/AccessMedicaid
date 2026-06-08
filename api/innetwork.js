@@ -263,16 +263,20 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
     // holding ZERO locations, so query a WIDE set (24) to reach the residential ZIPs that
     // actually carry providers - empty ZIPs return instantly. Stop early once we have plenty,
     // and cap concurrency at 4 to stay under the burst rate limit. (Verified: 90011 alone -> 253.)
-    var pick = zips.slice(0, 24);
+    // Near a dense downtown, dozens of PO-box/admin ZIPs (which hold 0 locations) rank closest by
+    // centroid and crowd the residential ZIPs out of the nearest few, so sweep a LARGE set (50).
+    // Empty ZIPs return instantly; we stop early once we have plenty. (Molina doesn't actually
+    // rate-limit these single-ZIP Location reads hard - the old "2" was admin ZIPs + a name filter.)
+    var pick = zips.slice(0, 50);
     var entry = [], ci = 0;
     async function zipWorker() {
-      while (ci < pick.length && entry.length < 150) {
+      while (ci < pick.length && entry.length < 200) {
         var z = pick[ci++];
         var b = await fetchText(base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=80", 7000).then(parseBundle).catch(function () { return null; });
         if (b && b.entry) entry = entry.concat(b.entry);
       }
     }
-    var pool = []; for (var w = 0; w < 4; w++) pool.push(zipWorker());
+    var pool = []; for (var w = 0; w < 6; w++) pool.push(zipWorker());
     await Promise.all(pool);
     return { url: "per-ZIP x" + pick.length, zips: pick, bundle: { entry: entry } };
   }
