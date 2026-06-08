@@ -1109,18 +1109,18 @@
  geo.lastSource = "kaiser"; geo.lastApprox = false; geo.lastRefreshed = ""; geo.lastSpecUnavail = false; geo.lastFacility = true;
  var nf = String(brand).replace(/[\\"]/g, "");
  var rx = new RegExp(nf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
- var bf = [
- 'node["name"~"' + nf + '",i]["amenity"~"hospital|clinic|doctors|pharmacy|social_facility"]',
- 'way["name"~"' + nf + '",i]["amenity"~"hospital|clinic|doctors|pharmacy|social_facility"]',
- 'node["name"~"' + nf + '",i]["healthcare"]',
- 'way["name"~"' + nf + '",i]["healthcare"]',
- ];
- return overpassDirect(null, effRadius, geo.center.lat, geo.center.lng, bf).catch(function () { return []; })
- .then(function (list) {
+ // Indexed key FIRST so the name regex is a fast secondary filter (name-first times out).
+ var keys = ['"amenity"="hospital"', '"amenity"="clinic"', '"amenity"="doctors"', '"amenity"="pharmacy"', '"healthcare"="hospital"', '"healthcare"="clinic"', '"healthcare"="centre"'];
+ var bf = []; keys.forEach(function (k) { bf.push('node[' + k + ']["name"~"' + nf + '",i]'); bf.push('way[' + k + ']["name"~"' + nf + '",i]'); });
+ // Reliable primary: server brand search (Google Places when keyed) + backup: direct Overpass.
+ var srv = fetch("/api/nearby?brand=" + encodeURIComponent(brand) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&radius=" + effRadius, { headers: { Accept: "application/json" } })
+ .then(function (r) { return r.json(); }).then(function (d) { return (d && d.ok && Array.isArray(d.places)) ? d.places : []; }).catch(function () { return []; });
+ var direct = overpassDirect(null, effRadius, geo.center.lat, geo.center.lng, bf).catch(function () { return []; });
+ return Promise.all([srv, direct]).then(function (res) {
  var seen = {}, out = [];
- (list || []).forEach(function (p) {
+ (res[0] || []).concat(res[1] || []).forEach(function (p) {
  if (!p || !isFinite(p.lat) || !isFinite(p.lng) || !rx.test(p.name || "")) return;
- var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4);
+ var k = normName(p.name) + "@" + p.lat.toFixed(3) + "," + p.lng.toFixed(3);
  if (seen[k]) return; seen[k] = 1; p.inNetwork = true; out.push(p);
  });
  return out;

@@ -95,11 +95,37 @@ async function googlePlaces(type, radius, lat, lng, key) {
     }).filter(function (x) { return isFinite(x.lat) && isFinite(x.lng); });
 }
 
+/* Google Places TEXT search - used for brand searches (e.g. "Kaiser Permanente"), where we
+ * want every facility carrying a brand name near a point rather than a generic care type. */
+async function googlePlacesText(textQuery, radius, lat, lng, key) {
+  var fieldMask = "places.displayName,places.location,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.types,places.primaryType";
+  var body = { textQuery: textQuery, maxResultCount: 20, locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: Math.min(radius, 50000) } } };
+  var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 9000);
+  var r = await fetch("https://places.googleapis.com/v1/places:searchText", { method: "POST", signal: ctrl.signal, headers: { "Content-Type": "application/json", "X-Goog-Api-Key": key, "X-Goog-FieldMask": fieldMask }, body: JSON.stringify(body) });
+  clearTimeout(t);
+  if (!r.ok) { var et = ""; try { et = await r.text(); } catch (_) {} throw new Error("google " + r.status + (et ? ": " + et.replace(/\s+/g, " ").slice(0, 400) : "")); }
+  var j = await r.json();
+  return (j.places || []).map(function (p) {
+    var loc = p.location || {};
+    return { name: (p.displayName && p.displayName.text) || "(Unnamed location)", lat: loc.latitude, lng: loc.longitude, phone: p.nationalPhoneNumber || "", address: p.formattedAddress || "", website: p.websiteUri || "" };
+  }).filter(function (x) { return isFinite(x.lat) && isFinite(x.lng); });
+}
+// Overpass filters for a brand name (indexed key first so the name regex is a fast secondary
+// filter - putting name~ first makes Overpass scan every named element and time out).
+function brandFilters(brand) {
+  var nf = String(brand).replace(/["\\]/g, "");
+  var keys = ['"amenity"="hospital"', '"amenity"="clinic"', '"amenity"="doctors"', '"amenity"="pharmacy"', '"healthcare"="hospital"', '"healthcare"="clinic"', '"healthcare"="centre"'];
+  var out = [];
+  keys.forEach(function (k) { out.push('node[' + k + ']["name"~"' + nf + '",i]'); out.push('way[' + k + ']["name"~"' + nf + '",i]'); });
+  return out;
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   var q = req.query || {};
   var lat = parseFloat(q.lat), lng = parseFloat(q.lng);
   var type = String(q.type || "clinic").toLowerCase();
+  var brand = String(q.brand || "").trim();
   var radius = parseInt(q.radius || "8047", 10) || 8047;
   radius = Math.min(Math.max(radius, 500), 40000); // 0.3 - ~25 mi (covers a 30-min drive isochrone)
   if (!isFinite(lat) || !isFinite(lng)) { res.status(400).json({ ok: false, error: "Missing coordinates" }); return; }
@@ -112,6 +138,38 @@ module.exports = async function handler(req, res) {
   var envKeys = debug ? Object.keys(process.env).filter(function (k) { return /google|maps|places|api.?key/i.test(k); }) : undefined;
   var gkey = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY;
   var googleStatus = gkey ? "key-present-not-used" : "no-key";
+
+  // Brand search (closed networks like Kaiser): find every facility carrying the brand name.
+  if (brand) {
+    var brx = new RegExp(brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+    if (gkey) {
+      try {
+        var gb = (await googlePlacesText(brand, radius, lat, lng, gkey)).filter(function (p) { return brx.test(p.name || ""); });
+        if (gb.length) { res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800"); res.status(200).json({ ok: true, source: "google", googleStatus: "ok", brand: brand, radius: radius, count: gb.length, places: gb }); return; }
+        googleStatus = "google-returned-0";
+      } catch (e) { googleStatus = debug ? ("google-error: " + ((e && e.message) || String(e))) : "google-error"; }
+    }
+    var bql = "[out:json][timeout:25];(" + brandFilters(brand).map(function (f) { return f + "(around:" + radius + "," + lat + "," + lng + ");"; }).join("") + ");out center tags 100;";
+    try {
+      var bdata = await firstNonEmpty(MIRRORS.map(function (m) { return queryMirror(m, bql); }));
+      var bseen = {};
+      var bplaces = (bdata.elements || []).map(function (e) {
+        var c = e.type === "node" ? { lat: e.lat, lon: e.lon } : (e.center || {});
+        var t = e.tags || {};
+        var addr = [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" ");
+        if (t["addr:city"]) addr += (addr ? ", " : "") + t["addr:city"];
+        return { name: t.name || t.operator || "(Unnamed location)", lat: c.lat, lng: c.lon, phone: t.phone || t["contact:phone"] || "", address: addr, website: t.website || t["contact:website"] || "" };
+      }).filter(function (x) {
+        if (!isFinite(x.lat) || !isFinite(x.lng) || !brx.test(x.name)) return false;
+        var k = x.name + "@" + x.lat.toFixed(4) + "," + x.lng.toFixed(4);
+        if (bseen[k]) return false; bseen[k] = 1; return true;
+      });
+      res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=604800");
+      res.status(200).json({ ok: true, source: "osm", googleStatus: googleStatus, envKeys: envKeys, brand: brand, radius: radius, count: bplaces.length, places: bplaces }); return;
+    } catch (e) {
+      res.status(200).json({ ok: false, source: "osm", googleStatus: googleStatus, envKeys: envKeys, brand: brand, error: debug ? ("overpass: " + ((e && e.message) || String(e))) : "Map search is busy right now. Please try again." }); return;
+    }
+  }
   if (gkey) {
     try {
       var gp = await googlePlaces(type, radius, lat, lng, gkey);
