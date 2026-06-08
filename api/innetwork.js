@@ -137,6 +137,7 @@ async function censusGeocode(places) {
   function isPlaceholder(street) { var sl = (street || "").toLowerCase(); return PLACEHOLDER_ADDR.test(street) || (sl && byStreet[sl] && Object.keys(byStreet[sl]).length > 3); }
   var rows = [], map = {};
   places.forEach(function (p, i) {
+    if (!p.approxByZip) return; // already has exact coordinates (e.g. Kaiser/BSP near results)
     var a = p._addr || {}; var street = csvCell(a.street);
     if (!street || (!a.zip && !a.city) || isPlaceholder(street)) return;
     var key = (street + "|" + (a.zip || a.city)).toLowerCase();
@@ -320,27 +321,32 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
 }
 
-// Health Net: filter the preprocessed JSON dataset (ZIP-centroid coordinates).
-function healthNetSearch(lat, lng, radius, type, specialty, language) {
-  if (!HN || !Array.isArray(HN.records)) return { ok: false, reason: "no-dataset" };
+// Serve a preprocessed JSON dataset (Health Net's directory, or Kaiser's facilities).
+// ds.facilityOnly (Kaiser, a closed network): members get all care at these facilities, so
+// specialty/care-type filtering doesn't apply - return the nearest facilities for any search.
+function datasetSearch(ds, lat, lng, radius, type, specialty, language) {
+  if (!ds || !Array.isArray(ds.records)) return { ok: false, reason: "no-dataset" };
   var maxM = radius * 1.1 + 400;
-  var match = specialty ? specialtyMatcher(specialty) : null;
-  var providerMode = !!(specialty || language);
+  var facilityOnly = !!ds.facilityOnly;
+  var match = (!facilityOnly && specialty) ? specialtyMatcher(specialty) : null;
+  var providerMode = !facilityOnly && !!(specialty || language);
   var CARECAT = { clinic: ["clinic"], doctor: ["doctor"], hospital: ["hospital"], urgent_care: ["urgent_care"], mental_health: ["mental_health"], vision: ["vision"] };
-  var cats = CARECAT[type] || null;
+  var cats = (!facilityOnly) ? (CARECAT[type] || null) : null;
   var out = [];
-  for (var i = 0; i < HN.records.length; i++) {
-    var r = HN.records[i];
+  for (var i = 0; i < ds.records.length; i++) {
+    var r = ds.records[i];
     if (!isFinite(r.lat) || !isFinite(r.lng) || distM(lat, lng, r.lat, r.lng) > maxM) continue;
-    if (providerMode) {
-      if (match && !match.test(r.specialty || r.name || "")) continue;
-      if (language && !langMatch(r.languages, language)) continue;
-    } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
+    if (!facilityOnly) {
+      if (providerMode) {
+        if (match && !match.test(r.specialty || r.name || "")) continue;
+        if (language && !langMatch(r.languages, language)) continue;
+      } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
+    }
     var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
-    out.push({ name: r.name, specialty: r.specialty, lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: true, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
+    out.push({ name: r.name, specialty: r.specialty || "", lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: !facilityOnly, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
   }
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: providerMode ? "providers" : "locations", source: "healthnet", approxByZip: true, refreshed: HN.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
+  return { ok: true, mode: facilityOnly ? "facilities" : (providerMode ? "providers" : "locations"), source: ds.plan === "kaiser" ? "kaiser" : "healthnet", facilityOnly: facilityOnly, approxByZip: !facilityOnly, refreshed: ds.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
 }
 
 module.exports = async function handler(req, res) {
@@ -363,7 +369,7 @@ module.exports = async function handler(req, res) {
   try {
     var result;
     if (cfg.dataset) {
-      result = healthNetSearch(lat, lng, radius, type, specialty, language);
+      result = datasetSearch(HN, lat, lng, radius, type, specialty, language);
       result = Object.assign({ plan: plan }, result);
     } else {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");

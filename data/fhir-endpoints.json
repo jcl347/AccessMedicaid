@@ -9,10 +9,11 @@
       "geo": "postal"
     },
     "phc": {
-      "baseUrl": "",
-      "verified": false,
-      "vendor": "unknown",
-      "notes": "phc here = PHC California (Positive Healthcare, an AIDS Healthcare Foundation specialty Medi-Cal plan in LA) - NOT Partnership HealthPlan of California (whose Edifecs php_pdfhir endpoint must NOT be used here). No public FHIR Provider Directory confirmed for Positive Healthcare/AHF; uses the Tier-1 directory deep-link + public map fallback until verified."
+      "baseUrl": "https://api.ahffhir.com/r4/Public",
+      "geo": "postal",
+      "verified": true,
+      "vendor": "1upHealth FHIR (AIDS Healthcare Foundation)",
+      "notes": "PHC California (Positive Healthcare/AHF) public no-auth FHIR PD on 1upHealth. No positions -> geocoded. Chained location.address-postalcode works. NPIs present."
     },
     "caloptima": {
       "baseUrl": "https://us120.fhir.edifecsfedcloud.com/copt_pdfhir",
@@ -56,16 +57,18 @@
       "notes": "metadata public at totalview.healthos.elevancehealth.com/.../AnthemBlueCross/api/v1/fhir but data queries 403 without an API key (request via InteroperabilityWorkgroup@Anthem.com)."
     },
     "gold-coast": {
-      "baseUrl": "",
-      "verified": false,
-      "vendor": "Edifecs",
-      "notes": "Edifecs-hosted PD API asserted on official site but no production base URL published; portal requires registration."
+      "baseUrl": "https://us120.fhir.edifecsfedcloud.com/gchp_meta/pd/R4",
+      "geo": "postal",
+      "verified": true,
+      "vendor": "Edifecs (HAPI FHIR R4)",
+      "notes": "Public no-auth FHIR Provider Directory (discovered via fdp.edifecsfedcloud.com catalog). No positions -> geocoded. Chained location.address-postalcode works."
     },
     "kaiser": {
-      "baseUrl": "",
-      "verified": false,
-      "vendor": "none (PDF directories)",
-      "notes": "No public Provider Directory FHIR endpoint; Medi-Cal directories are regional PDFs. Use Tier-1 deep-link only."
+      "baseUrl": "https://kpx-service-bus.kp.org/service/hp/mhpo/healthplanproviderv1rc/",
+      "geo": "near",
+      "verified": true,
+      "vendor": "Kaiser Permanente (public FHIR R4, Da Vinci Plan-Net)",
+      "notes": "Public no-auth FHIR PD. The near geo search works and returns real positions (postal results have none), so geo=near. Closed network - directory is Kaiser providers/facilities."
     },
     "kern": {
       "baseUrl": "",

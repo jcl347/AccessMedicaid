@@ -1008,7 +1008,7 @@
  else { var maxMi = effRadius / 1609 + 0.25; places = places.filter(function (p) { return p.dist <= maxMi; }); }
  // In-network first, then by distance, so verified providers lead the list.
  places.sort(function (a, b) { return (b.inNetwork ? 1 : 0) - (a.inNetwork ? 1 : 0) || a.dist - b.dist; });
- var anyNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet";
+ var anyNet = geo.lastSource === "fhir" || geo.lastSource === "healthnet" || geo.lastSource === "kaiser";
  var hasPlan = planHasInNetwork();
  // Many providers share one ZIP-centroid coordinate (approximate pins), which would stack
  // them into a single dot. Fan same-coordinate pins out in a small golden-angle spiral
@@ -1051,8 +1051,9 @@
  var lgp = $("#lgPlaceText"); if (lgp) lgp.textContent = netCount ? "Other nearby (verify coverage)" : "Places nearby";
  var pl = getPlan();
  var specUnavail = geo.lastSpecUnavail && (geo.specialty || geo.language);
- var noun = (!specUnavail && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : (specUnavail ? "in-network clinics" : careLabel().toLowerCase());
- var src = netCount ? (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "") + (specUnavail ? " (This plan's directory can't filter by specialty online - showing in-network clinics; call them to find a " + (geo.specialty || "provider").toLowerCase() + ".)" : "")) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
+ var facility = geo.lastFacility;
+ var noun = facility ? "Kaiser locations" : ((!specUnavail && (geo.specialty || geo.language)) ? ((geo.specialty ? geo.specialty.toLowerCase() + " " : "") + (geo.language ? geo.language + "-speaking " : "") + "providers") : (specUnavail ? "in-network clinics" : careLabel().toLowerCase()));
+ var src = netCount ? (facility ? (" Kaiser is a closed network - members get all care at these Kaiser locations; pick any and they'll connect you with a doctor.") : (" In-network results from " + ((pl && pl.name) || "your plan") + "'s official provider directory." + (geo.lastApprox ? " Some pins are approximate to the ZIP area where an exact address match wasn't available." : "") + (specUnavail ? " (This plan's directory can't filter by specialty online - showing in-network clinics; call them to find a " + (geo.specialty || "provider").toLowerCase() + ".)" : ""))) : (geo.lastSource === "google" ? " Place data: Google." : " Place data: OpenStreetMap.");
  var lead;
  if (netCount) lead = "Found " + netCount + " in-network " + noun + (outCount ? " plus " + outCount + " other nearby (verify coverage)" : "") + " within " + scope + ". In-network listed first.";
  else lead = "Found " + places.length + " " + noun + " within " + scope + (hasPlan ? " (none matched your plan's directory - verify coverage)" : "") + ", nearest first.";
@@ -1072,8 +1073,8 @@
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable) }; })
- .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false }; });
+ .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable), facility: !!(d && d.facilityOnly) }; })
+ .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false, facility: false }; });
  }
  function acquire() {
  // ONLY in-network: if the selected plan has an in-network directory, show only those results
@@ -1081,7 +1082,7 @@
  return acquireFhir().then(function (f) {
  if (f) {
  f.places.forEach(function (p) { p.inNetwork = true; });
- geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail;
+ geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail; geo.lastFacility = f.facility;
  return f.places;
  }
  geo.lastApprox = false;
@@ -1163,6 +1164,9 @@
  } else if (inNet && geo.lastSource === "healthnet") {
  box.hidden = false; box.className = "map-source in-network";
  box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>In-network data from " + escapeHtml(sp) + "'s published provider directory" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + (geo.lastApprox ? " (some pins approximate to ZIP area)" : "") + "</span>";
+ } else if (inNet && geo.lastSource === "kaiser") {
+ box.hidden = false; box.className = "map-source in-network";
+ box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>Kaiser locations (closed network) - " + escapeHtml(sp) + "</span>";
  } else {
  box.hidden = false; box.className = "map-source";
  box.innerHTML = svg("info") + "<span>Data source: " + (geo.lastSource === "google" ? "Google Places" : "OpenStreetMap") + " (public map data - not filtered by insurance)</span>";
@@ -1176,10 +1180,10 @@
  if (!plan) { box.hidden = true; return; }
  box.hidden = false;
  var sp = shortPlan(plan.name);
- if (source === "fhir" || source === "healthnet") {
+ if (source === "fhir" || source === "healthnet" || source === "kaiser") {
  box.className = "net-note net-ok";
  box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
- box.appendChild(el("p", { class: "nn-body", text: "These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Most pins are geocoded to the street address; a few are approximate to the ZIP area." : "") + " Directories can still lag behind - it is smart to call ahead to confirm." }));
+ box.appendChild(el("p", { class: "nn-body", text: geo.lastFacility ? ("Kaiser is a closed network - members get all their care at these Kaiser locations. Pick any one and Kaiser will connect you with a doctor.") : ("These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Most pins are geocoded to the street address; a few are approximate to the ZIP area." : "") + " Directories can still lag behind - it is smart to call ahead to confirm.") }));
  var fresh = geo.lastRefreshed === "live" ? "Updated live from the plan's directory." : (geo.lastRefreshed ? ("Directory last refreshed: " + fmtRefreshed(geo.lastRefreshed) + ".") : "");
  if (fresh) box.appendChild(el("p", { class: "nn-fresh", html: svg("refresh") + "<span>" + escapeHtml(fresh) + "</span>" }));
  } else {
