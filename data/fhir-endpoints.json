@@ -4,8 +4,8 @@
     "la-care": {
       "baseUrl": "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4",
       "verified": true,
-      "vendor": "Edifecs (HAPI FHIR R4)",
-      "notes": "Public-no-auth confirmed; Da Vinci PDEX Plan-Net. From lacare.org/technical-information.",
+      "vendor": "Edifecs HAPI FHIR R4 (server 5.4.1.13_edfx), Da Vinci Plan-Net style",
+      "notes": "Public-no-auth confirmed (from lacare.org/technical-information). Locations carry NO position element, so geo=postal: query Location?address-postalcode (Bundle.total ~53 for one ZIP) and PractitionerRole?location.address-postalcode, then geocode the real street. address.line packs 'ORG - Service Type - STREET' and stamps a placeholder admin address (9230 W Olympic Blvd, Beverly Hills) on many records - cleanStreet/cleanOrgName + NPPES handle it. specialty.coding is usually NullFlavor UNK with the real specialty in specialty.text (specialtyText skips the UNK coding). Carries the Da Vinci 'newpatients' extension (acceptingPatients newpt/existptonly/nopt).",
       "geo": "postal"
     },
     "phc": {

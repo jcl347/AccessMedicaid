@@ -180,6 +180,9 @@
  state.planId = p.id;
  store(false, STORE.plan, state.planId || "");
  renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit(); renderTriage();
+ // Recalculate the map for the newly selected plan (its in-network directory differs).
+ renderFilters();
+ if (window.L) { if (geo.iso && geo.iso.mode) applyIso(); else runSearch(); }
  $("#needs-step").scrollIntoView({ block: "start" });
  });
  return card;
@@ -758,7 +761,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "doctor", specialty: "Primary care", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "doctor", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -791,7 +794,7 @@
  // ONE unified filter set. Care types (place kinds) always show; provider specialties are
  // appended when the selected plan has an in-network directory (they're FHIR-only). A
  // separate optional "preferred language" row also shows for in-network plans.
- var SPECIALTIES = ["Primary care", "Pediatrics", "OB-GYN", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
+ var SPECIALTIES = ["Pediatrics", "OB-GYN", "Cardiology", "Dermatology", "Vision", "Orthopedics"];
  var LANGUAGES = ["Spanish", "Mandarin", "Cantonese", "Vietnamese", "Korean", "Armenian", "Tagalog", "Russian", "Arabic"];
  function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
  function renderFilters() {
@@ -1076,15 +1079,13 @@
  .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable), facility: !!(d && d.facilityOnly) }; })
  .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false, facility: false }; });
  }
+ function normName(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
  function acquire() {
- // ONLY in-network: if the selected plan has an in-network directory, show only those results
- // (even if none). Plans WITHOUT an in-network endpoint fall back to public map data.
+ // In-network FIRST (the plan's official directory), THEN also nearby public places marked
+ // out-of-network so members see the full landscape - clearly distinguished on the map.
+ // Plans WITHOUT an in-network endpoint show public map data only.
  return acquireFhir().then(function (f) {
- if (f) {
- f.places.forEach(function (p) { p.inNetwork = true; });
- geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail; geo.lastFacility = f.facility;
- return f.places;
- }
+ if (!f) {
  geo.lastApprox = false;
  return acquirePublic().then(function (pub) {
  var pl = (pub && pub.places) || [];
@@ -1092,6 +1093,21 @@
  geo.lastSource = (pub && pub.source) || "osm";
  return pl;
  });
+ }
+ f.places.forEach(function (p) { p.inNetwork = true; });
+ geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail; geo.lastFacility = f.facility;
+ // Kaiser is a closed network - out-of-network places aren't meaningful, so show only its facilities.
+ if (f.facility) return f.places;
+ // Otherwise merge in nearby public (out-of-network / unverified) places, dropping any whose
+ // name matches an in-network result so the same clinic isn't shown twice.
+ return acquirePublic().then(function (pub) {
+ var pubPlaces = (pub && pub.places) || [];
+ var netNames = {};
+ f.places.forEach(function (p) { var k = normName(p.name); if (k) netNames[k] = 1; });
+ pubPlaces = pubPlaces.filter(function (p) { return !netNames[normName(p.name)]; });
+ pubPlaces.forEach(function (p) { p.inNetwork = false; });
+ return f.places.concat(pubPlaces);
+ }).catch(function () { return f.places; });
  });
  }
  function acquirePublic() {

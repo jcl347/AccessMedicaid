@@ -50,6 +50,17 @@ function cleanStreet(line) {
   s = (parts.length > 1 ? parts[parts.length - 1] : s).replace(/\s*\|\s*\d+\s*$/, "").trim();
   return s;
 }
+// The same packing appears in Location.name ("ORG - Service Type - STREET"). For DISPLAY we want
+// the org name (the FIRST segment), not the street. Only collapse when it's clearly packed
+// (3+ dash segments, or the last segment is a street that starts with a number) so we don't
+// truncate legitimate names that merely contain a hyphen (e.g. "St. Mary - Long Beach").
+function cleanOrgName(name) {
+  var s = String(name || "").replace(/\s*\|\s*\d+\s*$/, "").trim();
+  var parts = s.split(/\s+-\s*(?=\S)/);
+  if (parts.length >= 3) return parts[0].trim();
+  if (parts.length === 2 && /^\d/.test(parts[1].trim())) return parts[0].trim();
+  return s;
+}
 var PLACEHOLDER_ADDR = /9230\s*w\s*olympic\s*blvd/i;
 // General placeholder detector: the same street stamped on >3 different ZIPs can't be a real
 // single address - drop those records so they don't pile onto one point.
@@ -106,9 +117,32 @@ function telOf(res) { var ph = "", web = ""; ((res && res.telecom) || []).forEac
 function addrOf(loc) { var a = (loc && loc.address) || {}; var s = cleanStreet([].concat(a.line || []).filter(Boolean).join(" ")); if (a.city) s += (s ? ", " : "") + a.city; if (a.state) s += (s ? ", " : "") + a.state; if (a.postalCode) s += " " + a.postalCode; return s.trim(); }
 function specialtyText(pr) {
   var set = [];
-  function add(v) { v = (v || "").trim(); if (v && set.indexOf(v) < 0) set.push(v); }
-  ((pr && pr.specialty) || []).forEach(function (cc) { (cc.coding || []).forEach(function (c) { add(c.display || c.code); }); add(cc.text); });
+  function add(v) { v = (v || "").trim(); if (!v || /^(unk|unknown)$/i.test(v)) return; if (set.indexOf(v) < 0) set.push(v); }
+  // Many directories (L.A. Care) put a NullFlavor "UNK/unknown" coding on specialty and carry the
+  // real specialty in specialty.text - skip those codings so "unknown" never shows to members.
+  ((pr && pr.specialty) || []).forEach(function (cc) {
+    (cc.coding || []).forEach(function (c) {
+      if (/nullflavor/i.test(c.system || "") || (c.code || "").toUpperCase() === "UNK") return;
+      add(c.display || c.code);
+    });
+    add(cc.text);
+  });
   return set.join(", ");
+}
+// Da Vinci PDEX Plan-Net "accepting new patients" extension (on PractitionerRole / HealthcareService).
+// Returns true only when the plan explicitly marks the provider as taking NEW patients ("newpt").
+function newPatientsOf(res) {
+  var exts = (res && res.extension) || [];
+  for (var i = 0; i < exts.length; i++) {
+    var e = exts[i]; if (!e || !/newpatients/i.test(e.url || "")) continue;
+    var sub = e.extension || [];
+    for (var j = 0; j < sub.length; j++) {
+      var s = sub[j]; if (!s || !/acceptingpatients/i.test(s.url || "")) continue;
+      var cs = (s.valueCodeableConcept && s.valueCodeableConcept.coding) || [];
+      for (var k = 0; k < cs.length; k++) { if ((cs[k].code || "").toLowerCase() === "newpt") return true; }
+    }
+  }
+  return false;
 }
 function specialtyMatcher(s) {
   s = (s || "").toLowerCase().trim();
@@ -210,7 +244,7 @@ function normLocation(loc) {
   var co = coordsFor(loc); if (!co) return null;
   var t = telOf(loc), typeText = "";
   (loc.type || []).forEach(function (tc) { (tc.coding || []).forEach(function (c) { typeText += " " + (c.display || c.code || ""); }); if (tc.text) typeText += " " + tc.text; });
-  return { name: loc.name || "(In-network location)", lat: co.lat, lng: co.lng, phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, approxByZip: co.approx, _typeText: typeText, _addr: addrParts(loc) };
+  return { name: cleanOrgName(loc.name) || "(In-network location)", lat: co.lat, lng: co.lng, phone: t.phone, address: addrOf(loc), website: t.website, inNetwork: true, approxByZip: co.approx, _typeText: typeText, _addr: addrParts(loc) };
 }
 
 // Fetch a Location bundle by the endpoint's geo strategy.
@@ -295,7 +329,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   // same doctor at several placeholder "locations" with different ZIPs - this collapses those.
   var byName = {};
   roles.forEach(function (pr) {
-    var spec = specialtyText(pr), prTel = telOf(pr);
+    var spec = specialtyText(pr), prTel = telOf(pr), newPt = newPatientsOf(pr);
     var pract = (pr.practitioner && pr.practitioner.reference) ? idx[pr.practitioner.reference] : null;
     var practName = humanName(pract), languages = langsOf(pract);
     var ipa = (pr.organization && pr.organization.reference && idx[pr.organization.reference]) ? (idx[pr.organization.reference].name || "") : "";
@@ -304,7 +338,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var loc = lref && lref.reference ? idx[lref.reference] : null; if (!loc) return;
       var co = coordsFor(loc); if (!co) return;
       var d = distM(lat, lng, co.lat, co.lng); if (d > maxM) return;
-      var name = practName || loc.name || "(In-network provider)";
+      var name = practName || cleanOrgName(loc.name) || "(In-network provider)";
       // Match the provider's SPECIALTY (precise); only fall back to the name when no specialty
       // is listed - matching the name directly would leak across specialties (e.g. a surname
       // "Childs" matching pediatrics).
@@ -313,7 +347,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var key = name.toLowerCase() + "|" + spec.toLowerCase();
       var ex = byName[key];
       if (ex && ex._d <= d) return; // keep the nearest location for this provider+specialty
-      byName[key] = { name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, npi: npiOf(pract), _addr: addrParts(loc), _d: d };
+      byName[key] = { name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, newPatients: newPt, npi: npiOf(pract), _addr: addrParts(loc), _d: d };
     });
   });
   var out = Object.keys(byName).map(function (k) { var r = byName[k]; delete r._d; return r; });
