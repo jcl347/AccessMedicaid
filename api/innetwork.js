@@ -144,6 +144,76 @@ function newPatientsOf(res) {
   }
   return false;
 }
+// --- DATA-DRIVEN specialty categories ---------------------------------------------------------
+// We do NOT hardcode a specialty menu. Instead we read the specialty strings that a plan's own
+// directory/dataset actually carries, normalize each to a clean canonical label (merging the
+// many ways the same specialty is written), drop facility-types / generic noise, and surface the
+// labels that are actually present (with counts) as the filter chips. Different plans -> different
+// chips; plans with no clear specialties -> no specialty chips at all.
+var SPEC_CANON = [
+  [/family (medicine|practice|health)/, "Family Medicine"],
+  [/general (practice|practitioner)/, "General Practice"],
+  [/internal medicine|adult medicine/, "Internal Medicine"],
+  [/geriatric/, "Geriatrics"],
+  [/pediatric|\bpeds\b|adolescent/, "Pediatrics"],
+  [/obstetri|gynecolog|\bob.?gyn\b|women.?s health|maternal.?fetal/, "Obstetrics & Gynecology"],
+  [/midwife|midwifery/, "Midwifery"],
+  [/psychiatr/, "Psychiatry"],
+  [/psycholog/, "Psychology"],
+  [/behavioral|mental health|counsel|marriage and family|social work|substance|addiction/, "Behavioral Health"],
+  [/cardiolog|cardiovascular|\bheart\b/, "Cardiology"],
+  [/dermatolog|\bskin\b/, "Dermatology"],
+  [/optometr/, "Optometry"],
+  [/ophthalmolog/, "Ophthalmology"],
+  [/orthop|sports medicine/, "Orthopedics"],
+  [/gastroenter/, "Gastroenterology"],
+  [/neurolog/, "Neurology"],
+  [/endocrin/, "Endocrinology"],
+  [/nephrolog/, "Nephrology"],
+  [/pulmonolog|pulmonary|respiratory/, "Pulmonology"],
+  [/oncolog|hematolog/, "Oncology & Hematology"],
+  [/rheumatolog/, "Rheumatology"],
+  [/urolog/, "Urology"],
+  [/otolaryngolog|\bent\b|ear.?nose.?throat/, "ENT (Ear, Nose & Throat)"],
+  [/allerg|immunolog/, "Allergy & Immunology"],
+  [/podiatr/, "Podiatry"],
+  [/dental|dentist|orthodont|endodont|periodont|oral surgery|oral and maxillo/, "Dental"],
+  [/chiropract/, "Chiropractic"],
+  [/physical therap|physiotherap/, "Physical Therapy"],
+  [/occupational therap/, "Occupational Therapy"],
+  [/pain (medicine|management)/, "Pain Management"],
+  [/infectious disease/, "Infectious Disease"],
+  [/physiatr|physical medicine|rehabilitation/, "Rehabilitation"],
+  [/general surgery|\bsurgeon\b/, "Surgery"],
+];
+// Strings that are facility types / roles / generic noise, NOT clinical specialties - drop them.
+var SPEC_JUNK = /unknown|^unk$|federally qualified|\bfqhc\b|community health|health center|\bclinic\b|hospital|pharmacy|urgent care|multi.?special|acute care|long.?term care|home health|laboratory|radiolog|imaging|\bnurse\b|registered|\bassistant\b|technician|\baide\b|allied health|^other|^physician|^medicine|^general|^health|^medical|case manage|care management/;
+function normSpec(raw) {
+  var s = String(raw || "").toLowerCase()
+    .replace(/\([^)]*\)/g, " ")            // drop parentheticals e.g. "(FQHC)"
+    .replace(/&/g, " and ")
+    .replace(/[^a-z ]+/g, " ")
+    .replace(/\b(physician|physicians|specialist|specialists|doctor|provider|providers|services|service|disease|diseases)\b/g, " ")
+    .replace(/\s+/g, " ").trim();
+  if (!s) return "";
+  for (var i = 0; i < SPEC_CANON.length; i++) { if (SPEC_CANON[i][0].test(s)) return SPEC_CANON[i][1]; }
+  if (SPEC_JUNK.test(s) || s.length < 4 || s.split(" ").length > 4) return "";
+  return s.replace(/\band\b/g, "&").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+}
+// Distinct canonical specialty labels present across a list of providers, with counts (top 14).
+// We normalize the WHOLE specialty string (normSpec already drops parentheticals and matches a
+// canonical category by keyword), rather than splitting on commas - directory specialties often
+// contain commas inside their name ("Endocrinology, Diabetes & Metabolism", "Pediatrics (Babies,
+// Children)"), which comma-splitting would shatter into junk facets.
+function facetSpecialties(list) {
+  var counts = {};
+  (list || []).forEach(function (p) { var n = normSpec(p.specialty); if (n) counts[n] = (counts[n] || 0) + 1; });
+  return Object.keys(counts).map(function (k) { return { label: k, count: counts[k] }; })
+    .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); })
+    .slice(0, 14);
+}
+// A provider matches the selected (data-derived) specialty label when it canonicalizes to it.
+function specSelected(specText, sel) { return !sel || normSpec(specText).toLowerCase() === sel.toLowerCase(); }
 function specialtyMatcher(s) {
   s = (s || "").toLowerCase().trim();
   if (!s) return null;
@@ -343,10 +413,11 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   }
   if (!roles.length) return { ok: false, reason: "no-providers", query: debug ? queries : undefined };
 
-  var match = specialtyMatcher(specialty);
   var maxM = radius * 1.1 + 400;
   // Dedupe by PROVIDER (one entry per doctor at their nearest location). L.A. Care lists the
   // same doctor at several placeholder "locations" with different ZIPs - this collapses those.
+  // NOTE: we build the FULL set first (no specialty filter), so the specialty facet reflects the
+  // plan's whole nearby roster; the selected specialty filter is applied afterward.
   var byName = {};
   roles.forEach(function (pr) {
     var spec = specialtyText(pr), prTel = telOf(pr), newPt = newPatientsOf(pr);
@@ -359,10 +430,6 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var co = coordsFor(loc); if (!co) return;
       var d = distM(lat, lng, co.lat, co.lng); if (d > maxM) return;
       var name = practName || cleanOrgName(loc.name) || "(In-network provider)";
-      // Match the provider's SPECIALTY (precise); only fall back to the name when no specialty
-      // is listed - matching the name directly would leak across specialties (e.g. a surname
-      // "Childs" matching pediatrics).
-      if (match && !match.test(spec || name)) return;
       var lt = telOf(loc);
       var key = name.toLowerCase() + "|" + spec.toLowerCase();
       var ex = byName[key];
@@ -370,9 +437,11 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       byName[key] = { name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, newPatients: newPt, npi: npiOf(pract), _addr: addrParts(loc), _d: d };
     });
   });
-  var out = Object.keys(byName).map(function (k) { var r = byName[k]; delete r._d; return r; });
-  out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: "providers", specialty: specialty, language: language, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
+  var all = Object.keys(byName).map(function (k) { var r = byName[k]; delete r._d; return r; });
+  all.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
+  var specialties = facetSpecialties(all);               // data-driven chips for THIS plan
+  var out = specialty ? all.filter(function (p) { return specSelected(p.specialty, specialty); }) : all;
+  return { ok: true, mode: "providers", specialty: specialty, language: language, specialties: specialties, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
 }
 
 // Serve a preprocessed JSON dataset (Health Net's directory, or Kaiser's facilities).
@@ -382,25 +451,34 @@ function datasetSearch(ds, lat, lng, radius, type, specialty, language) {
   if (!ds || !Array.isArray(ds.records)) return { ok: false, reason: "no-dataset" };
   var maxM = radius * 1.1 + 400;
   var facilityOnly = !!ds.facilityOnly;
-  var match = (!facilityOnly && specialty) ? specialtyMatcher(specialty) : null;
-  var providerMode = !facilityOnly && !!(specialty || language);
-  var CARECAT = { clinic: ["clinic"], doctor: ["doctor"], hospital: ["hospital"], urgent_care: ["urgent_care"], mental_health: ["mental_health"], vision: ["vision"] };
-  var cats = (!facilityOnly) ? (CARECAT[type] || null) : null;
-  var out = [];
+  // Doctor/specialty search (provider records) vs a specific care-type (place) search.
+  var wantDoctors = !facilityOnly && (type === "doctor" || !!specialty || !!language);
+  var CARECAT = { clinic: ["clinic"], hospital: ["hospital"], urgent_care: ["urgent_care"], mental_health: ["mental_health"], vision: ["vision"], dentist: ["dental", "dentist"] };
+  var cats = (!facilityOnly && !wantDoctors) ? (CARECAT[type] || null) : null;
+  function mk(r) {
+    var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
+    return { name: r.name, specialty: r.specialty || "", lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: !facilityOnly, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } };
+  }
+  var cand = [];
   for (var i = 0; i < ds.records.length; i++) {
     var r = ds.records[i];
     if (!isFinite(r.lat) || !isFinite(r.lng) || distM(lat, lng, r.lat, r.lng) > maxM) continue;
-    if (!facilityOnly) {
-      if (providerMode) {
-        if (match && !match.test(r.specialty || r.name || "")) continue;
-        if (language && !langMatch(r.languages, language)) continue;
-      } else if (!cats || cats.indexOf(r.cat) < 0) { continue; }
+    if (facilityOnly) { cand.push(mk(r)); continue; }
+    if (wantDoctors) {
+      if (r.cat !== "doctor") continue;                       // provider records only
+      if (language && !langMatch(r.languages, language)) continue;
+      cand.push(mk(r));
+    } else {
+      if (!cats || cats.indexOf(r.cat) < 0) continue;
+      cand.push(mk(r));
     }
-    var addr = [r.address, r.city, r.state].filter(Boolean).join(", ") + (r.zip ? " " + r.zip : "");
-    out.push({ name: r.name, specialty: r.specialty || "", lat: r.lat, lng: r.lng, phone: r.phone, address: addr.trim(), website: "", inNetwork: true, approxByZip: !facilityOnly, languages: r.languages || [], ipa: r.ipa || "", newPatients: !!r.newPatients, _addr: { street: r.address || "", city: r.city || "", state: r.state || "CA", zip: r.zip || "" } });
   }
-  out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  return { ok: true, mode: facilityOnly ? "facilities" : (providerMode ? "providers" : "locations"), source: ds.plan === "kaiser" ? "kaiser" : "healthnet", facilityOnly: facilityOnly, approxByZip: !facilityOnly, refreshed: ds.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
+  cand.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
+  // Specialty chips come straight from the dataset's own specialty values (faceted), and the
+  // selected one filters the same way as the FHIR path.
+  var specialties = wantDoctors ? facetSpecialties(cand) : [];
+  var out = (wantDoctors && specialty) ? cand.filter(function (p) { return specSelected(p.specialty, specialty); }) : cand;
+  return { ok: true, mode: facilityOnly ? "facilities" : (wantDoctors ? "providers" : "locations"), source: ds.plan === "kaiser" ? "kaiser" : "healthnet", facilityOnly: facilityOnly, specialties: specialties, approxByZip: !facilityOnly, refreshed: ds.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
 }
 
 module.exports = async function handler(req, res) {

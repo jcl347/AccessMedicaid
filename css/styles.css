@@ -271,6 +271,8 @@ a { color: var(--primary-700); }
 .filter-q { display: block; width: 100%; margin: .1rem 0 .45rem; font-weight: 700; }
 .chip.chip-spec[aria-pressed="true"] { background: #2f9e63; border-color: #2f9e63; color: #fff; }
 .chip.chip-spec[aria-pressed="true"] svg { color: #fff; }
+.chip .chip-count { font-size: .72rem; font-weight: 800; opacity: .65; margin-left: .15rem; }
+.chip[aria-pressed="true"] .chip-count { opacity: .95; }
 .map-open { display: inline-flex; align-items: center; gap: .4rem; margin-top: .7rem; font-weight: 700; }
 .map-open svg { width: 17px; height: 17px; }
 
