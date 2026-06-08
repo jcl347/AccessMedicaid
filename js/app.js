@@ -1128,6 +1128,20 @@
  }
  function acquire() {
  if (closedBrand()) return acquireClosedNetwork(closedBrand());
+ // In-network applies ONLY to doctor / specialty searches. A plan's FHIR directory is
+ // provider-oriented and barely lists pharmacies, ERs, urgent care, community clinics, dentists,
+ // or mental-health offices - so routing those care-TYPE (place) searches through it makes them
+ // sparse. Use PUBLIC map data for care types (shown out-of-network, "verify coverage").
+ var inNetSearch = planHasInNetwork() && (geo.specialty || geo.care === "doctor");
+ if (!inNetSearch) {
+ geo.lastApprox = false; geo.lastFacility = false; geo.lastSpecUnavail = false; geo.lastRefreshed = "";
+ return acquirePublic().then(function (pub) {
+ var pl = (pub && pub.places) || [];
+ pl.forEach(function (p) { p.inNetwork = false; });
+ geo.lastSource = (pub && pub.source) || "osm";
+ return pl;
+ });
+ }
  // In-network FIRST (the plan's official directory), THEN also nearby public places marked
  // out-of-network so members see the full landscape - clearly distinguished on the map.
  // Plans WITHOUT an in-network endpoint show public map data only.
@@ -1247,6 +1261,9 @@
  box.className = "net-note net-ok";
  box.appendChild(el("div", { class: "nn-head", html: svg("check") + "<span>These take <strong>" + escapeHtml(sp) + "</strong></span>" }));
  box.appendChild(el("p", { class: "nn-body", text: geo.lastFacility ? ("Kaiser is a closed network - members get all their care at these Kaiser locations. Pick any one and Kaiser will connect you with a doctor.") : ("These come straight from " + plan.name + "'s official provider directory, so they accept your plan." + (geo.lastApprox ? " Most pins are geocoded to the street address; a few are approximate to the ZIP area." : "") + " Directories can still lag behind - it is smart to call ahead to confirm.") }));
+ // Assigned-PCP caveat: the directory lists providers you can CHOOSE; a member's *assigned*
+ // PCP is account-specific and only available via member login (Patient Access API), not here.
+ if (!geo.lastFacility) box.appendChild(el("p", { class: "nn-pcp", html: svg("info") + "<span><strong>Choosing a doctor isn't the same as your assigned PCP.</strong> These are in-network providers you can pick. Your <strong>assigned primary care provider (PCP)</strong> is specific to your Medi-Cal account - to see or change yours, sign in to " + escapeHtml(sp) + "'s member portal or call Member Services. We can't show your assigned PCP on this map." + (geo.lastSpecUnavail ? " (This plan only lists in-network locations online, not individual doctors - call to find a specific provider.)" : "") + "</span>" }));
  var fresh = geo.lastRefreshed === "live" ? "Updated live from the plan's directory." : (geo.lastRefreshed ? ("Directory last refreshed: " + fmtRefreshed(geo.lastRefreshed) + ".") : "");
  if (fresh) box.appendChild(el("p", { class: "nn-fresh", html: svg("refresh") + "<span>" + escapeHtml(fresh) + "</span>" }));
  } else {
