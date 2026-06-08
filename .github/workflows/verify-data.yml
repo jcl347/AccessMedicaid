@@ -56,13 +56,15 @@ jobs:
       - name: Rebuild site data bundle
         run: node scripts/build-data.mjs
       - name: Commit refreshed data if changed
+        # Best-effort: a blocked push (e.g. branch protection) or a no-op must not red the run.
+        continue-on-error: true
         run: |
           if [ -n "$(git status --porcelain data/healthnet-providers.json js/data.js)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add data/healthnet-providers.json js/data.js
             git commit -m "chore: weekly refresh of Health Net in-network directory"
-            git push
+            git push || echo "::warning::push blocked (branch protection?) - refresh not persisted this run"
           else
             echo "No changes to commit."
           fi

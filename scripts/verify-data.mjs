@@ -65,12 +65,13 @@ let ok = 0, broken = 0, blocked = 0, phoneMiss = 0;
 for (const it of items) {
   const pg = pages.get(it.url) || { status: 0, ok: false, digits: "" };
   // GitHub runners use datacenter IPs that many official sites bot-block, throttle, or
-  // stonewall (timeouts, resets, 5xx challenge pages, 401/403/406/429/451). Treat those as
-  // "inconclusive" - NOT link rot. Only clear dead links (404/410 and other plain 4xx) count
-  // as broken, so a transient/blocked check from CI doesn't fail the run.
+  // stonewall in MANY ways - timeouts, resets, 5xx challenge pages, and assorted 4xx
+  // (400/401/403/405/406/429/451/...). The ONLY statuses that reliably mean a link is dead are
+  // 404 and 410; treat just those as broken and everything else as "inconclusive" - NOT link
+  // rot - so a transient/blocked check from CI never fails the run on a false positive.
   const st = pg.status;
-  const inconclusive = st === 0 || st >= 500 || [401, 403, 406, 408, 409, 425, 429, 451].indexOf(st) >= 0;
-  if (!pg.ok && inconclusive) { blocked++; if (report.blocked.length < 80) report.blocked.push({ label: it.label, url: it.url, status: st || pg.err || "network" }); continue; }
+  const dead = st === 404 || st === 410;
+  if (!pg.ok && !dead) { blocked++; if (report.blocked.length < 80) report.blocked.push({ label: it.label, url: it.url, status: st || pg.err || "network" }); continue; }
   if (!pg.ok) { broken++; if (report.brokenLinks.length < 100) report.brokenLinks.push({ label: it.label, url: it.url, status: pg.status, err: pg.err || "" }); continue; }
   ok++;
   const d = (it.phone || "").replace(/\D/g, "");
