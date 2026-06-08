@@ -251,7 +251,7 @@ function normLocation(loc) {
 async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
   if (geoMode === "near") {
     var u = base + "/Location?near=" + nearParam(lat, lng, km) + "&_count=100";
-    return { url: u, bundle: parseBundle(await fetchText(u, 12000)) };
+    return { url: u, bundle: parseBundle(await fetchText(u, 9000)) };
   }
   var zips = zipsWithin(lat, lng, radius, zipCap(radius));
   if (!zips.length && zip) zips = [zip5(zip)];
@@ -299,7 +299,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   if (geoMode === "near") {
     var u1 = base + "/PractitionerRole?location.near=" + nearParam(lat, lng, km) + inc + "&_count=200";
     queries.push(u1);
-    var b1 = parseBundle(await fetchText(u1, 12000));
+    var b1 = parseBundle(await fetchText(u1, 9000));
     if (b1 && b1.entry && b1.entry.length) { indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
   } else if (geoMode === "postal") {
     var zips = zipsWithin(lat, lng, radius, zipCap(radius));
@@ -416,12 +416,6 @@ module.exports = async function handler(req, res) {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
       var geoMode = cfg.geo === "near" ? "near" : (cfg.geo === "postal-single" ? "postal-single" : "postal"); // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
-      // `near` servers (Blue Shield Promise) HARD-cap returned results to the near radius, so a
-      // tight search (e.g. 10 mi) returns only a handful even where many exist. Query a generous
-      // radius (24km - verified to return ~96 near downtown LA without timing out) and let the
-      // distance filter (maxM, from the real radius) trim precisely, so the count reflects who's
-      // actually nearby, not the server's near cutoff. (30km made the bundle too big -> timeout.)
-      if (geoMode === "near") km = Math.max(km, 24);
       // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
       // doctor is returned and flagged - not just facility records (location mode = clinics).
       var wantProviders = !!(specialty || language || type === "doctor");

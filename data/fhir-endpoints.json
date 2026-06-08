@@ -41,14 +41,14 @@
       "verified": true,
       "geo": "postal-single",
       "vendor": "HealthEdge/Sapphire via Azure APIM",
-      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively: firing 8 ZIP queries in parallel got throttled down to ~2 results, so we now query the nearest 9 ZIPs through a concurrency-3 worker pool (postal-single) to slip under the burst limit. Server ignores comma-separated address-postalcode (returns 0) and 500s on _include. Locations carry real position lat/lng."
+      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M) but DEGRADED in practice: returns only ~2 usable results near downtown LA. The PractitionerRole step fails (server ignores comma-separated address-postalcode -> 0, and 500s on _include / chained location filters), so provider mode yields nothing and we fall back to ~2 in-network clinic Locations. `near` is unsupported (HTTP 500); we query the nearest 9 ZIPs individually via a concurrency-3 pool (postal-single, to avoid burst rate-limiting). KEPT the in-network flag because it does return real (if sparse) in-network data; a full fix needs per-ZIP PractitionerRole retrieval. Locations carry real position lat/lng."
     },
     "blue-shield-promise": {
       "baseUrl": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory",
       "verified": true,
       "geo": "near",
       "vendor": "Smile CDR / HAPI FHIR 7.6.0",
-      "notes": "Public-no-auth production endpoint verified live (2026-06: 96 providers within 15mi of downtown LA). `near` geo search works but the server HARD-caps results to the near radius - a 10mi query returned only 1, a 15mi query 96 - so we query a generous near radius (>=30km) and trim by distance client-side. Backend mdc = Medi-Cal directory cloud. Production host api.blueshieldca.com, path /bsc/fhir/ (sandbox uses api-dev + /bsc/fhir-sandbox/)."
+      "notes": "Public-no-auth production endpoint verified live (2026-06). `near` geo search works: ~96 providers within 15mi of downtown LA, but only ~1 within 10mi - BSC Promise's mapped provider positions near downtown are genuinely sparse (most sit 11-17mi out), so tight-radius counts are honestly low and grow with radius / a travel-time area. (Forcing a wider near radius then trimming by distance does NOT help and can time out, since the extra results are all beyond the trim distance.) Backend mdc = Medi-Cal directory cloud. Host api.blueshieldca.com, path /bsc/fhir/."
     },
     "anthem": {
       "baseUrl": "",
