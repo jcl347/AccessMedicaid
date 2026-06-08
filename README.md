@@ -80,8 +80,9 @@ bundle, `js/data.js`, built from those JSON files, so the static site works by
 - **🌐 Whole-page translation** - a language menu (16 languages) translates the entire page
  via Google Translate, plus a reminder that every plan must provide a free interpreter.
 - **Accessibility & care-first design** - always-on 911/988 safety strip, "Get help now"
- button, text-size controls, read-aloud, print/Save-as-PDF, dark-mode & reduced-motion
- aware, 48px touch targets, semantic HTML, ARIA, ~6th-grade reading level, no tracking.
+ button, text-size controls, print/Save-as-PDF, dark-mode & reduced-motion aware,
+ mobile-first responsive layout, 48px touch targets, semantic HTML, ARIA, ~6th-grade
+ reading level, no tracking.
 
 ## In-network provider directories (FHIR / CMS interoperability)
 

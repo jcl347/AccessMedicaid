@@ -55,7 +55,7 @@
  function catIcon(cat, cls) { return svg(CAT_ICON[cat] || "info", cls); }
 
  /* ---------- state ---------- */
- var STORE = { plan: "amla.plan", size: "amla.textsize", zip: "amla.zip", lang: "amla.lang", voice: "amla.voice" };
+ var STORE = { plan: "amla.plan", size: "amla.textsize", zip: "amla.zip", lang: "amla.lang" };
  var state = { planId: null, category: null, query: "", care: "urgent care", loc: "", zip: "" };
 
  /* ---------- helpers ---------- */
@@ -1365,89 +1365,6 @@
  Array.prototype.forEach.call(document.querySelectorAll(".ts-btn"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-size") === size ? "true" : "false"); });
  }
  }
- // Natural-sounding voices vary by OS/browser. We rank the warmer "neural"/"online"
- // voices first (Microsoft Aria/Jenny, Google US English, Apple Samantha/Siri) so the
- // default doesn't land on a robotic fallback. Users can still pick any installed voice.
- var VOICE_RANK = ["aria", "jenny", "michelle", "ava", "emma", "guy", "natural", "online", "google us english", "google uk english female", "samantha", "siri", "karen", "moira", "tessa", "google"];
- function scoreVoice(v) {
- var n = (v.name || "").toLowerCase(), s = 0;
- for (var i = 0; i < VOICE_RANK.length; i++) { if (n.indexOf(VOICE_RANK[i]) >= 0) { s = VOICE_RANK.length - i + 20; break; } }
- if (/en[-_]us/i.test(v.lang)) s += 6; else if (/^en/i.test(v.lang)) s += 3;
- if (v.localService === false) s += 2; // cloud voices are usually higher quality
- if (/female|woman/i.test(n)) s += 1;
- return s;
- }
- function enVoices() {
- var all = window.speechSynthesis.getVoices() || [];
- var en = all.filter(function (v) { return /^en/i.test(v.lang || ""); });
- return (en.length ? en : all).sort(function (a, b) { return scoreVoice(b) - scoreVoice(a); });
- }
- // Pick the section the reader is currently looking at, so Read aloud reads THAT part
- // of the page rather than dumping the entire site. Falls back to the first section.
- function currentSection() {
- var secs = document.querySelectorAll("main section");
- var vh = window.innerHeight || 800, best = null, bestScore = Infinity;
- Array.prototype.forEach.call(secs, function (s) {
- var r = s.getBoundingClientRect();
- if (r.bottom < 80 || r.top > vh - 60) return; // not meaningfully in view
- var score = Math.abs(r.top - 90); // closest to just under the sticky header
- if (score < bestScore) { bestScore = score; best = s; }
- });
- return best || secs[0] || null;
- }
- function sectionText(node) {
- if (!node) return "";
- // Read the heading + prose, skip control chrome (chips, map, legend, inputs).
- var bits = [];
- Array.prototype.forEach.call(node.querySelectorAll("h1,h2,h3,p,li"), function (e) {
- if (e.closest(".chip-row,.map-frame-wrap,.map-legend,.map-source,.radius-row,.spec-row,.search-row,.share-row,.iso-controls")) return;
- var t = (e.innerText || "").trim();
- if (t) bits.push(t);
- });
- return bits.join(". ").replace(/\s+/g, " ").slice(0, 4500);
- }
- function initReadAloud() {
- var btn = $("#readAloudBtn"); if (!btn) return;
- var synth = window.speechSynthesis;
- if (!("speechSynthesis" in window) || !synth) { btn.style.display = "none"; return; }
- var on = false, voices = [], chosen = null;
- function buildVoices() { voices = enVoices(); chosen = voices[0] || null; }
- buildVoices();
- if (typeof synth.onvoiceschanged !== "undefined") synth.onvoiceschanged = buildVoices;
- setTimeout(buildVoices, 350);
-
- function stop() { synth.cancel(); on = false; btn.setAttribute("aria-pressed", "false"); }
- // Split into sentences for natural pauses and gentle pitch/rate variation (less monotone).
- function chunk(text) {
- var parts = text.replace(/\s+/g, " ").split(/(?<=[.!?:])\s+(?=[A-Z0-9"'])/);
- var out = [], buf = "";
- parts.forEach(function (p) { if ((buf + " " + p).length > 240) { if (buf) out.push(buf.trim()); buf = p; } else { buf += " " + p; } });
- if (buf.trim()) out.push(buf.trim());
- return out.slice(0, 80);
- }
- function start() {
- var sentences = chunk(sectionText(currentSection())); if (!sentences.length) return;
- on = true; btn.setAttribute("aria-pressed", "true");
- synth.cancel();
- sentences.forEach(function (s, i) {
- var u = new SpeechSynthesisUtterance(s);
- if (chosen) { u.voice = chosen; u.lang = chosen.lang; }
- u.rate = 0.96 + (i % 3) * 0.02;
- u.pitch = 1.02 + (i % 2 ? -0.06 : 0.06);
- u.volume = 1;
- if (i === sentences.length - 1) u.onend = function () { on = false; btn.setAttribute("aria-pressed", "false"); };
- synth.speak(u);
- });
- }
- btn.addEventListener("click", function () { if (on) stop(); else start(); });
- // Never let speech linger past the page: stop on leave/hide.
- window.addEventListener("pagehide", function () { if (on) stop(); });
- document.addEventListener("visibilitychange", function () { if (document.hidden && on) stop(); });
- // Never let speech linger past the page: stop on leave/hide. Reading only ever
- // begins from the click handler above.
- window.addEventListener("pagehide", function () { if (on) stop(); });
- document.addEventListener("visibilitychange", function () { if (document.hidden && on) stop(); });
- }
  function initPrint() { var b = $("#printBtn"); if (b) b.addEventListener("click", function () { window.print(); }); }
  function initSearch() {
  var box = $("#searchBox"); if (!box) return; var t;
@@ -1468,7 +1385,7 @@
  // Default to L.A. Care (the largest Medi-Cal plan in the region) when nothing is chosen yet.
  if (!state.planId && DATA.plans.some(function (p) { return p.id === "la-care"; })) state.planId = "la-care";
  renderPlanPicker(); renderNeeds(); renderResults(); renderState(); renderBarriers(); renderSources(); renderToolkit(); renderTriage();
- initTextSize(); initReadAloud(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); renderStartHere(); initFeedback(); initApptPrint(); initReveal(); maybeNotify();
+ initTextSize(); initPrint(); initSearch(); initMeta(); initNearMe(); buildLangMenu(); buildHeroChips(); renderStartHere(); initFeedback(); initApptPrint(); initReveal(); maybeNotify();
  if (!reduceMotion) document.addEventListener("pointerdown", rippleHandler, true);
  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) { navigator.serviceWorker.register("sw.js").catch(function () {}); }
  }

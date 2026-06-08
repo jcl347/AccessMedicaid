@@ -112,11 +112,6 @@ a { color: var(--primary-700); }
 .ts-btn[aria-pressed="true"], .tool-btn[aria-pressed="true"] { background: var(--primary); color: #fff; border-color: var(--primary); }
 .tool-btn:hover, .ts-btn:hover { border-color: var(--primary-bright); }
 
-.read-wrap { display: inline-flex; align-items: center; gap: .35rem; }
-.voice-select { min-height: 40px; max-width: 9.5rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: var(--radius-sm); font-family: inherit; font-weight: 600; font-size: .82rem; padding: .35rem .5rem; cursor: pointer; }
-.voice-select:hover { border-color: var(--primary-bright); }
-.voice-select:focus-visible { outline: 2px solid var(--primary-bright); outline-offset: 1px; }
-
 .lang-wrap { position: relative; }
 .lang-btn { font-weight: 700; }
 .lang-menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 120; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-lg); padding: .5rem; width: 290px; display: none; grid-template-columns: 1fr 1fr; gap: .25rem; }
@@ -510,12 +505,61 @@ font[style] { background: transparent !important; box-shadow: none !important; }
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 900px) { .image-band { background-attachment: scroll; } }
+/* Media that's pinned on desktop is too heavy for phones (jank + data). */
+@media (max-width: 900px) { .image-band, .section.tinted::before { background-attachment: scroll; } }
 @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Belt-and-suspenders: nothing should ever be wider than the screen. Large media and any
+   stray wide element are capped so phones never get a sideways scrollbar. */
+img, iframe, video, canvas, .leaflet-container { max-width: 100%; }
+
+/* ---------- Phones (<= 640px) ---------- */
+@media (max-width: 640px) {
+ /* Card grids with large fixed minimums (300px, 280px, 270px...) force horizontal
+    scrolling on a ~320-400px screen. Stack them to one column instead. */
+ .results-list, .near-list, #toolkitBody, .prep-grid, .care-nums, .plan-grid { grid-template-columns: 1fr; }
+ .needs-grid { grid-template-columns: repeat(2, 1fr); gap: .55rem; }
+
+ .wrap { padding: 0 1rem; }
+ .section { padding: 1.8rem 0; }
+ .section-sub { margin-bottom: 1rem; }
+
+ /* Header: tidy two-row layout (brand on top, tools below) without overflow. */
+ .header-inner { gap: .4rem .6rem; padding: .55rem 0; }
+ .header-tools { width: 100%; justify-content: flex-start; gap: .4rem; }
+ .brand-mark { width: 38px; height: 38px; }
+ .brand-title { font-size: 1.06rem; }
+ .tool-btn span, .ts-label { font-size: .82rem; }
+
+ /* Hero scales down so the fold isn't all image. */
+ .hero { min-height: clamp(380px, 64vh, 520px); }
+ .hero-inner { padding: 2.4rem 0 2rem; }
+ .hero p { font-size: 1.04rem; }
+ .hero-cta { gap: .5rem; }
+ .hero-cta .btn-hero { width: 100%; justify-content: center; }
+
+ /* Map + near-me controls go full width and finger-friendly. */
+ .map-frame { height: 340px; }
+ .map-controls { gap: .5rem; }
+ .map-controls .btn, .map-controls .chip { flex: 1 1 auto; justify-content: center; }
+ .zip-input, .addr-input, .spec-input, .search-row { width: 100%; max-width: none; }
+
+ /* Stat numbers a touch smaller so 2-up never wraps awkwardly. */
+ .stat-num { font-size: clamp(1.4rem, 7vw, 1.9rem); }
+}
+
+/* ---------- Small phones (<= 560px) ---------- */
 @media (max-width: 560px) {
  .brand-tagline { display: none; } .ts-label { display: none; }
  .fab .fab-text { display: none; } .fab { padding: .9rem; }
  .barrier-body { padding-left: 1.1rem; }
- .lang-menu { width: 240px; }
+ .lang-menu { width: min(280px, calc(100vw - 1.5rem)); }
  .image-band-inner { padding-top: 2.8rem; padding-bottom: 2.8rem; }
+}
+
+/* ---------- Extra-small phones (<= 380px) ---------- */
+@media (max-width: 380px) {
+ .needs-grid { grid-template-columns: 1fr; }
+ .ts-group { gap: .15rem; } .ts-btn { min-width: 34px; }
+ .stats-grid { gap: .6rem; }
 }
