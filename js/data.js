@@ -2789,8 +2789,7 @@ window.AM_DATA = {
     "iehp",
     "molina",
     "blue-shield-promise",
-    "gold-coast",
-    "kaiser"
+    "gold-coast"
   ],
   "inNetworkPlans": [
     "la-care",
@@ -2802,5 +2801,8 @@ window.AM_DATA = {
     "blue-shield-promise",
     "gold-coast",
     "kaiser"
-  ]
+  ],
+  "closedNetworkBrands": {
+    "kaiser": "kaiser"
+  }
 };

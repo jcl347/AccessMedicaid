@@ -19,13 +19,22 @@ const fhirDoc = read("fhir-endpoints.json");
 const fhirPlans = Object.keys(fhirDoc.plans || {}).filter(
  (id) => (fhirDoc.plans[id] && fhirDoc.plans[id].baseUrl || "").length > 0
 );
-// All plans /api/innetwork can serve in-network results for: FHIR endpoints + any plan with
-// a preprocessed dataset file present (e.g. Health Net's JSON directory). The client uses
-// this to gate the call, show the badge, and offer specialty/language filters.
+// Closed-network brands (e.g. Kaiser): no usable public FHIR directory, but the plan is a
+// closed network, so its in-network facilities are exactly the brand-named ones - the client
+// plots those from public map data and marks them in-network. id -> brand search string.
+const closedNetworkBrands = {};
+Object.keys(fhirDoc.plans || {}).forEach((id) => {
+ const b = fhirDoc.plans[id] && fhirDoc.plans[id].closedNetworkBrand;
+ if (b) closedNetworkBrands[id] = b;
+});
+// All plans the map can show in-network results for: FHIR endpoints + any plan with a
+// preprocessed dataset file present (e.g. Health Net) + closed-network brands. The client uses
+// this to gate the search, show the in-network badge, and offer specialty/language filters.
 const inNetworkPlans = Object.keys(fhirDoc.plans || {}).filter((id) => {
  const p = fhirDoc.plans[id] || {};
  if ((p.baseUrl || "").length > 0) return true;
  if (p.dataset && existsSync(join(dataDir, p.dataset))) return true;
+ if (p.closedNetworkBrand) return true;
  return false;
 });
 
@@ -54,6 +63,7 @@ const bundle = {
  barrierSources: barriersDoc.sources || [],
  fhirPlans,
  inNetworkPlans,
+ closedNetworkBrands,
 };
 
 const banner = "/* AUTO-GENERATED from /data by scripts/build-data.mjs - do not edit by hand. */\n";

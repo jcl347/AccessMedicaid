@@ -75,6 +75,8 @@
  function store(get, key, val) { try { return get ? localStorage.getItem(key) : localStorage.setItem(key, val); } catch (e) { return null; } }
  function getPlan() { return DATA.plans.filter(function (p) { return p.id === state.planId; })[0] || null; }
  function inNetworkIds() { return (DATA.inNetworkPlans && DATA.inNetworkPlans.length) ? DATA.inNetworkPlans : (DATA.fhirPlans || []); }
+ // Closed-network plans (e.g. Kaiser): in-network = the plan's own branded facilities.
+ function closedBrand() { return (DATA.closedNetworkBrands || {})[state.planId] || ""; }
  function shortLabel(c) { return c.replace(/\s*\(.*?\)\s*/g, "").trim(); }
 
  /* ---------- animations ---------- */
@@ -173,17 +175,23 @@
  kids.push(el("span", { class: "pc-rel", text: p.relationship || "" }));
  var inFhir = DATA.fhirPlans && DATA.fhirPlans.indexOf(p.id) >= 0;
  var inAny = (DATA.inNetworkPlans || DATA.fhirPlans || []).indexOf(p.id) >= 0;
- if (inAny) kids.push(el("span", { class: "pc-fhir", title: inFhir ? ("Connected to " + p.name + "'s official FHIR provider directory (CMS interoperability) so the map can show live in-network providers.") : ("Uses " + p.name + "'s official published provider directory for in-network results (pins approximate to ZIP area)."), html: svg("check") + "<span>In-network map</span>" }));
+ var isClosed = !!(DATA.closedNetworkBrands || {})[p.id];
+ var fhirTitle = isClosed ? (p.name + " is a closed network - the map shows its own locations near you, where members get all their care.")
+ : inFhir ? ("Connected to " + p.name + "'s official FHIR provider directory (CMS interoperability) so the map can show live in-network providers.")
+ : ("Uses " + p.name + "'s official published provider directory for in-network results (pins approximate to ZIP area).");
+ if (inAny) kids.push(el("span", { class: "pc-fhir", title: fhirTitle, html: svg("check") + "<span>In-network map</span>" }));
  kids.push(el("span", { class: "pc-check", text: "✓ Selected" }));
  var card = el("button", { class: "plan-card", type: "button", role: "radio", "aria-checked": checked ? "true" : "false", "data-id": p.id, style: "--plan-color:" + (p.brandColor || "#0a5dc2") }, kids);
  card.addEventListener("click", function () {
  state.planId = p.id;
  store(false, STORE.plan, state.planId || "");
  renderPlanPicker(); renderNeeds(); renderResults(); renderBarriers(); renderToolkit(); renderTriage();
- // Recalculate the map for the newly selected plan (its in-network directory differs).
+ // Recalculate the map for the newly selected plan (its in-network directory differs) and
+ // move the user to the map so they see the updated in-network results.
  renderFilters();
  if (window.L) { if (geo.iso && geo.iso.mode) applyIso(); else runSearch(); }
- $("#needs-step").scrollIntoView({ block: "start" });
+ var dest = document.getElementById("near-me") || document.getElementById("needs-step");
+ if (dest) dest.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
  });
  return card;
  }
@@ -798,6 +806,17 @@
  var LANGUAGES = ["Spanish", "Mandarin", "Cantonese", "Vietnamese", "Korean", "Armenian", "Tagalog", "Russian", "Arabic"];
  function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
  function renderFilters() {
+ // Closed network (Kaiser): specialty/care filters don't apply - members get all care at the
+ // plan's own facilities. Show a short note instead of chips.
+ var closed = closedBrand();
+ if (closed) {
+ geo.specialty = ""; geo.language = ""; geo.care = "doctor";
+ var crow = $("#careChips");
+ if (crow) { crow.innerHTML = ""; crow.appendChild(el("p", { class: "muted", style: "margin:.2rem 0;", html: svg("info") + " <strong>" + escapeHtml((getPlan() || {}).name || "This plan") + "</strong> is a closed network - the map shows all of its locations near you, where members get all their care." })); }
+ var lr0 = $("#langRow"); if (lr0) lr0.hidden = true;
+ var lc0 = $("#languageChips"); if (lc0) lc0.innerHTML = "";
+ return;
+ }
  var inNet = planHasInNetwork();
  if (!inNet) { geo.specialty = ""; geo.language = ""; } // specialty/language are in-network-only
  var row = $("#careChips");
@@ -1083,7 +1102,32 @@
  .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false, facility: false }; });
  }
  function normName(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
+ // Closed network (Kaiser): no usable public FHIR. A member's in-network facilities are exactly
+ // the brand-named ones, which exist in public map data with real coordinates. Pull those by
+ // name and mark them in-network (green). Nothing else is in-network for a closed network.
+ function acquireClosedNetwork(brand) {
+ geo.lastSource = "kaiser"; geo.lastApprox = false; geo.lastRefreshed = ""; geo.lastSpecUnavail = false; geo.lastFacility = true;
+ var nf = String(brand).replace(/[\\"]/g, "");
+ var rx = new RegExp(nf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+ var bf = [
+ 'node["name"~"' + nf + '",i]["amenity"~"hospital|clinic|doctors|pharmacy|social_facility"]',
+ 'way["name"~"' + nf + '",i]["amenity"~"hospital|clinic|doctors|pharmacy|social_facility"]',
+ 'node["name"~"' + nf + '",i]["healthcare"]',
+ 'way["name"~"' + nf + '",i]["healthcare"]',
+ ];
+ return overpassDirect(null, effRadius, geo.center.lat, geo.center.lng, bf).catch(function () { return []; })
+ .then(function (list) {
+ var seen = {}, out = [];
+ (list || []).forEach(function (p) {
+ if (!p || !isFinite(p.lat) || !isFinite(p.lng) || !rx.test(p.name || "")) return;
+ var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4);
+ if (seen[k]) return; seen[k] = 1; p.inNetwork = true; out.push(p);
+ });
+ return out;
+ });
+ }
  function acquire() {
+ if (closedBrand()) return acquireClosedNetwork(closedBrand());
  // In-network FIRST (the plan's official directory), THEN also nearby public places marked
  // out-of-network so members see the full landscape - clearly distinguished on the map.
  // Plans WITHOUT an in-network endpoint show public map data only.
@@ -1147,8 +1191,8 @@
  dentist: ['node["amenity"="dentist"]', 'way["amenity"="dentist"]', 'node["healthcare"="dentist"]', 'way["healthcare"="dentist"]'],
  mental_health: ['node["healthcare"="psychotherapist"]', 'way["healthcare"="psychotherapist"]', 'node["healthcare"="counselling"]', 'way["healthcare"="counselling"]', 'node["healthcare:speciality"~"psych|mental|behav|counsel|addict",i]', 'way["healthcare:speciality"~"psych|mental|behav|counsel|addict",i]', 'node["amenity"~"clinic|doctors|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'way["amenity"~"clinic|doctors|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'node["healthcare"~"clinic|centre|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]', 'way["healthcare"~"clinic|centre|hospital"]["name"~"mental|behav|psych|counsel|wellness",i]'],
  };
- function overpassDirect(type, radius, lat, lng) {
- var filters = CLIENT_FILTERS[type] || CLIENT_FILTERS.clinic;
+ function overpassDirect(type, radius, lat, lng, filtersOverride) {
+ var filters = filtersOverride || CLIENT_FILTERS[type] || CLIENT_FILTERS.clinic;
  var ql = "[out:json][timeout:25];(" + filters.map(function (f) { return f + "(around:" + radius + "," + lat + "," + lng + ");"; }).join("") + ");out center tags 250;";
  function one(base) {
  var ctrl = new AbortController(); var t = setTimeout(function () { ctrl.abort(); }, 10000);
@@ -1185,7 +1229,7 @@
  box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>In-network data from " + escapeHtml(sp) + "'s published provider directory" + (geo.lastRefreshed && geo.lastRefreshed !== "live" ? ", refreshed " + escapeHtml(fmtRefreshed(geo.lastRefreshed)) : "") + (geo.lastApprox ? " (some pins approximate to ZIP area)" : "") + "</span>";
  } else if (inNet && geo.lastSource === "kaiser") {
  box.hidden = false; box.className = "map-source in-network";
- box.innerHTML = '<span class="fhir-badge">' + svg("flame") + "FHIR</span><span>Kaiser locations (closed network) - " + escapeHtml(sp) + "</span>";
+ box.innerHTML = svg("check") + "<span>" + escapeHtml(sp) + " locations (closed network) - members get all their care here</span>";
  } else {
  box.hidden = false; box.className = "map-source";
  box.innerHTML = svg("info") + "<span>Data source: " + (geo.lastSource === "google" ? "Google Places" : "OpenStreetMap") + " (public map data - not filtered by insurance)</span>";

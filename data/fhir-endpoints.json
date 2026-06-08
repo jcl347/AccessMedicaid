@@ -64,11 +64,13 @@
       "notes": "Public no-auth FHIR Provider Directory (discovered via fdp.edifecsfedcloud.com catalog). No positions -> geocoded. Chained location.address-postalcode works."
     },
     "kaiser": {
-      "baseUrl": "https://kpx-service-bus.kp.org/service/hp/mhpo/healthplanproviderv1rc/",
+      "baseUrl": "",
       "geo": "near",
-      "verified": true,
-      "vendor": "Kaiser Permanente (public FHIR R4, Da Vinci Plan-Net)",
-      "notes": "Public no-auth FHIR PD. The near geo search works and returns real positions (postal results have none), so geo=near. Closed network - directory is Kaiser providers/facilities."
+      "verified": false,
+      "closedNetworkBrand": "kaiser",
+      "fhirCandidate": "https://kpx-service-bus.kp.org/service/hp/mhpo/healthplanproviderv1rc/",
+      "vendor": "Kaiser Permanente (kpx-service-bus API gateway)",
+      "notes": "The kpx-service-bus.kp.org FHIR gateway is NOT usable publicly: it returns HTTP 406 to standard FHIR requests (even with Accept: application/fhir+json server-side) - it is registration/key gated like Anthem, not public no-auth as first thought (verified live: /api/innetwork?plan=kaiser returns reason no-providers). Kaiser is a CLOSED network, so a member's in-network facilities are exactly the Kaiser Permanente-branded ones. The client therefore plots Kaiser Permanente facilities from public map data (OpenStreetMap, real coordinates) and marks them in-network green - see closedNetworkBrand."
     },
     "kern": {
       "baseUrl": "",
