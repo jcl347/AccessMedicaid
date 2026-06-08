@@ -1331,10 +1331,24 @@
  document.cookie = name + "=" + value + ";path=/";
  if (host) { document.cookie = name + "=" + value + ";path=/;domain=" + host; document.cookie = name + "=" + value + ";path=/;domain=." + host; }
  }
+ function eraseCookie(name) {
+ var host = location.hostname, exp = "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+ document.cookie = name + exp;
+ if (host) { document.cookie = name + exp + ";domain=" + host; document.cookie = name + exp + ";domain=." + host; }
+ }
  function applyLang(code) {
  store(false, STORE.lang, code);
  var lbl = $("#langLabel"); if (lbl) { var f = LANGS.filter(function (l) { return l.c === code; })[0]; lbl.textContent = f ? f.n : "Language"; }
  Array.prototype.forEach.call(document.querySelectorAll(".lang-opt"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-lang") === code ? "true" : "false"); });
+ if (!code || code === "en") {
+ // Back to the original English. Google Translate only reverts cleanly via its cookie + a
+ // reload (poking the combo leaves the page translated). Clear any stray googtrans variants,
+ // then set the no-op /en/en (source en -> target en = untranslated) and reload.
+ eraseCookie("googtrans");
+ setCookie("googtrans", "/en/en");
+ location.reload();
+ return;
+ }
  setCookie("googtrans", "/en/" + code);
  var combo = document.querySelector("select.goog-te-combo");
  if (combo) { combo.value = code; combo.dispatchEvent(new Event("change")); } else { location.reload(); }
@@ -1350,8 +1364,10 @@
  var btn = $("#langBtn");
  btn.addEventListener("click", function () { var open = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", open ? "true" : "false"); });
  document.addEventListener("click", function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) menu.classList.remove("open"); });
- var saved = store(true, STORE.lang);
- if (saved && saved !== "en") { var f = LANGS.filter(function (l) { return l.c === saved; })[0]; if (f && $("#langLabel")) $("#langLabel").textContent = f.n; }
+ var saved = store(true, STORE.lang) || "en";
+ var f = LANGS.filter(function (l) { return l.c === saved; })[0];
+ if (f && saved !== "en" && $("#langLabel")) $("#langLabel").textContent = f.n;
+ Array.prototype.forEach.call(menu.querySelectorAll(".lang-opt"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-lang") === saved ? "true" : "false"); });
  }
 
  /* ---------- controls ---------- */
