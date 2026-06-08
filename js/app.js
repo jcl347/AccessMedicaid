@@ -1037,7 +1037,10 @@
  var npx = p.newPatients ? "<br><span style=\"color:#2f7d52\">Accepting new patients</span>" : "";
  var approx = p.approxByZip ? '<br><span style="color:#8a6d00">Approximate (ZIP-area) location - call to confirm address</span>' : "";
  var pop = "<strong>" + escapeHtml(p.name) + "</strong>" + spec + net + npx + lng2 + ipa2 + "<br>" + escapeHtml(p.address || "") + approx + "<br>" + p.dist.toFixed(1) + " mi away" + (p.phone ? '<br><a href="' + telHref(p.phone) + '">Call ' + escapeHtml(p.phone) + "</a>" : "") + '<br><a target="_blank" rel="noopener" href="' + dirUrl(p.lat, p.lng, "driving") + '">Directions</a>';
- L.circleMarker([p._mlat, p._mlng], { radius: 7, color: "#fff", weight: 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: .92 }).addTo(geo.layer).bindPopup(pop);
+ // In-network dots are bigger and bolder so they stand out from the smaller, muted
+ // out-of-network (public map) pins - and brought to the front so green is never hidden.
+ var mk = L.circleMarker([p._mlat, p._mlng], { radius: isNet ? 11 : 6, color: "#fff", weight: isNet ? 3 : 2, fillColor: isNet ? "#2f9e63" : "#0b66d6", fillOpacity: isNet ? 1 : .8 }).addTo(geo.layer).bindPopup(pop);
+ if (isNet && mk.bringToFront) mk.bringToFront();
  });
  // Expand the view so EVERY result is visible, plus the reachable area / search ring.
  if (places.length) {

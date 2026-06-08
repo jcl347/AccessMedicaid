@@ -3,7 +3,7 @@
    refresh). The dynamic /api/ endpoints are always network (graceful offline
    JSON). Cross-origin assets (fonts, Leaflet, map tiles) are runtime-cached so
    the map and styles keep working offline once seen. */
-var CACHE = "amla-v35";
+var CACHE = "amla-v36";
 var CORE = ["./", "./index.html", "./css/styles.css", "./js/app.js", "./js/data.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", function (e) {
