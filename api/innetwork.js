@@ -419,22 +419,22 @@ module.exports = async function handler(req, res) {
       // TEMP DIAGNOSTIC (&diag=1): probe which query shapes this server accepts, so we can build
       // the right retrieval for awkward servers (Molina). Returns metadata only (no PII bodies).
       if (String(q.diag || "") === "1") {
-        var dz = zipsWithin(lat, lng, radius, 3)[0] || zip5(zip) || "90011";
-        var probes = [];
+        var dz = zip5(zip) || zipsWithin(lat, lng, radius, 3)[0] || "90011";
+        var probes = []; var locIds = [];
         async function probe(label, url) {
           try {
             var r = await fetchText(url, 9000); var b = null; try { b = JSON.parse(r.body); } catch (e) {}
             var ents = (b && b.entry) || []; var f = (ents[0] && ents[0].resource) || {};
-            probes.push({ label: label, status: r.status, ok: r.ok, total: (b && b.total), entries: ents.length, firstType: f.resourceType, firstId: f.id, hasPosition: !!(f.position && f.position.latitude), practitionerDisplay: !!(f.practitioner && f.practitioner.display), hasSpecialty: !!(f.specialty && f.specialty.length), bodySnippet: (!b ? String(r.body || "").replace(/\s+/g, " ").slice(0, 200) : undefined) });
-          } catch (e) { probes.push({ label: label, error: String((e && e.message) || e) }); }
+            var ids = ents.map(function (e) { return e && e.resource && e.resource.id; }).filter(Boolean);
+            probes.push({ label: label, status: r.status, ok: r.ok, total: (b && b.total), entries: ents.length, firstType: f.resourceType, hasPosition: !!(f.position && f.position.latitude), practitionerDisplay: !!(f.practitioner && f.practitioner.display), hasSpecialty: !!(f.specialty && f.specialty.length), locRef: (f.location && f.location[0] && f.location[0].reference) || undefined, bodySnippet: (!b ? String(r.body || "").replace(/\s+/g, " ").slice(0, 160) : undefined) });
+            return ids;
+          } catch (e) { probes.push({ label: label, error: String((e && e.message) || e) }); return []; }
         }
-        await probe("A:Location?postal", base + "/Location?address-postalcode=" + encodeURIComponent(dz) + "&_count=10");
-        await probe("B:PR?loc.postal", base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(dz) + "&_count=10");
-        await probe("C:PR?loc.postal+inc", base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(dz) + "&_include=PractitionerRole:practitioner&_count=10");
-        var firstLoc = (probes[0] && probes[0].firstId) ? probes[0].firstId : "";
-        if (firstLoc) await probe("D:PR?location=id", base + "/PractitionerRole?location=Location/" + encodeURIComponent(firstLoc) + "&_count=10");
-        await probe("E:PR?bare", base + "/PractitionerRole?_count=3");
-        res.status(200).json({ ok: true, plan: plan, zipTested: dz, base: base, probes: probes }); return;
+        locIds = await probe("A:Location?postal", base + "/Location?address-postalcode=" + encodeURIComponent(dz) + "&_count=10");
+        if (locIds[0]) await probe("D:PR?location=1id", base + "/PractitionerRole?location=Location/" + encodeURIComponent(locIds[0]) + "&_count=10");
+        if (locIds.length > 1) await probe("F:PR?location=comma", base + "/PractitionerRole?location=" + encodeURIComponent(locIds.slice(0, 3).map(function (i) { return "Location/" + i; }).join(",")) + "&_count=10");
+        await probe("G:Loc?postal+name", base + "/Location?address-postalcode=" + encodeURIComponent(dz) + "&_count=2&_elements=name,position,address");
+        res.status(200).json({ ok: true, plan: plan, zipTested: dz, base: base, locIdCount: locIds.length, probes: probes }); return;
       }
       // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
       // doctor is returned and flagged - not just facility records (location mode = clinics).
