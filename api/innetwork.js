@@ -258,13 +258,20 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
   if (!zips.length) return { error: "no-zips" };
   if (geoMode === "postal-single") {
     // Some servers (Molina) ignore a comma-separated ZIP list (return total=0) - query the
-    // nearest few ZIPs individually and merge. (Tolerant of this flaky host's timeouts.)
-    var pick = zips.slice(0, 8);
-    var bundles = await Promise.all(pick.map(function (z) {
-      return fetchText(base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=80", 7000).then(parseBundle).catch(function () { return null; });
-    }));
-    var entry = [];
-    bundles.forEach(function (b) { if (b && b.entry) entry = entry.concat(b.entry); });
+    // nearest ZIPs individually and merge. Molina ALSO rate-limits bursts hard (8 parallel ->
+    // most get throttled to nothing), so use a small worker pool (concurrency 3) instead of
+    // firing them all at once, which gets far more ZIPs through within the time budget.
+    var pick = zips.slice(0, 9);
+    var entry = [], ci = 0;
+    async function zipWorker() {
+      while (ci < pick.length) {
+        var z = pick[ci++];
+        var b = await fetchText(base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=80", 6000).then(parseBundle).catch(function () { return null; });
+        if (b && b.entry) entry = entry.concat(b.entry);
+      }
+    }
+    var pool = []; for (var w = 0; w < 3; w++) pool.push(zipWorker());
+    await Promise.all(pool);
     return { url: "per-ZIP x" + pick.length, zips: pick, bundle: { entry: entry } };
   }
   var u2 = base + "/Location?address-postalcode=" + encodeURIComponent(zips.join(",")) + "&_count=500";
@@ -409,6 +416,11 @@ module.exports = async function handler(req, res) {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
       var geoMode = cfg.geo === "near" ? "near" : (cfg.geo === "postal-single" ? "postal-single" : "postal"); // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
+      // `near` servers (Blue Shield Promise) HARD-cap returned results to the near radius, so a
+      // tight search (e.g. 10 mi) returns only a handful even where many exist (15 mi -> 96).
+      // Query a generous radius and let the distance filter (maxM, from the real radius) trim
+      // precisely - so the count reflects who's actually nearby, not the server's near cutoff.
+      if (geoMode === "near") km = Math.max(km, 30);
       // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
       // doctor is returned and flagged - not just facility records (location mode = clinics).
       var wantProviders = !!(specialty || language || type === "doctor");

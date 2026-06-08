@@ -41,14 +41,14 @@
       "verified": true,
       "geo": "postal-single",
       "vendor": "HealthEdge/Sapphire via Azure APIM",
-      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively. Server ignores comma-separated address-postalcode (returns 0) and 500s on _include - query ZIPs individually (postal-single). Locations carry real position lat/lng."
+      "notes": "Public-no-auth verified live (Location total 1.4M, PractitionerRole 16M). Server does NOT support `near` (HTTP 500); uses address-postalcode/address-city, so we reverse-geocode the point to a ZIP. Rate-limits aggressively: firing 8 ZIP queries in parallel got throttled down to ~2 results, so we now query the nearest 9 ZIPs through a concurrency-3 worker pool (postal-single) to slip under the burst limit. Server ignores comma-separated address-postalcode (returns 0) and 500s on _include. Locations carry real position lat/lng."
     },
     "blue-shield-promise": {
       "baseUrl": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory",
       "verified": true,
       "geo": "near",
       "vendor": "Smile CDR / HAPI FHIR 7.6.0",
-      "notes": "Public-no-auth production endpoint verified live; `near` geo search confirmed working (backend mdc = Medi-Cal directory cloud). Production host api.blueshieldca.com, path /bsc/fhir/ (sandbox uses api-dev + /bsc/fhir-sandbox/)."
+      "notes": "Public-no-auth production endpoint verified live (2026-06: 96 providers within 15mi of downtown LA). `near` geo search works but the server HARD-caps results to the near radius - a 10mi query returned only 1, a 15mi query 96 - so we query a generous near radius (>=30km) and trim by distance client-side. Backend mdc = Medi-Cal directory cloud. Production host api.blueshieldca.com, path /bsc/fhir/ (sandbox uses api-dev + /bsc/fhir-sandbox/)."
     },
     "anthem": {
       "baseUrl": "",
