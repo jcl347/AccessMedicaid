@@ -100,6 +100,7 @@ function bundleResources(b, type) { return (((b && b.entry) || []).map(function 
 function indexBundle(b, idx) { ((b && b.entry) || []).forEach(function (e) { var r = e && e.resource; if (r && r.resourceType && r.id) idx[r.resourceType + "/" + r.id] = r; }); return idx; }
 function humanName(p) { if (!p) return ""; var n = (p.name && p.name[0]) || {}; if (n.text) return n.text; var g = [].concat(n.given || []).join(" "); return ((g ? g + " " : "") + (n.family || "")).trim(); }
 function langsOf(p) { var out = []; ((p && p.communication) || []).forEach(function (cc) { var c = (cc.coding && cc.coding[0]) || {}; var v = c.display || c.code || cc.text; if (v && out.indexOf(v) < 0) out.push(v); }); return out; }
+function npiOf(p) { var ids = (p && p.identifier) || []; for (var i = 0; i < ids.length; i++) { if (ids[i] && /npi/i.test(ids[i].system || "") && /^\d{10}$/.test(String(ids[i].value || ""))) return String(ids[i].value); } for (var j = 0; j < ids.length; j++) { if (/^\d{10}$/.test(String(ids[j].value || ""))) return String(ids[j].value); } return ""; }
 function langMatch(list, want) { if (!want) return true; want = want.toLowerCase(); return (list || []).some(function (L) { return String(L).toLowerCase().indexOf(want) >= 0; }); }
 function telOf(res) { var ph = "", web = ""; ((res && res.telecom) || []).forEach(function (t) { if (t && t.value) { if (t.system === "phone" && !ph) ph = t.value; if (t.system === "url" && !web) web = t.value; } }); return { phone: ph, website: web }; }
 function addrOf(loc) { var a = (loc && loc.address) || {}; var s = cleanStreet([].concat(a.line || []).filter(Boolean).join(" ")); if (a.city) s += (s ? ", " : "") + a.city; if (a.state) s += (s ? ", " : "") + a.state; if (a.postalCode) s += " " + a.postalCode; return s.trim(); }
@@ -159,6 +160,49 @@ async function censusGeocode(places) {
     if (f[2] === "Match" && f[5]) { var ll = f[5].split(","); var lo = parseFloat(ll[0]), la = parseFloat(ll[1]); if (isFinite(la) && isFinite(lo)) { var p = places[id]; if (p) { p.lat = la; p.lng = lo; p.approxByZip = false; } GEO_CACHE[map[id]] = [la, lo]; return; } }
     GEO_CACHE[map[id]] = null;
   });
+}
+
+// --- real practice addresses via the free CMS NPPES NPI registry (no key) ---
+// Some directories (L.A. Care) link providers to placeholder Locations. NPPES returns the
+// provider's actual LOCATION (practice) address by NPI, which we then geocode. Cached per NPI.
+var NPI_CACHE = {};
+async function nppesAddress(npi) {
+  if (!npi) return null;
+  if (Object.prototype.hasOwnProperty.call(NPI_CACHE, npi)) return NPI_CACHE[npi];
+  try {
+    var r = await fetchText("https://npiregistry.cms.hhs.gov/api/?version=2.1&number=" + encodeURIComponent(npi), 6000);
+    if (!r.ok) { NPI_CACHE[npi] = null; return null; }
+    var j = JSON.parse(r.body);
+    var rec = j && j.results && j.results[0];
+    var addrs = (rec && rec.addresses) || [];
+    var loc = null, mail = null;
+    addrs.forEach(function (a) { if (a.address_purpose === "LOCATION") loc = loc || a; else if (a.address_purpose === "MAILING") mail = mail || a; });
+    var a = loc || mail;
+    if (!a || !a.address_1 || /\b(p\.?o\.? box|pmb)\b/i.test(a.address_1)) { NPI_CACHE[npi] = null; return null; }
+    var street = a.address_1.trim() + (a.address_2 && /ste|suite|fl|#|unit/i.test(a.address_2) ? " " + a.address_2.trim() : "");
+    var out = { street: street, city: a.city || "", state: a.state || "CA", zip: zip5(a.postal_code) };
+    NPI_CACHE[npi] = out; return out;
+  } catch (e) { NPI_CACHE[npi] = null; return null; }
+}
+// Replace placeholder addresses on provider records with the real NPPES practice address so
+// censusGeocode can plot them at their true street. Capped + concurrency-limited.
+async function enrichFromNppes(places) {
+  if (typeof fetch === "undefined") return;
+  var byStreet = {};
+  places.forEach(function (p) { var s = ((p._addr && p._addr.street) || "").toLowerCase(); if (s) (byStreet[s] = byStreet[s] || {})[(p._addr && p._addr.zip) || ""] = 1; });
+  function isPh(street) { var sl = (street || "").toLowerCase(); return PLACEHOLDER_ADDR.test(street) || (sl && byStreet[sl] && Object.keys(byStreet[sl]).length > 3); }
+  var targets = places.filter(function (p) { return p.npi && p._addr && isPh(p._addr.street); }).slice(0, 80);
+  if (!targets.length) return;
+  var i = 0;
+  async function worker() {
+    while (i < targets.length) {
+      var p = targets[i++];
+      var a = await nppesAddress(p.npi);
+      if (a) { p._addr = a; p.address = (a.street + (a.city ? ", " + a.city : "") + (a.state ? ", " + a.state : "") + (a.zip ? " " + a.zip : "")).trim(); }
+    }
+  }
+  var ws = []; for (var w = 0; w < 8; w++) ws.push(worker());
+  await Promise.all(ws);
 }
 
 function normLocation(loc) {
@@ -268,7 +312,7 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       var key = name.toLowerCase() + "|" + spec.toLowerCase();
       var ex = byName[key];
       if (ex && ex._d <= d) return; // keep the nearest location for this provider+specialty
-      byName[key] = { name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, _addr: addrParts(loc), _d: d };
+      byName[key] = { name: name, specialty: spec, lat: co.lat, lng: co.lng, phone: prTel.phone || lt.phone || "", address: addrOf(loc), website: prTel.website || lt.website || "", inNetwork: true, approxByZip: co.approx, languages: languages, ipa: ipa, npi: npiOf(pract), _addr: addrParts(loc), _d: d };
     });
   });
   var out = Object.keys(byName).map(function (k) { var r = byName[k]; delete r._d; return r; });
@@ -342,6 +386,7 @@ module.exports = async function handler(req, res) {
     // Upgrade approximate ZIP-centroid pins to exact street coordinates (free Census
     // geocoder). Best-effort: failures keep the ZIP pin. Then drop the temp address field.
     if (result.ok && Array.isArray(result.places) && result.places.length) {
+      try { await enrichFromNppes(result.places); } catch (e) { /* keep FHIR/ZIP coords */ }
       try { await censusGeocode(result.places); } catch (e) { /* keep ZIP-centroid coords */ }
       result.approxByZip = result.places.some(function (p) { return p.approxByZip; });
       result.geocoded = result.places.filter(function (p) { return !p.approxByZip; }).length;
