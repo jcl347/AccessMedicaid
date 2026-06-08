@@ -257,20 +257,22 @@ async function locationBundle(base, geoMode, lat, lng, km, radius, zip) {
   if (!zips.length && zip) zips = [zip5(zip)];
   if (!zips.length) return { error: "no-zips" };
   if (geoMode === "postal-single") {
-    // Some servers (Molina) ignore a comma-separated ZIP list (return total=0) - query the
-    // nearest ZIPs individually and merge. Molina ALSO rate-limits bursts hard (8 parallel ->
-    // most get throttled to nothing), so use a small worker pool (concurrency 3) instead of
-    // firing them all at once, which gets far more ZIPs through within the time budget.
-    var pick = zips.slice(0, 9);
+    // Molina ignores comma ZIP lists (total=0) and 500s on chained/_include/_elements queries,
+    // so query ZIPs individually via Location?address-postalcode (which works and returns real
+    // positions). CRUCIAL: downtown LA's nearest ZIP *centroids* are largely PO-box/admin ZIPs
+    // holding ZERO locations, so query a WIDE set (24) to reach the residential ZIPs that
+    // actually carry providers - empty ZIPs return instantly. Stop early once we have plenty,
+    // and cap concurrency at 4 to stay under the burst rate limit. (Verified: 90011 alone -> 253.)
+    var pick = zips.slice(0, 24);
     var entry = [], ci = 0;
     async function zipWorker() {
-      while (ci < pick.length) {
+      while (ci < pick.length && entry.length < 150) {
         var z = pick[ci++];
         var b = await fetchText(base + "/Location?address-postalcode=" + encodeURIComponent(z) + "&_count=80", 7000).then(parseBundle).catch(function () { return null; });
         if (b && b.entry) entry = entry.concat(b.entry);
       }
     }
-    var pool = []; for (var w = 0; w < 3; w++) pool.push(zipWorker());
+    var pool = []; for (var w = 0; w < 4; w++) pool.push(zipWorker());
     await Promise.all(pool);
     return { url: "per-ZIP x" + pick.length, zips: pick, bundle: { entry: entry } };
   }
@@ -284,9 +286,13 @@ async function locationSearch(base, geoMode, lat, lng, km, radius, type, zip, de
   if (!lb.bundle) return { ok: false, reason: "fhir-error", query: debug ? [lb.url] : undefined };
   var maxM = radius * 1.1 + 400;
   var places = bundleResources(lb.bundle, "Location").map(normLocation).filter(function (p) { return p && distM(lat, lng, p.lat, p.lng) <= maxM; });
+  // For a SPECIFIC care type (pharmacy/hospital/dentist/mental health) keep only matching places.
+  // For the generic "clinic"/"doctor" location search, keep ALL in-network locations - everything
+  // the plan's own directory returns is in-network, so a name that doesn't contain "clinic" is no
+  // reason to hide it. (This name filter is what collapsed Molina's location fallback to ~2.)
   var GENERIC = { clinic: 1, doctor: 1 };
   var kw = CARE_KEYWORDS[type];
-  if (kw) { var f = places.filter(function (p) { return kw.test((p.name || "") + " " + (p._typeText || "")); }); if (!GENERIC[type] || f.length) places = f; }
+  if (kw && !GENERIC[type]) { places = places.filter(function (p) { return kw.test((p.name || "") + " " + (p._typeText || "")); }); }
   var seen = {}, out = [];
   places.forEach(function (p) { var k = (p.name || "") + "@" + p.lat.toFixed(4) + "," + p.lng.toFixed(4); if (seen[k]) return; seen[k] = 1; delete p._typeText; out.push(p); });
   out.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
@@ -313,7 +319,10 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   }
   // Fallback: some servers reject the chained location.* filter on PractitionerRole (IEHP
   // returns HTTP 400). Get nearby Locations first, then PractitionerRoles that reference them.
-  if (!roles.length) {
+  // Skip for postal-single (Molina): it doesn't link PractitionerRole to Location at all
+  // (location= returns 0), so don't waste a ZIP sweep here - the handler falls back to the
+  // in-network LOCATION search, which is the best Molina supports.
+  if (!roles.length && geoMode !== "postal-single") {
     var lb = await locationBundle(base, geoMode, lat, lng, km, radius, zip);
     if (lb && lb.bundle) {
       indexBundle(lb.bundle, idx);
@@ -416,26 +425,6 @@ module.exports = async function handler(req, res) {
       var base = String(cfg.baseUrl).replace(/\/+$/, "");
       var geoMode = cfg.geo === "near" ? "near" : (cfg.geo === "postal-single" ? "postal-single" : "postal"); // default postal: most directories lack coordinates
       var km = Math.max(0.5, radius / 1000);
-      // TEMP DIAGNOSTIC (&diag=1): probe which query shapes this server accepts, so we can build
-      // the right retrieval for awkward servers (Molina). Returns metadata only (no PII bodies).
-      if (String(q.diag || "") === "1") {
-        var dz = zip5(zip) || zipsWithin(lat, lng, radius, 3)[0] || "90011";
-        var probes = []; var locIds = [];
-        async function probe(label, url) {
-          try {
-            var r = await fetchText(url, 9000); var b = null; try { b = JSON.parse(r.body); } catch (e) {}
-            var ents = (b && b.entry) || []; var f = (ents[0] && ents[0].resource) || {};
-            var ids = ents.map(function (e) { return e && e.resource && e.resource.id; }).filter(Boolean);
-            probes.push({ label: label, status: r.status, ok: r.ok, total: (b && b.total), entries: ents.length, firstType: f.resourceType, hasPosition: !!(f.position && f.position.latitude), practitionerDisplay: !!(f.practitioner && f.practitioner.display), hasSpecialty: !!(f.specialty && f.specialty.length), locRef: (f.location && f.location[0] && f.location[0].reference) || undefined, bodySnippet: (!b ? String(r.body || "").replace(/\s+/g, " ").slice(0, 160) : undefined) });
-            return ids;
-          } catch (e) { probes.push({ label: label, error: String((e && e.message) || e) }); return []; }
-        }
-        locIds = await probe("A:Location?postal", base + "/Location?address-postalcode=" + encodeURIComponent(dz) + "&_count=10");
-        if (locIds[0]) await probe("D:PR?location=1id", base + "/PractitionerRole?location=Location/" + encodeURIComponent(locIds[0]) + "&_count=10");
-        if (locIds.length > 1) await probe("F:PR?location=comma", base + "/PractitionerRole?location=" + encodeURIComponent(locIds.slice(0, 3).map(function (i) { return "Location/" + i; }).join(",")) + "&_count=10");
-        await probe("G:Loc?postal+name", base + "/Location?address-postalcode=" + encodeURIComponent(dz) + "&_count=2&_elements=name,position,address");
-        res.status(200).json({ ok: true, plan: plan, zipTested: dz, base: base, locIdCount: locIds.length, probes: probes }); return;
-      }
       // "Doctors" (type=doctor) uses provider mode with no specialty filter so EVERY in-network
       // doctor is returned and flagged - not just facility records (location mode = clinics).
       var wantProviders = !!(specialty || language || type === "doctor");
