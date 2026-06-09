@@ -1,9 +1,10 @@
 /* Access Medi-Cal LA service worker - offline support + faster repeat visits.
-   Core files are precached. Same-origin requests are cache-first (with network
-   refresh). The dynamic /api/ endpoints are always network (graceful offline
-   JSON). Cross-origin assets (fonts, Leaflet, map tiles) are runtime-cached so
-   the map and styles keep working offline once seen. */
-var CACHE = "amla-v41";
+   App shell (HTML/JS/CSS/manifest) is NETWORK-FIRST so a new deploy shows on the
+   next load (cache-first made updates lag a reload or two); it falls back to cache
+   only when offline. Other same-origin static (icons/images) and cross-origin assets
+   (fonts, Leaflet, tiles) are cache-first. The dynamic /api/ endpoints are always
+   network with graceful offline JSON. */
+var CACHE = "amla-v42";
 var CORE = ["./", "./index.html", "./css/styles.css", "./js/app.js", "./js/data.js", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", function (e) {
@@ -27,8 +28,18 @@ self.addEventListener("fetch", function (e) {
     return;
   }
 
-  // Same-origin static: cache-first, refresh in background, fall back to app shell.
   if (url.origin === location.origin) {
+    // App shell (HTML + JS/CSS/data/manifest): NETWORK-FIRST so a fresh deploy is seen on the
+    // next load; fall back to cache only when the network fails (offline).
+    var shell = req.mode === "navigate" || url.pathname === "/" || /\.(?:html|js|css|webmanifest)$/.test(url.pathname);
+    if (shell) {
+      e.respondWith(fetch(req).then(function (res) {
+        if (res && res.status === 200) { var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, copy); }); }
+        return res;
+      }).catch(function () { return caches.match(req).then(function (c) { return c || caches.match("./index.html"); }); }));
+      return;
+    }
+    // Other same-origin static (icons/images): cache-first, refresh in background.
     e.respondWith(caches.match(req).then(function (cached) {
       var net = fetch(req).then(function (res) {
         if (res && res.status === 200) { var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, copy); }); }
