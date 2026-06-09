@@ -207,7 +207,7 @@ var SPEC_CANON = [
   [/pain (medicine|management)/, "Pain Management"],
   [/infectious disease/, "Infectious Disease"],
   [/physiatr|physical medicine|rehabilitation/, "Rehabilitation"],
-  [/general surgery|\bsurgeon\b/, "Surgery"],
+  [/\bsurgery\b|\bsurgeon\b|surgical/, "Surgery"],
 ];
 // Strings that are facility types / roles / generic noise, NOT clinical specialties - drop them.
 var SPEC_JUNK = /unknown|^unk$|federally qualified|\bfqhc\b|community health|health center|\bclinic\b|hospital|pharmacy|urgent care|multi.?special|acute care|long.?term care|home health|laboratory|radiolog|imaging|\bnurse\b|registered|\bassistant\b|technician|\baide\b|allied health|^other|^physician|^medicine|^general|^health|^medical|^clinical$|^unsupported$|case manage|care management/;
