@@ -182,7 +182,8 @@ var SPEC_CANON = [
   [/midwife|midwifery/, "Midwifery"],
   [/psychiatr/, "Psychiatry"],
   [/psycholog/, "Psychology"],
-  [/behavioral|mental health|counsel|marriage and family|social work|substance|addiction/, "Behavioral Health"],
+  [/behavioral|mental health|counsel|marriage and family|social work|substance|addiction|behavior analyst|applied behavior/, "Behavioral Health"],
+  [/anesthesiolog/, "Anesthesiology"],
   [/cardiolog|cardiovascular|\bheart\b/, "Cardiology"],
   [/dermatolog|\bskin\b/, "Dermatology"],
   [/optometr/, "Optometry"],
@@ -209,13 +210,13 @@ var SPEC_CANON = [
   [/general surgery|\bsurgeon\b/, "Surgery"],
 ];
 // Strings that are facility types / roles / generic noise, NOT clinical specialties - drop them.
-var SPEC_JUNK = /unknown|^unk$|federally qualified|\bfqhc\b|community health|health center|\bclinic\b|hospital|pharmacy|urgent care|multi.?special|acute care|long.?term care|home health|laboratory|radiolog|imaging|\bnurse\b|registered|\bassistant\b|technician|\baide\b|allied health|^other|^physician|^medicine|^general|^health|^medical|case manage|care management/;
+var SPEC_JUNK = /unknown|^unk$|federally qualified|\bfqhc\b|community health|health center|\bclinic\b|hospital|pharmacy|urgent care|multi.?special|acute care|long.?term care|home health|laboratory|radiolog|imaging|\bnurse\b|registered|\bassistant\b|technician|\baide\b|allied health|^other|^physician|^medicine|^general|^health|^medical|^clinical$|^unsupported$|case manage|care management/;
 function normSpec(raw) {
   var s = String(raw || "").toLowerCase()
     .replace(/\([^)]*\)/g, " ")            // drop parentheticals e.g. "(FQHC)"
     .replace(/&/g, " and ")
     .replace(/[^a-z ]+/g, " ")
-    .replace(/\b(physician|physicians|specialist|specialists|doctor|provider|providers|services|service|disease|diseases)\b/g, " ")
+    .replace(/\b(physician|physicians|specialist|specialists|doctor|provider|providers|services|service|disease|diseases|unsupported|not specified)\b/g, " ")
     .replace(/\s+/g, " ").trim();
   if (!s) return "";
   for (var i = 0; i < SPEC_CANON.length; i++) { if (SPEC_CANON[i][0].test(s)) return SPEC_CANON[i][1]; }
@@ -230,7 +231,11 @@ function normSpec(raw) {
 function facetSpecialties(list) {
   var counts = {};
   (list || []).forEach(function (p) { var n = normSpec(p.specialty); if (n) counts[n] = (counts[n] || 0) + 1; });
+  // For a large roster, drop count-1 specialties: they're the unstable "tail" that wobbles
+  // between requests. Small plans keep everything so their few specialties still show.
+  var min = ((list || []).length >= 60) ? 2 : 1;
   return Object.keys(counts).map(function (k) { return { label: k, count: counts[k] }; })
+    .filter(function (f) { return f.count >= min; })
     .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); })
     .slice(0, 14);
 }
@@ -241,15 +246,26 @@ function specSelected(specText, sel) { return !sel || normSpec(specText).toLower
 // Provider languages come through as display names ("Spanish") OR ISO codes ("es", "es-MX", "spa").
 // Normalize to a clean English label; drop English (the default) and unmapped short codes.
 var LANG_CODE = { es: "Spanish", spa: "Spanish", zh: "Chinese", zho: "Chinese", cmn: "Mandarin", yue: "Cantonese", vi: "Vietnamese", vie: "Vietnamese", ko: "Korean", kor: "Korean", hy: "Armenian", hye: "Armenian", tl: "Tagalog", fil: "Tagalog", ru: "Russian", rus: "Russian", fa: "Persian (Farsi)", fas: "Persian (Farsi)", per: "Persian (Farsi)", ar: "Arabic", ara: "Arabic", ja: "Japanese", jpn: "Japanese", hi: "Hindi", hin: "Hindi", pa: "Punjabi", pan: "Punjabi", th: "Thai", tha: "Thai", km: "Khmer", khm: "Khmer", he: "Hebrew", heb: "Hebrew", fr: "French", fra: "French", pt: "Portuguese", por: "Portuguese", de: "German", deu: "German" };
+var LANG_NAME = [
+  [/mandarin/, "Mandarin"], [/cantonese/, "Cantonese"], [/chinese/, "Chinese"],
+  [/spanish|castilian/, "Spanish"], [/persian|farsi/, "Persian (Farsi)"],
+  [/tagalog|filipino/, "Tagalog"], [/vietnamese/, "Vietnamese"], [/korean/, "Korean"],
+  [/armenian/, "Armenian"], [/arabic/, "Arabic"], [/russian/, "Russian"], [/hindi/, "Hindi"],
+  [/punjabi/, "Punjabi"], [/japanese/, "Japanese"], [/khmer|cambodian/, "Khmer"],
+  [/hebrew/, "Hebrew"], [/french/, "French"], [/portuguese/, "Portuguese"], [/german/, "German"],
+  [/thai/, "Thai"], [/sign language|^asl$/, "ASL"],
+];
 function normLang(raw) {
-  var s = String(raw || "").trim(); if (!s) return "";
+  // Directories write languages many ways: "Spanish", "es", "es-MX", "Spanish, Castilian",
+  // "Mandarin Chinese", "Farsi". Take the leading token, map codes and descriptive names to one
+  // clean label, and drop English (the default) + unmapped short codes.
+  var s = String(raw || "").split(",")[0].trim(); if (!s) return "";
   var low = s.toLowerCase();
-  if (low === "english" || /^en\b/.test(low) || low === "en" || low === "eng") return ""; // default, not a filter
+  if (low === "english" || low === "en" || low === "eng" || /^en[-_]/.test(low)) return "";
   if (LANG_CODE[low]) return LANG_CODE[low];
-  var base = low.split(/[-_]/)[0];
-  if (LANG_CODE[base]) return LANG_CODE[base];
+  var base = low.split(/[-_]/)[0]; if (LANG_CODE[base]) return LANG_CODE[base];
+  for (var i = 0; i < LANG_NAME.length; i++) { if (LANG_NAME[i][0].test(low)) return LANG_NAME[i][1]; }
   if (s.length <= 3) return ""; // unmapped short code - don't show an ugly "Vi"/"Es"
-  if (/sign language|^asl$/i.test(s)) return "ASL";
   return s.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
 }
 function facetLanguages(list) {
