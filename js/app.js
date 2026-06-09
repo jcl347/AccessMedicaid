@@ -189,7 +189,7 @@
  // Recalculate the map for the newly selected plan (its in-network directory differs) and
  // move the user to the map so they see the updated in-network results. Reset the previous
  // plan's specialty selection + data-driven chips (the next search repopulates them).
- geo.specialty = ""; geo.lastSpecialties = [];
+ geo.specialty = ""; geo.lastSpecialties = []; geo.language = ""; geo.lastLanguages = [];
  renderFilters();
  if (window.L) { if (geo.iso && geo.iso.mode) applyIso(); else runSearch(); }
  var dest = document.getElementById("near-me") || document.getElementById("needs-step");
@@ -771,7 +771,7 @@
  { key: "doctor", label: "Doctors", icon: "plusCircle" },
  ];
  var RADII = [{ m: 1609, label: "1 mi" }, { m: 4828, label: "3 mi" }, { m: 8047, label: "5 mi" }, { m: 16093, label: "10 mi" }, { m: 24140, label: "15 mi" }];
- var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "doctor", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", lastSpecialties: [], iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
+ var geo = { center: { lat: 34.0522, lng: -118.2437 }, label: "Los Angeles, CA", care: "doctor", specialty: "", language: "", radius: 8047, map: null, layer: null, t: 0, shared: false, lastRefreshed: "", lastSpecialties: [], lastLanguages: [], iso: { mode: "drive", minutes: 30, fc: null, layer: null, radius: null } };
  var ISO_MODES = [{ k: "walk", label: "On foot" }, { k: "bike", label: "By bike" }, { k: "drive", label: "Driving" }];
  var ISO_MINS = [10, 20, 30];
  function isoModeLabel() { var m = ISO_MODES.filter(function (x) { return x.k === geo.iso.mode; })[0]; return m ? m.label.toLowerCase() : ""; }
@@ -805,7 +805,6 @@
  // Specialty chips are DATA-DRIVEN: built from the selected plan's OWN directory data
  // (geo.lastSpecialties, faceted server-side from real FHIR/dataset specialties) - so they
  // differ per plan and disappear entirely when a plan exposes no clear specialties.
- var LANGUAGES = ["Spanish", "Mandarin", "Cantonese", "Vietnamese", "Korean", "Armenian", "Tagalog", "Russian", "Arabic"];
  function planHasInNetwork() { return !!(state.planId && inNetworkIds().indexOf(state.planId) >= 0); }
  function renderFilters() {
  // Closed network (Kaiser): specialty/care filters don't apply - members get all care at the
@@ -847,17 +846,20 @@
  });
  }
  }
- var langRow = $("#langRow"); if (langRow) langRow.hidden = !inNet;
+ // Language chips are DATA-DRIVEN too (geo.lastLanguages, faceted from the plan's own provider
+ // records). The row only shows when the plan's data actually carries language info.
+ var langs = (inNet && geo.lastLanguages) ? geo.lastLanguages : [];
+ var langRow = $("#langRow"); if (langRow) langRow.hidden = !langs.length;
  var lrow = $("#languageChips");
- if (lrow && inNet) {
+ if (lrow && langs.length) {
  lrow.innerHTML = "";
  var anyLang = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": geo.language ? "false" : "true", text: "Any language" });
  anyLang.addEventListener("click", function () { geo.language = ""; renderFilters(); runSearch(); });
  lrow.appendChild(anyLang);
- LANGUAGES.forEach(function (s) {
- var on = geo.language.toLowerCase() === s.toLowerCase();
- var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", text: s });
- chip.addEventListener("click", function () { geo.language = on ? "" : s; renderFilters(); runSearch(); });
+ langs.forEach(function (f) {
+ var on = geo.language.toLowerCase() === String(f.label).toLowerCase();
+ var chip = el("button", { class: "chip chip-sm", type: "button", "aria-pressed": on ? "true" : "false", html: escapeHtml(f.label) + (f.count ? ' <span class="chip-count">' + f.count + "</span>" : "") });
+ chip.addEventListener("click", function () { geo.language = on ? "" : f.label; renderFilters(); runSearch(); });
  lrow.appendChild(chip);
  });
  } else if (lrow) { lrow.innerHTML = ""; geo.language = ""; }
@@ -1118,15 +1120,15 @@
  var ai = $("#addrInput"); var z = ai && /^\d{5}$/.test((ai.value || "").trim()) ? ai.value.trim() : "";
  var furl = "/api/innetwork?plan=" + encodeURIComponent(pid) + "&lat=" + geo.center.lat + "&lng=" + geo.center.lng + "&type=" + encodeURIComponent(geo.care) + "&radius=" + effRadius + (geo.specialty ? "&specialty=" + encodeURIComponent(geo.specialty) : "") + (geo.language ? "&language=" + encodeURIComponent(geo.language) : "") + (z ? "&zip=" + z : "");
  return fetch(furl, { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); })
- .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable), facility: !!(d && d.facilityOnly), specialties: (d && Array.isArray(d.specialties)) ? d.specialties : [] }; })
- .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false, facility: false, specialties: [] }; });
+ .then(function (d) { return { places: (d && d.ok && Array.isArray(d.places)) ? d.places : [], source: (d && d.source) || "fhir", approx: !!(d && d.approxByZip), refreshed: (d && d.refreshed) || "", specUnavail: !!(d && d.specialtyUnavailable), facility: !!(d && d.facilityOnly), specialties: (d && Array.isArray(d.specialties)) ? d.specialties : [], languages: (d && Array.isArray(d.languagesAvail)) ? d.languagesAvail : [] }; })
+ .catch(function () { return { places: [], source: "fhir", approx: false, refreshed: "", specUnavail: false, facility: false, specialties: [], languages: [] }; });
  }
  function normName(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
  // Closed network (Kaiser): no usable public FHIR. A member's in-network facilities are exactly
  // the brand-named ones, which exist in public map data with real coordinates. Pull those by
  // name and mark them in-network (green). Nothing else is in-network for a closed network.
  function acquireClosedNetwork(brand) {
- geo.lastSource = "kaiser"; geo.lastApprox = false; geo.lastRefreshed = ""; geo.lastSpecUnavail = false; geo.lastFacility = true; geo.lastSpecialties = [];
+ geo.lastSource = "kaiser"; geo.lastApprox = false; geo.lastRefreshed = ""; geo.lastSpecUnavail = false; geo.lastFacility = true; geo.lastSpecialties = []; geo.lastLanguages = [];
  var nf = String(brand).replace(/[\\"]/g, "");
  var rx = new RegExp(nf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
  // Indexed key FIRST so the name regex is a fast secondary filter (name-first times out).
@@ -1176,7 +1178,7 @@
  });
  }
  f.places.forEach(function (p) { p.inNetwork = true; });
- geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail; geo.lastFacility = f.facility; geo.lastSpecialties = f.specialties || [];
+ geo.lastSource = f.source; geo.lastApprox = f.approx; geo.lastRefreshed = f.refreshed; geo.lastSpecUnavail = f.specUnavail; geo.lastFacility = f.facility; geo.lastSpecialties = f.specialties || []; geo.lastLanguages = f.languages || [];
  // Kaiser is a closed network - out-of-network places aren't meaningful, so show only its facilities.
  if (f.facility) return f.places;
  // Otherwise merge in nearby public (out-of-network / unverified) places, dropping any whose

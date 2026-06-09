@@ -107,6 +107,28 @@ function fetchText(url, ms) {
     .catch(function (e) { clearTimeout(t); throw e; });
 }
 function parseBundle(r) { if (!r || !r.ok) return null; try { return JSON.parse(r.body); } catch (e) { return null; } }
+// Follow FHIR Bundle "next" links to pull the FULL result set. Directories like L.A. Care return
+// a small page AND duplicate each provider across dozens of placeholder locations, so a single
+// page yields only a handful of UNIQUE doctors - and which ones varies by page. Bounded by a page
+// cap and a wall-clock deadline so we stay within the function budget. Returns merged entries.
+async function fetchPaged(url, maxPages, ms, deadline) {
+  var entries = [], pages = 0, cur = url, truncated = false;
+  while (cur && pages < maxPages) {
+    if (Date.now() > deadline) { truncated = true; break; }
+    var b = parseBundle(await fetchText(cur, ms));
+    if (!b) break;
+    var ents = b.entry || [];
+    entries = entries.concat(ents);
+    pages++;
+    var next = null;
+    (b.link || []).forEach(function (l) { if (l && l.relation === "next" && l.url) next = l.url; });
+    if (!next || !ents.length) break;
+    if (entries.length > 8000) { truncated = true; break; }
+    cur = next;
+  }
+  if (cur && pages >= maxPages) truncated = true;
+  return { entries: entries, truncated: truncated, pages: pages };
+}
 function bundleResources(b, type) { return (((b && b.entry) || []).map(function (e) { return e && e.resource; }).filter(function (x) { return x && x.resourceType === type; })); }
 function indexBundle(b, idx) { ((b && b.entry) || []).forEach(function (e) { var r = e && e.resource; if (r && r.resourceType && r.id) idx[r.resourceType + "/" + r.id] = r; }); return idx; }
 function humanName(p) { if (!p) return ""; var n = (p.name && p.name[0]) || {}; if (n.text) return n.text; var g = [].concat(n.given || []).join(" "); return ((g ? g + " " : "") + (n.family || "")).trim(); }
@@ -214,6 +236,29 @@ function facetSpecialties(list) {
 }
 // A provider matches the selected (data-derived) specialty label when it canonicalizes to it.
 function specSelected(specText, sel) { return !sel || normSpec(specText).toLowerCase() === sel.toLowerCase(); }
+
+// --- DATA-DRIVEN languages (same idea as specialties) -----------------------------------------
+// Provider languages come through as display names ("Spanish") OR ISO codes ("es", "es-MX", "spa").
+// Normalize to a clean English label; drop English (the default) and unmapped short codes.
+var LANG_CODE = { es: "Spanish", spa: "Spanish", zh: "Chinese", zho: "Chinese", cmn: "Mandarin", yue: "Cantonese", vi: "Vietnamese", vie: "Vietnamese", ko: "Korean", kor: "Korean", hy: "Armenian", hye: "Armenian", tl: "Tagalog", fil: "Tagalog", ru: "Russian", rus: "Russian", fa: "Persian (Farsi)", fas: "Persian (Farsi)", per: "Persian (Farsi)", ar: "Arabic", ara: "Arabic", ja: "Japanese", jpn: "Japanese", hi: "Hindi", hin: "Hindi", pa: "Punjabi", pan: "Punjabi", th: "Thai", tha: "Thai", km: "Khmer", khm: "Khmer", he: "Hebrew", heb: "Hebrew", fr: "French", fra: "French", pt: "Portuguese", por: "Portuguese", de: "German", deu: "German" };
+function normLang(raw) {
+  var s = String(raw || "").trim(); if (!s) return "";
+  var low = s.toLowerCase();
+  if (low === "english" || /^en\b/.test(low) || low === "en" || low === "eng") return ""; // default, not a filter
+  if (LANG_CODE[low]) return LANG_CODE[low];
+  var base = low.split(/[-_]/)[0];
+  if (LANG_CODE[base]) return LANG_CODE[base];
+  if (s.length <= 3) return ""; // unmapped short code - don't show an ugly "Vi"/"Es"
+  if (/sign language|^asl$/i.test(s)) return "ASL";
+  return s.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+}
+function facetLanguages(list) {
+  var counts = {};
+  (list || []).forEach(function (p) { var seen = {}; (p.languages || []).forEach(function (L) { var n = normLang(L); if (n && !seen[n]) { seen[n] = 1; counts[n] = (counts[n] || 0) + 1; } }); });
+  return Object.keys(counts).map(function (k) { return { label: k, count: counts[k] }; })
+    .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 12);
+}
+function langSelected(langs, sel) { if (!sel) return true; var s = sel.toLowerCase(); return (langs || []).some(function (L) { return normLang(L).toLowerCase() === s; }); }
 function specialtyMatcher(s) {
   s = (s || "").toLowerCase().trim();
   if (!s) return null;
@@ -376,19 +421,21 @@ async function locationSearch(base, geoMode, lat, lng, km, radius, type, zip, de
 async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, language, zip, debug) {
   var inc = "&_include=PractitionerRole:practitioner&_include=PractitionerRole:location&_include=PractitionerRole:organization";
   var queries = [], idx = {}, roles = [];
+  var truncated = false;
   if (geoMode === "near") {
     var u1 = base + "/PractitionerRole?location.near=" + nearParam(lat, lng, km) + inc + "&_count=200";
     queries.push(u1);
-    var b1 = parseBundle(await fetchText(u1, 9000));
-    if (b1 && b1.entry && b1.entry.length) { indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
+    var p1 = await fetchPaged(u1, 6, 9000, Date.now() + 12000); truncated = truncated || p1.truncated;
+    if (p1.entries.length) { var b1 = { entry: p1.entries }; indexBundle(b1, idx); roles = bundleResources(b1, "PractitionerRole"); }
   } else if (geoMode === "postal") {
     var zips = zipsWithin(lat, lng, radius, zipCap(radius));
     if (!zips.length && zip) zips = [zip5(zip)];
     if (!zips.length) return { ok: false, reason: "no-zips" };
     var u2 = base + "/PractitionerRole?location.address-postalcode=" + encodeURIComponent(zips.join(",")) + inc + "&_count=500";
     queries.push(u2);
-    var b2 = parseBundle(await fetchText(u2, 12000));
-    if (b2 && b2.entry && b2.entry.length) { indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
+    // Paginate to pull the full roster (heavy per-provider duplication means one page is too few).
+    var p2 = await fetchPaged(u2, 7, 11000, Date.now() + 15000); truncated = truncated || p2.truncated;
+    if (p2.entries.length) { var b2 = { entry: p2.entries }; indexBundle(b2, idx); roles = bundleResources(b2, "PractitionerRole"); }
     // postal-single (Molina): skip the chained PR query (server 500s); fall through to two-step.
   }
   // Fallback: some servers reject the chained location.* filter on PractitionerRole (IEHP
@@ -406,8 +453,8 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
       if (ids.length) {
         var u3 = base + "/PractitionerRole?location=" + encodeURIComponent(ids.map(function (i) { return "Location/" + i; }).join(",")) + "&_include=PractitionerRole:practitioner&_include=PractitionerRole:organization&_count=500";
         queries.push(u3);
-        var b3 = parseBundle(await fetchText(u3, 12000));
-        if (b3 && b3.entry && b3.entry.length) { indexBundle(b3, idx); roles = bundleResources(b3, "PractitionerRole"); }
+        var p3 = await fetchPaged(u3, 5, 11000, Date.now() + 12000); truncated = truncated || p3.truncated;
+        if (p3.entries.length) { var b3 = { entry: p3.entries }; indexBundle(b3, idx); roles = bundleResources(b3, "PractitionerRole"); }
       }
     }
   }
@@ -424,7 +471,8 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
     var pract = (pr.practitioner && pr.practitioner.reference) ? idx[pr.practitioner.reference] : null;
     var practName = humanName(pract), languages = langsOf(pract);
     var ipa = (pr.organization && pr.organization.reference && idx[pr.organization.reference]) ? (idx[pr.organization.reference].name || "") : "";
-    if (language && !langMatch(languages, language)) return;
+    // NOTE: no language filter here - build the FULL roster so the language facet is complete;
+    // the selected language filter is applied at the end alongside specialty.
     [].concat(pr.location || []).forEach(function (lref) {
       var loc = lref && lref.reference ? idx[lref.reference] : null; if (!loc) return;
       var co = coordsFor(loc); if (!co) return;
@@ -439,9 +487,10 @@ async function providerSearch(base, geoMode, lat, lng, km, radius, specialty, la
   });
   var all = Object.keys(byName).map(function (k) { var r = byName[k]; delete r._d; return r; });
   all.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  var specialties = facetSpecialties(all);               // data-driven chips for THIS plan
-  var out = specialty ? all.filter(function (p) { return specSelected(p.specialty, specialty); }) : all;
-  return { ok: true, mode: "providers", specialty: specialty, language: language, specialties: specialties, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, places: out.slice(0, 250), query: debug ? queries : undefined };
+  var specialties = facetSpecialties(all);               // data-driven specialty chips for THIS plan
+  var languagesAvail = facetLanguages(all);              // data-driven language chips for THIS plan
+  var out = all.filter(function (p) { return specSelected(p.specialty, specialty) && langSelected(p.languages, language); });
+  return { ok: true, mode: "providers", specialty: specialty, language: language, specialties: specialties, languagesAvail: languagesAvail, approxByZip: out.some(function (p) { return p.approxByZip; }), count: out.length, uniqueProviders: all.length, rolesScanned: roles.length, truncated: truncated, places: out.slice(0, 250), query: debug ? queries : undefined };
 }
 
 // Serve a preprocessed JSON dataset (Health Net's directory, or Kaiser's facilities).
@@ -465,8 +514,7 @@ function datasetSearch(ds, lat, lng, radius, type, specialty, language) {
     if (!isFinite(r.lat) || !isFinite(r.lng) || distM(lat, lng, r.lat, r.lng) > maxM) continue;
     if (facilityOnly) { cand.push(mk(r)); continue; }
     if (wantDoctors) {
-      if (r.cat !== "doctor") continue;                       // provider records only
-      if (language && !langMatch(r.languages, language)) continue;
+      if (r.cat !== "doctor") continue;                       // provider records only (no language filter yet - facet first)
       cand.push(mk(r));
     } else {
       if (!cats || cats.indexOf(r.cat) < 0) continue;
@@ -474,11 +522,12 @@ function datasetSearch(ds, lat, lng, radius, type, specialty, language) {
     }
   }
   cand.sort(function (a, b) { return distM(lat, lng, a.lat, a.lng) - distM(lat, lng, b.lat, b.lng); });
-  // Specialty chips come straight from the dataset's own specialty values (faceted), and the
-  // selected one filters the same way as the FHIR path.
+  // Specialty + language chips come straight from the dataset's own values (faceted from the full
+  // roster), and the selected ones filter the same way as the FHIR path.
   var specialties = wantDoctors ? facetSpecialties(cand) : [];
-  var out = (wantDoctors && specialty) ? cand.filter(function (p) { return specSelected(p.specialty, specialty); }) : cand;
-  return { ok: true, mode: facilityOnly ? "facilities" : (wantDoctors ? "providers" : "locations"), source: ds.plan === "kaiser" ? "kaiser" : "healthnet", facilityOnly: facilityOnly, specialties: specialties, approxByZip: !facilityOnly, refreshed: ds.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
+  var languagesAvail = wantDoctors ? facetLanguages(cand) : [];
+  var out = wantDoctors ? cand.filter(function (p) { return specSelected(p.specialty, specialty) && langSelected(p.languages, language); }) : cand;
+  return { ok: true, mode: facilityOnly ? "facilities" : (wantDoctors ? "providers" : "locations"), source: ds.plan === "kaiser" ? "kaiser" : "healthnet", facilityOnly: facilityOnly, specialties: specialties, languagesAvail: languagesAvail, approxByZip: !facilityOnly, refreshed: ds.generated || "", type: type, specialty: specialty, language: language, count: out.length, places: out.slice(0, 250) };
 }
 
 module.exports = async function handler(req, res) {
